@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "436671733079",
+    "project_id": "gioco8-32e43",
+    "storage_bucket": "gioco8-32e43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436671733079:android:1efd5921cd6cc191b57212",
+        "android_client_info": {
+          "package_name": "it.polito.did.gruppo8"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436671733079-ugp5o61bm4bhmros033t2ac2uurv900n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKbsrknaTZhTCLldpmTCxtPxpEdsQux-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "436671733079-ugp5o61bm4bhmros033t2ac2uurv900n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
