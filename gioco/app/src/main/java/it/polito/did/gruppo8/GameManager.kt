@@ -15,7 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
-//ciao spero funzioni
+//ciao funziona
 class GameManager(private val scope:CoroutineScope) {
     private val URL = "https://firiebase_URL/"
     private val firebase = Firebase.database(URL)
