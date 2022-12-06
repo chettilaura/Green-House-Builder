@@ -1,5 +1,6 @@
 package it.polito.did.gruppo8
-//commento
+//commento 2
+//altro commento
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
