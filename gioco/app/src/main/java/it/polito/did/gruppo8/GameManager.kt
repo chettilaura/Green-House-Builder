@@ -1,6 +1,5 @@
 package it.polito.did.gruppo8
-//commento 2
-//altro commento
+
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,40 +14,66 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
-//ciao funziona
+
 class GameManager(private val scope:CoroutineScope) {
-    private val URL = "https://firiebase_URL/"
-    private val firebase = Firebase.database(URL)
-    private val firebaseAuth = Firebase.auth
 
-    init {
-        //firebase.setLogLevel(Logger.Level.DEBUG)
-        scope.launch {
-            try {
-                //".await" è suspend fun -> coroutine
-                firebaseAuth.signInAnonymously().await()
-                Log.d("GameManager", "Current User: ${firebaseAuth.uid}")
-                delay(500)
-                mutableScreenName.value = ScreenName.Initial
-            } catch (e: Exception) {
-                mutableScreenName.value = ScreenName.Error(e.message?:"Unknown error")
-            }
-        }
-    }
+    //----------------def variabili GameManager
 
+
+    //screeName è un liveData -> contiene mutableScreenName che è un MutableLiveData
+    //mutableScreenName contiene il nome dello screen corrente
     private val mutableScreenName = MutableLiveData<ScreenName>().also {
+        //prima assegnazione dello screen (fatta di default) è lo Splash
+        //qui uso 'it.value' anzichè 'mutableScreenName.value' perché l'ho definito qui
         it.value = ScreenName.Splash
     }
     val screenName: LiveData<ScreenName> = mutableScreenName
 
+
+    //matchId è un liveData -> contiene mutableMatchId che è un MutableLiveData
+    //mutableMatchId contiene l'ID della partita
     private val mutableMatchId = MutableLiveData<String>()
     val matchId: LiveData<String> = mutableMatchId
 
+
+    //players è un liveData -> contiene mutablePlayers che è un MutableLiveData
+    //mutablePlayers contiene elenco (map) dei giocatori (string,string)
     private val mutablePlayers = MutableLiveData<Map<String, String>>().also {
         it.value = emptyMap()
     }
     val players: LiveData<Map<String, String>> = mutablePlayers
 
+
+    private val URL = "https://firiebase_URL/"
+    private val firebase = Firebase.database(URL)
+    private val firebaseAuth = Firebase.auth
+
+
+
+    //--------------------funzione init
+
+
+
+    init {
+        //firebase.setLogLevel(Logger.Level.DEBUG)
+        scope.launch {
+            try {
+                // coroutine ->".await" è suspend fun
+                firebaseAuth.signInAnonymously().await()
+                Log.d("GameManager", "Current User: ${firebaseAuth.uid}")
+                delay(500)
+                //assegno come screen-corrente InitialScreen
+                mutableScreenName.value = ScreenName.Initial
+            } catch (e: Exception) {
+                //assegno come screen-corrente Error
+                mutableScreenName.value = ScreenName.Error(e.message?:"Unknown error")
+            }
+        }
+    }
+
+
+
+    //--------------------inizio funzioni GameManager
 
     private fun assignTeam(players: Map<String,String>): Map<String,String>? {
         val teams = players.keys.groupBy { players[it].toString() }
@@ -98,9 +123,15 @@ class GameManager(private val scope:CoroutineScope) {
     fun createNewGame() {
         scope.launch {
             try {
+
                 val ref = firebase.getReference("abc")
                 //val ref = firebase.reference.push()
+                //se vado a vedere nel logcat mi mostra "creating match abc"
                 Log.d("GameManager","Creating match ${ref.key}")
+
+                        //prova passaggio ad altro screen
+                        mutableScreenName.value = ScreenName.Splash
+
                 ref.setValue(
                     mapOf(
                         "date" to LocalDateTime.now().toString(),
@@ -108,7 +139,9 @@ class GameManager(private val scope:CoroutineScope) {
                         "screen" to "WaitingStart"
                     )
                 ).await()
+                //messaggio sulla console
                 Log.d("GameManager", "Match creation succeeded")
+
                 mutableMatchId.value = ref.key
                 mutableScreenName.value = ScreenName.SetupMatch(ref.key!!)
                 watchPlayers()
@@ -148,6 +181,10 @@ class GameManager(private val scope:CoroutineScope) {
         scope.launch {
             try {
                 val ref = firebase.getReference(matchId)
+
+                //se vado a vedere nel logcat mi mostra "creating match abc"
+                Log.d("GameManager","joined match ${ref.key}")
+
                 val data = ref.get().await()
                 if (data!=null) {
                     mutableMatchId.value = matchId

@@ -14,14 +14,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
+//onStartNewGame è un nome locale per indicare che riceve da mainscreen "onCreateNewGame" che è def in view model che corrisponde a "createNewGame" in game manager
+//funzioni composable accettano un Modifier
+
 @Composable
-fun InitialScreen(onStartNewGame: () -> Unit,
-                  onJoinGame: (String) -> Unit,
-                  modifier: Modifier = Modifier
-) {
+fun InitialScreen(onStartNewGame: () -> Unit,  onJoinGame: (String) -> Unit,  modifier: Modifier = Modifier)
+{
+    //"matchId" è un LiveData definito in gameManager
+    // LiveData + "remember" -> indico ricomposizione quando avviene modifica matchId (modifica id partita)
     val matchId = remember {
         mutableStateOf("")
     }
+
+    //vedi "GenericScreen.kt" per vedere struttura (Scaffold etc.)
     GenericScreen(title = "Initial Screen") {
         Column(modifier.fillMaxWidth()) {
             Spacer(Modifier.weight(1f))
@@ -64,6 +69,7 @@ fun InitialScreen(onStartNewGame: () -> Unit,
     }
 }
 
+//"fun GameSkeletonTheme" definita in "Theme.kt"
 @Preview(showBackground = true)
 @Composable
 fun PreviewInitialScreen() {

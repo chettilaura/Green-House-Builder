@@ -12,6 +12,12 @@ import it.polito.did.gruppo8.ScreenName
 fun MainScreen(modifier: Modifier = Modifier) {
     val vm: GameViewModel = viewModel()
     val players = vm.players.observeAsState()
+
+    //in base allo stato fa partire uno screen diverso -> vm.screenName è un liveData definito in gameManager
+    //il primo stato (nomeScreen) assegnato è lo splash che infatti parte per primo di default-> assegnaz fatta in gameManager
+    //i nomi degli stati sono definiti nella classe ScreenName (che non fa però il collegamento allo screen vero e proprio, quello lo fa main screen (loader))
+    //volendo creare un nuovo screen qui definisco passaggio da stato-screen a chiamata alla screen vera e propria (chiamo lo screen quando stato impostato sul corrispondente )
+
     when (val screenName = vm.screenName.observeAsState().value) {
         is ScreenName.Splash -> SplashScreen(modifier)
         is ScreenName.Initial -> InitialScreen(

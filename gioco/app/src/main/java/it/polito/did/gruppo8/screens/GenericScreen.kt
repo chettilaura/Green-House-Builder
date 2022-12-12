@@ -16,11 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 @Composable
-fun GenericScreen(
-    title: String,
-    modifier: Modifier = Modifier,
-    content: @Composable() () -> Unit = {}
-)
+fun GenericScreen( title: String, modifier: Modifier = Modifier, content: @Composable() () -> Unit = {} )
 {
     Scaffold(modifier = Modifier
         .fillMaxSize()

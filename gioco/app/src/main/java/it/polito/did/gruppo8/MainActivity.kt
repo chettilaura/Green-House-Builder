@@ -13,11 +13,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import it.polito.did.gruppo8.screens.MainScreen
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
-//attività lanciata all'avvio -> definita nel manifest file come "android:name=".MainActivity""
+//classe lanciata all'avvio -> definita nel manifest file come "android:name=".MainActivity
+//questa classe eredita le funzioni di Activity -> lancia Activity con onCreate
+//carica il primo screen (che non è un vero screen bensì è un loader degli altri screen -> infatti non compare in screenName)
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            //"fun GameSkeletonTheme" definita in "Theme.kt"
             GameSkeletonTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
