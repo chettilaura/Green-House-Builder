@@ -129,7 +129,7 @@ class GameManager(private val scope:CoroutineScope) {
                 //se vado a vedere nel logcat mi mostra "creating match abc"
                 Log.d("GameManager","Creating match ${ref.key}")
 
-                        //prova passaggio ad altro screen
+                        //--------prova passaggio ad altro screen
                         mutableScreenName.value = ScreenName.Splash
 
                 ref.setValue(
