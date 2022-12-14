@@ -18,7 +18,8 @@ import java.time.LocalDateTime
 
 // QUESTO COMMENTO SERVE PER TESTARE GITHUB - Mattia
 class GameManager(private val scope:CoroutineScope) {
-    //commento branch laura
+    //commento branch laura---
+    //commento branch post merge con mattia
 
     //----------------def variabili GameManager
     //MVVM __ view(screen.kt)-viewmodel(gameviewmodel)-model(database->gamemanager)
