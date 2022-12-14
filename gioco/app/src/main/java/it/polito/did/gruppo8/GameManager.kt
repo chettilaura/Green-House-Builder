@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
 
+
+// QUESTO COMMENTO SERVE PER TESTARE GITHUB - Mattia
 class GameManager(private val scope:CoroutineScope) {
 
     //----------------def variabili GameManager

@@ -22,5 +22,4 @@ class GameViewModel: ViewModel() {
     val players = gameManager.players
     val screenName = gameManager.screenName
     val matchId = gameManager.matchId
-
 }
