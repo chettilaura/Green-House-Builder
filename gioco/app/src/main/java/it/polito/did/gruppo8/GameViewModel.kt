@@ -19,6 +19,7 @@ class GameViewModel: ViewModel() {
     fun onStartGame() = gameManager.startGame()
 
 
+
     val players = gameManager.players
     val screenName = gameManager.screenName
     val matchId = gameManager.matchId

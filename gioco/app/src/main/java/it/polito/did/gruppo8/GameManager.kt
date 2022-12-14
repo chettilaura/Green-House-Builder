@@ -16,8 +16,10 @@ import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
 
 class GameManager(private val scope:CoroutineScope) {
+    //commento branch laura
 
     //----------------def variabili GameManager
+    //MVVM __ view(screen.kt)-viewmodel(gameviewmodel)-model(database->gamemanager)
 
 
     //screeName è un liveData -> contiene mutableScreenName che è un MutableLiveData
