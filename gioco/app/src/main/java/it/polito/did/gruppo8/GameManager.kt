@@ -20,6 +20,7 @@ import java.time.LocalDateTime
 class GameManager(private val scope:CoroutineScope) {
     //commento branch laura---
     //commento branch post merge con mattia
+    //commento branch edo
 
     //----------------def variabili GameManager
     //MVVM __ view(screen.kt)-viewmodel(gameviewmodel)-model(database->gamemanager)
