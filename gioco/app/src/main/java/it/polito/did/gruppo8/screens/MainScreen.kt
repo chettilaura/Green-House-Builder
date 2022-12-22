@@ -24,6 +24,17 @@ fun MainScreen(modifier: Modifier = Modifier) {
             vm::onCreateNewGame,
             vm::onJoinGame,
             modifier)
+        is ScreenName.Settings -> SettingsScreen(modifier)
+        is ScreenName.Tutorial -> TutorialScreen (modifier)
+        is ScreenName.Join -> JoinScreen(modifier)
+        is ScreenName.CitySetup -> CitySetupScreen(modifier)
+        is ScreenName.JoinInfo -> JoinInfoScreen(modifier)
+        is ScreenName.GameSetup -> GameSetupScreen(modifier)
+        is ScreenName.FreeItem -> FreeItemScreen(modifier)
+        is ScreenName.ItemRecap -> ItemRecapScreen(modifier)
+        is ScreenName.Quiz -> QuizScreen(modifier)
+        is ScreenName.Shop -> ShopScreen(modifier)
+        is ScreenName.BuyItem -> BuyItemScreen(modifier)
         is ScreenName.SetupMatch -> SetupMatchScreen(
             screenName.matchId,
             players,
