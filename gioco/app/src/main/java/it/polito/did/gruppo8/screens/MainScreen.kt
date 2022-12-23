@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.ScreenName
@@ -35,6 +36,13 @@ fun MainScreen(modifier: Modifier = Modifier) {
         is ScreenName.Quiz -> QuizScreen(modifier)
         is ScreenName.Shop -> ShopScreen(modifier)
         is ScreenName.BuyItem -> BuyItemScreen(modifier)
+        is ScreenName.GenericLoading -> GenericLoadingScreen(modifier)
+        is ScreenName.QuizFeedback -> QuizFeedbackScreen(modifier)
+        is ScreenName.HouseOverview -> HouseOverviewScreen(modifier)
+        is ScreenName.ItemList -> ItemListScreen(modifier)
+        is ScreenName.GameOver -> GameOverScreen(modifier)
+        is ScreenName.DistrictRank -> DistrictRankingScreen(modifier)
+        is ScreenName.PlayersRank -> PlayersRankingScreen(modifier)
         is ScreenName.SetupMatch -> SetupMatchScreen(
             screenName.matchId,
             players,
