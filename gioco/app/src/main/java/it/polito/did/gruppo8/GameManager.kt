@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -51,9 +53,12 @@ class GameManager(private val scope:CoroutineScope) {
     val players: LiveData<Map<String, String>> = mutablePlayers
 
 
-    private val URL = "https://firiebase_URL/"
+    //qui creo la referenza al DataBase tramite URL
+    private val URL = "https://gioco8-32e43-default-rtdb.europe-west1.firebasedatabase.app/"
     private val firebase = Firebase.database(URL)
     private val firebaseAuth = Firebase.auth
+
+
 
 
 
@@ -127,18 +132,25 @@ class GameManager(private val scope:CoroutineScope) {
         return players.value?.get(firebaseAuth.uid) ?: ""
     }
 
+    //funzione che parte dopo aver premuto "Start new match" in InitialScreen
     fun createNewGame() {
         scope.launch {
             try {
 
-                val ref = firebase.getReference("abc")
+            //qui crea una reference specificando un nome
+            //use ".getReference" to access a location in the database and read or write data
+            //accede alla reference "firebase" (creata prima) creando il percorso reference/abc
+                val ref = firebase.getReference("game_Id_Prova")
+
+            //qui crea una reference NON specificando un nome -> assegnato in automatico
+            //This will generate a new push id and return a reference to the location with that id
                 //val ref = firebase.reference.push()
-                //se vado a vedere nel logcat mi mostra "creating match abc"
+
+
+                //se vado a vedere nel logcat mi mostra "creating match -MatchName-"
                 Log.d("GameManager","Creating match ${ref.key}")
 
-                        //--------prova passaggio ad altro screen
-                        mutableScreenName.value = ScreenName.Splash
-
+                //usa la ref creata sopra e la riempie con una struct date/owner/screen
                 ref.setValue(
                     mapOf(
                         "date" to LocalDateTime.now().toString(),
@@ -149,8 +161,11 @@ class GameManager(private val scope:CoroutineScope) {
                 //messaggio sulla console
                 Log.d("GameManager", "Match creation succeeded")
 
+                //riempie la variabile MatchId
                 mutableMatchId.value = ref.key
+                //dopo aver premuto "Start new match" va alla schermata "SetUpMatchScreen" che crea il codice QR
                 mutableScreenName.value = ScreenName.SetupMatch(ref.key!!)
+                //chiama la funzione "watchPlayers" che
                 watchPlayers()
             } catch (e:Exception) {
                 mutableScreenName.value = ScreenName.Error(e.message ?: "Generic error")
@@ -158,8 +173,12 @@ class GameManager(private val scope:CoroutineScope) {
         }
     }
 
+
+
+
     private fun watchScreen() {
         val id = matchId.value ?: throw RuntimeException("Missing match Id")
+        //".getReference" legge nel DB
         val ref = firebase.getReference(id)
         ref.child("screen").addValueEventListener(
             object: ValueEventListener {
