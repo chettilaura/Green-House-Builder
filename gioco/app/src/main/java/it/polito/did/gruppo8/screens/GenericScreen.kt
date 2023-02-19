@@ -29,7 +29,7 @@ fun GenericScreen( title: String, modifier: Modifier = Modifier, content: @Compo
                     .fillMaxWidth()
                     .background(MaterialTheme.colors.secondary),
                 style = MaterialTheme.typography.h3,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Left
             )
             content()
         }

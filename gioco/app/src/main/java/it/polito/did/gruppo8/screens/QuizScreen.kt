@@ -21,6 +21,7 @@ import it.polito.did.gruppo8.GameViewModel
 
 @Composable
 fun QuizScreen(modifier: Modifier = Modifier) {
+    GenericScreen(title = "Rispondi alla domanda"){
         Box(modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
@@ -38,6 +39,7 @@ fun QuizScreen(modifier: Modifier = Modifier) {
             }
         }
     }
+}
 
 @Composable
 //Bisogna passare alla funzione testo della domanda, testi delle risposte per popolare gli elementi
