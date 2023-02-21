@@ -47,7 +47,7 @@ fun QuizScreen(modifier: Modifier = Modifier) {
 fun QuizCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        backgroundColor = Color.DarkGray,
+        backgroundColor = Color.LightGray,
         elevation = 5.dp,
         shape = RoundedCornerShape(30.dp)
     ) {
@@ -68,7 +68,7 @@ fun QuizCard() {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(300.dp)
+                        .fillMaxSize(0.5f)
                         .padding(16.dp),
                     backgroundColor = Color.Yellow,
                     elevation = 5.dp,

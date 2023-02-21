@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 @Composable
@@ -27,8 +28,8 @@ fun GenericScreen( title: String, modifier: Modifier = Modifier, content: @Compo
                 title,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.secondary),
-                style = MaterialTheme.typography.h3,
+                    .background(MaterialTheme.colors.secondaryVariant),
+                style = MaterialTheme.typography.h2,
                 textAlign = TextAlign.Left
             )
             content()
@@ -37,7 +38,7 @@ fun GenericScreen( title: String, modifier: Modifier = Modifier, content: @Compo
 }
 
 //usa previewGenericScreen per fare preview locale
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewGenericScreen() {
     GameSkeletonTheme {
