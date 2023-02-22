@@ -1,13 +1,13 @@
 package it.polito.did.gruppo8.screens
 
 import android.widget.ProgressBar
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.livedata.observeAsState
@@ -19,9 +19,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.LinearGradient
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.polito.did.gruppo8.GameViewModel
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
@@ -41,76 +49,271 @@ import java.util.*
 fun HouseOverviewScreen(modifier: Modifier = Modifier)
 {
     GenericScreen(title = "Overview"){
-        ParameterBars(param = listOf("Costo", "Emissioni", "Comfort"))
+        Column (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(2.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ParameterBars(/*TODO: passare parametri per definire lunghezza delle barre*/)
+            Spacer(modifier = Modifier
+                .size(2.dp))
+
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.1f)
+                .padding(1.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ){
+                TimerCard(/*TODO: passare parametro del tempo rimanente per la fine del turno*/)
+                Spacer(modifier = Modifier.weight(1f))
+                RoundCard("1/8"/*TODO: passare parametro del numero di turno*/)
+                Spacer(modifier = Modifier.weight(1f))
+                MoneyCard("534"/*TODO: passare valore dei soldi*/)
+            }
+            Spacer(modifier = Modifier
+                .size(2.dp))
+
+            HouseViewBox(/*TODO: passare parametri degli elementi da mostrare della casa*/)
+            Spacer(modifier = Modifier
+                .size(2.dp))
+
+            Button(onClick = { /*TODO: vai a lista di oggetti acquistati*/ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(2.dp)
+            ) {
+                Text(text = "View Item List")
+            }
+            Spacer(modifier = Modifier
+                .size(4.dp))
+
+            SeasonCard("Winter", "Random fact"/*TODO: passare la stagione e il testo da inserire*/)
+            Spacer(modifier = Modifier
+                .size(4.dp))
+
+            Button(onClick = { /*TODO: vai a vista del quartiere*/ },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(2.dp)
+            ) {
+                Text(text = "District View")
+            }
+
+        }
+
     }
 }
 
+@Composable
+fun HouseViewBox() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.5f)
+            .padding(2.dp)
+            .border(BorderStroke(2.dp, Color.DarkGray))
+    ) {
+
+    }
+}
 
 @Composable
-fun ParameterBars(param: List<String>) {
+fun SeasonCard(season: String, fact: String) {
     Card(modifier = Modifier
         .fillMaxWidth()
-        .padding(12.dp),
-        elevation = 4.dp
+        .fillMaxHeight(0.6f)
+        .padding(2.dp),
+        elevation = 4.dp,
+        border = BorderStroke(2.dp, Color.DarkGray)) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(text = "It's " + season + "!", style = MaterialTheme.typography.h3)
+            Card(modifier = Modifier
+                .fillMaxWidth()
+                .padding(2.dp),
+                elevation = (2).dp,
+                border = BorderStroke(2.dp, Color.DarkGray)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text(text = fact, style = MaterialTheme.typography.body1)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MoneyCard(money : String) {
+    Card(modifier = Modifier
+        .width(80.dp)
+        .height(60.dp)
+        .padding(2.dp),
+        elevation = 4.dp,
+        border = BorderStroke(2.dp, Color.DarkGray)) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.End
+        ) {
+            Text(text = "Money", style = MaterialTheme.typography.body1)
+            Text(text = money, style = MaterialTheme.typography.body2)
+        }
+    }
+}
+
+@Composable
+fun RoundCard(roundNum : String) {
+    Card(modifier = Modifier
+        .width(80.dp)
+        .height(60.dp)
+        .padding(2.dp),
+        elevation = 4.dp,
+        border = BorderStroke(2.dp, Color.DarkGray)) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Round", style = MaterialTheme.typography.body1)
+            Text(text = roundNum, style = MaterialTheme.typography.body2)
+        }
+    }
+}
+
+@Composable
+fun TimerCard() {
+    Card(modifier = Modifier
+        .width(80.dp)
+        .height(60.dp)
+        .padding(4.dp),
+        elevation = 4.dp,
+        border = BorderStroke(2.dp, Color.DarkGray)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(4.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(text = "Timer", style = MaterialTheme.typography.body1)
+            Text(text = "00:34", style = MaterialTheme.typography.body2)
+        }
+    }
+}
+
+@Composable
+fun ParameterBars() {
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(0.15f)
+        .padding(4.dp),
+        elevation = 4.dp,
+        border = BorderStroke(2.dp, Color.DarkGray)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = Color.LightGray)
-                .padding(4.dp),
-            verticalArrangement = Arrangement.Center,
+                .padding(10.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(  //Parametro 1
+            Row(  //Parametro CO2
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(1.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
             ) {
-                LinearProgressIndicator(
-                    progress = 0.5f,  //TODO: passare qui valore della lunghezza della barra
-                    color = Color.Yellow,
-                    modifier = Modifier.fillMaxWidth(0.5f)
-                        .size(10.dp)
-                        .clip(RoundedCornerShape(6.dp))
+                //TODO: aggiungere icona
+                Box(modifier = Modifier.fillMaxWidth(0.4f)) {
+                    Text(text = "CO2 Impact",
+                        style = MaterialTheme.typography.body1
+                    )
+                }
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(2.dp)
                 )
-                Spacer(modifier = Modifier.padding(10.dp))
-                Text(text = param[0],
-                    style = MaterialTheme.typography.h5)
-            }
-            Row(  //Parametro 2
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
                 LinearProgressIndicator(
                     progress = 0.7f, //TODO: passare qui valore della lunghezza della barra
-                    color = Color.DarkGray,
-                    modifier = Modifier.fillMaxWidth(0.5f)
+                    color = Color.Black,
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
                         .size(10.dp)
-                        .clip(RoundedCornerShape(6.dp))
+                        .clip(RoundedCornerShape(8.dp))
                 )
-                Spacer(modifier = Modifier.padding(10.dp))
-                Text(text = param[1],
-                    style = MaterialTheme.typography.h5)
             }
-            Row( //Parametro 3
+            Row( //Parametro COMFORT
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(4.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(1.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
             ) {
+                //TODO: aggiungere icona
+                Box(modifier = Modifier.fillMaxWidth(0.4f)){
+                    Text(text = "Comfort",
+                        style = MaterialTheme.typography.body1,
+                        textAlign = TextAlign.Left
+                    )
+                }
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(8.dp)
+                )
                 LinearProgressIndicator(
                     progress = 0.4f, //TODO: passare qui valore della lunghezza della barra
-                    color = Color.Blue,
-                    modifier = Modifier.fillMaxWidth(0.5f)
+                    color = Color.Black,
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .size(10.dp)
                         .clip(RoundedCornerShape(6.dp))
                 )
-                Spacer(modifier = Modifier.padding(10.dp))
-                Text(text = param[2],
-                    style = MaterialTheme.typography.h5)
+            }
+
+            Row(  //Parametro ECONOMY
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(1.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                //TODO: aggiungere icona
+                Box(modifier = Modifier.fillMaxWidth(0.4f)) {
+                    Text(text = "Economy",
+                        style = MaterialTheme.typography.body1,
+                        textAlign = TextAlign.Left
+                    )
+                }
+                Spacer(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(8.dp)
+                )
+                LinearProgressIndicator(
+                    progress = 0.5f,  //TODO: passare qui valore della lunghezza della barra
+                    color = Color.Black,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(10.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                )
             }
         }
     }
