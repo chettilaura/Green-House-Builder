@@ -2,6 +2,7 @@ package it.polito.did.gruppo8.screens
 
 import android.widget.ProgressBar
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -28,10 +29,14 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.polito.did.gruppo8.GameViewModel
+import it.polito.did.gruppo8.R
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import java.util.*
 
@@ -48,12 +53,18 @@ import java.util.*
 @Composable
 fun HouseOverviewScreen(modifier: Modifier = Modifier)
 {
-    GenericScreen(title = "Overview"){
+    Box(modifier = Modifier.fillMaxSize(1f)){
+        Image(
+            painter = painterResource(R.drawable.bg),
+            contentDescription = "Immagine di sfondo",
+            modifier = Modifier.fillMaxHeight(),
+            contentScale = ContentScale.FillHeight
+        )
         Column (
             modifier = Modifier
                 .fillMaxSize()
                 .padding(2.dp),
-            verticalArrangement = Arrangement.Top,
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ParameterBars(/*TODO: passare parametri per definire lunghezza delle barre*/)
@@ -67,9 +78,11 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                TimerCard(/*TODO: passare parametro del tempo rimanente per la fine del turno*/)
+                TurnCard(colorTurn = "RED", color = Color.Red /*TODO: passare parametro della squadra con turno attivo*/)
                 Spacer(modifier = Modifier.weight(1f))
                 RoundCard("1/8"/*TODO: passare parametro del numero di turno*/)
+                Spacer(modifier = Modifier.weight(1f))
+                TimerCard(/*TODO: passare parametro del tempo rimanente per la fine del turno*/)
                 Spacer(modifier = Modifier.weight(1f))
                 MoneyCard("534"/*TODO: passare valore dei soldi*/)
             }
@@ -195,6 +208,28 @@ fun RoundCard(roundNum : String) {
 }
 
 @Composable
+fun TurnCard(colorTurn : String, color : Color) {
+    Card(modifier = Modifier
+        .width(80.dp)
+        .height(60.dp)
+        .padding(2.dp),
+        backgroundColor = color,
+        elevation = 4.dp,
+        border = BorderStroke(2.dp, Color.DarkGray)) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(text = "It's " + colorTurn , style = MaterialTheme.typography.body1)
+            Text(text = "turn!", style = MaterialTheme.typography.body2)
+        }
+    }
+
+}
+
+@Composable
 fun TimerCard() {
     Card(modifier = Modifier
         .width(80.dp)
@@ -207,7 +242,7 @@ fun TimerCard() {
             modifier = Modifier
                 .padding(4.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Timer", style = MaterialTheme.typography.body1)
             Text(text = "00:34", style = MaterialTheme.typography.body2)
