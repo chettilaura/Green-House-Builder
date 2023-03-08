@@ -1,44 +1,29 @@
 package it.polito.did.gruppo8.screens
 
-import android.widget.ProgressBar
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.LinearGradient
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.runtime.*
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.lifecycle.viewmodel.compose.viewModel
-import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
-import java.util.*
+import it.polito.did.gruppo8.R.color.*
 
 //Contiene vista generale della propria casa. Contiene: box con info sui parametri (barre),
 //box con casetta, timer, soldi e info sul round di gioco
@@ -50,13 +35,33 @@ import java.util.*
 //      pulsante di back/possibilità di swipare a destra per tornare alla vista precedente
 //NOTA: lo sfondo è dello stesso colore del quartiere assegnato al giocatore
 
+/*val MyFontFamily = FontFamily(Font(R.font.caveat_regular))*/
+/*val LocalFont = staticCompositionLocalOf<FontFamily?> { null }*/
+val caveatRegular = FontFamily(
+    Font(R.font.caveat_regular, FontWeight.Normal, FontStyle.Normal)
+)
+val caveatMedium = FontFamily(
+    Font(R.font.caveat_medium, FontWeight.Medium, FontStyle.Normal)
+)
+val caveatSemiBold = FontFamily(
+    Font(R.font.caveat_semibold, FontWeight.SemiBold, FontStyle.Normal)
+)
+val caveatBold = FontFamily(
+    Font(R.font.caveat_bold, FontWeight.Bold, FontStyle.Normal)
+)
+/*val sunnyWeather = FontFamily(
+    Font(R.font.sunnyweather, FontWeight.Normal, FontStyle.Normal)
+)*/
+
 @Composable
+
 fun HouseOverviewScreen(modifier: Modifier = Modifier)
 {
+
     Box(modifier = Modifier.fillMaxSize(1f)){
         Image(
-            painter = painterResource(R.drawable.bg),
-            contentDescription = "Immagine di sfondo",
+            painter = painterResource(R.drawable.bg_green),
+            contentDescription = "Immagine di sfondo verde",
             modifier = Modifier.fillMaxHeight(),
             contentScale = ContentScale.FillHeight
         )
@@ -78,12 +83,20 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                TurnCard(colorTurn = "RED", color = Color.Red /*TODO: passare parametro della squadra con turno attivo*/)
+                TurnCard(
+                    colorTurn = "RED", colorResId = old_rose
+                    /*TODO: passare parametro della squadra con turno attivo
+                    *  il colore è in formato Int e il nome è contenuto nel file colors.xml dentro res,
+                    *  il nome deve essere corrispondente al colore */
+                )
                 Spacer(modifier = Modifier.weight(1f))
+
                 RoundCard("1/8"/*TODO: passare parametro del numero di turno*/)
                 Spacer(modifier = Modifier.weight(1f))
+
                 TimerCard(/*TODO: passare parametro del tempo rimanente per la fine del turno*/)
                 Spacer(modifier = Modifier.weight(1f))
+
                 MoneyCard("534"/*TODO: passare valore dei soldi*/)
             }
             Spacer(modifier = Modifier
@@ -94,25 +107,27 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 .size(2.dp))
 
             Button(onClick = { /*TODO: vai a lista di oggetti acquistati*/ },
+                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = emerald)),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(2.dp)
             ) {
-                Text(text = "View Item List")
+                Text(text = "VIEW ITEM LIST",  fontFamily = caveatBold, color = Color.White, style = MaterialTheme.typography.h6)
             }
             Spacer(modifier = Modifier
                 .size(4.dp))
 
-            SeasonCard("Winter", "Random fact"/*TODO: passare la stagione e il testo da inserire*/)
+            SeasonCard("WINTER", "RANDOM FACT"/*TODO: passare la stagione e il testo da inserire*/)
             Spacer(modifier = Modifier
                 .size(4.dp))
 
             Button(onClick = { /*TODO: vai a vista del quartiere*/ },
+                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = emerald)),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(2.dp)
             ) {
-                Text(text = "District View")
+                Text(text = "DISTRICT VIEW",  fontFamily = caveatBold, color = Color.White, style = MaterialTheme.typography.h6)
             }
 
         }
@@ -127,9 +142,13 @@ fun HouseViewBox() {
             .fillMaxWidth()
             .fillMaxHeight(0.5f)
             .padding(2.dp)
-            .border(BorderStroke(2.dp, Color.DarkGray))
+            /*.border(BorderStroke(2.dp, Color.DarkGray))*/
     ) {
-
+        Image(painter = painterResource(R.drawable.house),
+            contentDescription = "house",
+            modifier = Modifier.fillMaxSize(1f),
+            contentScale = ContentScale.FillBounds
+        )
     }
 }
 
@@ -139,6 +158,7 @@ fun SeasonCard(season: String, fact: String) {
         .fillMaxWidth()
         .fillMaxHeight(0.6f)
         .padding(2.dp),
+        backgroundColor = colorResource(id = emerald),
         elevation = 4.dp,
         border = BorderStroke(2.dp, Color.DarkGray)) {
         Column(
@@ -147,10 +167,11 @@ fun SeasonCard(season: String, fact: String) {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.Start
         ) {
-            Text(text = "It's " + season + "!", style = MaterialTheme.typography.h3)
+            Text(text = "IT'S " + season + "!", fontFamily = caveatSemiBold, color = Color.White,style = MaterialTheme.typography.h3)
             Card(modifier = Modifier
                 .fillMaxWidth()
                 .padding(2.dp),
+                backgroundColor = colorResource(id = asparagus),
                 elevation = (2).dp,
                 border = BorderStroke(2.dp, Color.DarkGray)
             ) {
@@ -160,7 +181,7 @@ fun SeasonCard(season: String, fact: String) {
                     verticalArrangement = Arrangement.SpaceEvenly,
                     horizontalAlignment = Alignment.Start
                 ) {
-                    Text(text = fact, style = MaterialTheme.typography.body1)
+                    Text(text = fact, fontFamily = caveatRegular, color=Color.White, style = MaterialTheme.typography.body1)
                 }
             }
         }
@@ -170,19 +191,31 @@ fun SeasonCard(season: String, fact: String) {
 @Composable
 fun MoneyCard(money : String) {
     Card(modifier = Modifier
-        .width(80.dp)
-        .height(60.dp)
+        .width(100.dp)
+        .height(70.dp)
         .padding(2.dp),
         elevation = 4.dp,
         border = BorderStroke(2.dp, Color.DarkGray)) {
-        Column(
+        Row(
             modifier = Modifier
-                .padding(8.dp),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.End
+                .fillMaxWidth()
+                .padding(1.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
         ) {
-            Text(text = "Money", style = MaterialTheme.typography.body1)
-            Text(text = money, style = MaterialTheme.typography.body2)
+            Image(painter = painterResource(id = R.drawable.coin),
+                contentDescription = "coin",
+                modifier = Modifier.fillMaxHeight(0.6f),
+                contentScale = ContentScale.FillHeight)
+            Column(
+                modifier = Modifier
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.End
+            ) {
+               /* Text(text = "MONEY", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)*/
+                Text(text = money, fontFamily = caveatBold, style = MaterialTheme.typography.h6)
+            }
         }
     }
 }
@@ -191,7 +224,7 @@ fun MoneyCard(money : String) {
 fun RoundCard(roundNum : String) {
     Card(modifier = Modifier
         .width(80.dp)
-        .height(60.dp)
+        .height(80.dp)
         .padding(2.dp),
         elevation = 4.dp,
         border = BorderStroke(2.dp, Color.DarkGray)) {
@@ -201,19 +234,21 @@ fun RoundCard(roundNum : String) {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Round", style = MaterialTheme.typography.body1)
-            Text(text = roundNum, style = MaterialTheme.typography.body2)
+            Text(text = "ROUND", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)
+            Text(text = roundNum, fontFamily = caveatBold, style = MaterialTheme.typography.h6)
         }
     }
 }
 
 @Composable
-fun TurnCard(colorTurn : String, color : Color) {
+fun TurnCard(colorTurn: String, colorResId: Int) {
+    val color = colorResource(id = colorResId)
+
     Card(modifier = Modifier
-        .width(80.dp)
-        .height(60.dp)
+        .width(100.dp)
+        .height(70.dp)
         .padding(2.dp),
-        backgroundColor = color,
+        backgroundColor = Color.White,
         elevation = 4.dp,
         border = BorderStroke(2.dp, Color.DarkGray)) {
         Column(
@@ -222,18 +257,21 @@ fun TurnCard(colorTurn : String, color : Color) {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.Start
         ) {
-            Text(text = "It's " + colorTurn , style = MaterialTheme.typography.body1)
-            Text(text = "turn!", style = MaterialTheme.typography.body2)
-        }
+            Row() {
+                Text(text = "IT'S ", fontFamily = caveatSemiBold, style = MaterialTheme.typography.body1)
+                Text(text = colorTurn, fontFamily = caveatBold, style = MaterialTheme.typography.subtitle1, color=color)
+                }
+            Text(text = "TURN!", fontFamily = caveatSemiBold, style = MaterialTheme.typography.body1)
+            }
+        /*Text(text = "It's " + colorTurn , style = MaterialTheme.typography.body1)*/
     }
-
 }
 
 @Composable
 fun TimerCard() {
     Card(modifier = Modifier
         .width(80.dp)
-        .height(60.dp)
+        .height(80.dp)
         .padding(4.dp),
         elevation = 4.dp,
         border = BorderStroke(2.dp, Color.DarkGray)
@@ -244,14 +282,23 @@ fun TimerCard() {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Timer", style = MaterialTheme.typography.body1)
-            Text(text = "00:34", style = MaterialTheme.typography.body2)
+            Image(painter = painterResource(id = R.drawable.clock),
+                contentDescription = "clock",
+                modifier = Modifier.weight(0.8f),
+                contentScale = ContentScale.FillHeight
+            )
+            /*Text(text = "TIMER", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)*/
+            Text(text = "00:34", fontFamily = caveatBold, style = MaterialTheme.typography.h6)
         }
     }
 }
 
 @Composable
 fun ParameterBars() {
+    /*val customFont = FontFamily(
+        Font(R.font.sunnyweather, FontWeight.Normal, FontStyle.Normal)
+    )*/
+
     Card(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(0.15f)
@@ -275,9 +322,22 @@ fun ParameterBars() {
             ) {
                 //TODO: aggiungere icona
                 Box(modifier = Modifier.fillMaxWidth(0.4f)) {
-                    Text(text = "CO2 Impact",
-                        style = MaterialTheme.typography.body1
-                    )
+                    Row(  //Parametro CO2
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(1.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Image(painter = painterResource(R.drawable.leaf),
+                            contentDescription = "leaf")
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(text = "CO2 IMPACT",
+                            fontFamily = caveatSemiBold,
+                            style = MaterialTheme.typography.h6
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
                 }
                 Spacer(
                     modifier = Modifier
@@ -286,7 +346,8 @@ fun ParameterBars() {
                 )
                 LinearProgressIndicator(
                     progress = 0.7f, //TODO: passare qui valore della lunghezza della barra
-                    color = Color.Black,
+                    color = colorResource(id = kelly_green),
+                    backgroundColor = Color.LightGray,
                     modifier = Modifier
                         .fillMaxWidth(1f)
                         .size(10.dp)
@@ -302,10 +363,23 @@ fun ParameterBars() {
             ) {
                 //TODO: aggiungere icona
                 Box(modifier = Modifier.fillMaxWidth(0.4f)){
-                    Text(text = "Comfort",
-                        style = MaterialTheme.typography.body1,
-                        textAlign = TextAlign.Left
-                    )
+                    Row(  //Parametro CO2
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(1.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Image(painter = painterResource(R.drawable.sofa),
+                            contentDescription = "sofa")
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(text = "COMFORT",
+                            fontFamily = caveatSemiBold,
+                            style = MaterialTheme.typography.h6,
+                            textAlign = TextAlign.Left
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
                 }
                 Spacer(
                     modifier = Modifier
@@ -314,7 +388,8 @@ fun ParameterBars() {
                 )
                 LinearProgressIndicator(
                     progress = 0.4f, //TODO: passare qui valore della lunghezza della barra
-                    color = Color.Black,
+                    color = colorResource(id = glaucous),
+                    backgroundColor = Color.LightGray,
                     modifier = Modifier
                         .fillMaxWidth()
                         .size(10.dp)
@@ -331,10 +406,23 @@ fun ParameterBars() {
             ) {
                 //TODO: aggiungere icona
                 Box(modifier = Modifier.fillMaxWidth(0.4f)) {
-                    Text(text = "Economy",
-                        style = MaterialTheme.typography.body1,
-                        textAlign = TextAlign.Left
-                    )
+                    Row(  //Parametro CO2
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(1.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Image(painter = painterResource(R.drawable.coin),
+                            contentDescription = "coin")
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(text = "ECONOMY",
+                            fontFamily = caveatSemiBold,
+                            style = MaterialTheme.typography.h6,
+                            textAlign = TextAlign.Left
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
                 }
                 Spacer(
                     modifier = Modifier
@@ -343,7 +431,8 @@ fun ParameterBars() {
                 )
                 LinearProgressIndicator(
                     progress = 0.5f,  //TODO: passare qui valore della lunghezza della barra
-                    color = Color.Black,
+                    color = colorResource(id = xanthous),
+                    backgroundColor = Color.LightGray,
                     modifier = Modifier
                         .fillMaxWidth()
                         .size(10.dp)

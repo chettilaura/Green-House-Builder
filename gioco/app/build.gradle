@@ -21,6 +21,12 @@ android {
         }
     }
 
+    sourceSets {
+        main{
+            res.srcDirs += 'gioco/app/src/main/res/font/sunnyweather.otf'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false

@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,7 +50,11 @@ fun QuizScreen(modifier: Modifier = Modifier) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ){
-                    TurnCard(colorTurn = "RED", color = Color.Red)
+                    TurnCard(colorTurn = "RED", colorResId = R.color.old_rose
+                        /*TODO: passare parametro della squadra con turno attivo
+                        *  il colore è in formato Int e il nome è contenuto nel file colors.xml dentro res,
+                        *  il nome deve essere corrispondente al colore */)
+
                     Spacer(modifier = Modifier.weight(1f))
                     RoundCard("1/8"/*TODO: passare parametro del numero di turno*/)
                     Spacer(modifier = Modifier.weight(1f))
@@ -57,14 +62,15 @@ fun QuizScreen(modifier: Modifier = Modifier) {
                     Spacer(modifier = Modifier.weight(1f))
                     MoneyCard("534"/*TODO: passare valore dei soldi*/)
                 }
-                QuizCard("Questa è la domanda del quiz che deve essere pescata dal database",
+                QuizCard(
+                    "Questa è la domanda del quiz che deve essere pescata dal database",
                     listOf(
                         "This is Answer number 1",
                         "This is Answer number 2",
                         "This is Answer number 3",
-                        "This is Answer number 4"
-                    ),
-                    Color.White)
+                        "This is Answer number 4"),
+                    R.color.old_rose
+                )
                 Spacer(modifier = Modifier.size(16.dp))
                 Button(onClick = { /*TODO*/ }) {
                     Text(text = "Salta domanda")
@@ -77,7 +83,8 @@ fun QuizScreen(modifier: Modifier = Modifier) {
 @Composable
 //Bisogna passare alla funzione testo della domanda, testi delle risposte per popolare gli elementi
 //Occorre anche passare risposta corretta al pulsante giusto
-fun QuizCard(question : String, answers : List<String>, color : Color, ) {
+fun QuizCard(question : String, answers : List<String>, colorResId : Int ) {
+    val color = colorResource(id = colorResId)
     Card(
         modifier = Modifier.fillMaxSize(0.9f),
         backgroundColor = color,
@@ -98,7 +105,7 @@ fun QuizCard(question : String, answers : List<String>, color : Color, ) {
                         .fillMaxWidth()
                         .fillMaxSize(0.6f)
                         .padding(16.dp),
-                    backgroundColor = Color.Yellow,
+                    backgroundColor = Color.White,
                     elevation = 5.dp,
                     border = BorderStroke(2.dp, Color.DarkGray),
                     shape = RoundedCornerShape(15.dp)
@@ -106,7 +113,7 @@ fun QuizCard(question : String, answers : List<String>, color : Color, ) {
                     Text(text = question,
                         Modifier.padding(16.dp))
                 }
-                Spacer(modifier = Modifier.size(16.dp))
+                /*Spacer(modifier = Modifier.size(8.dp))*/
 
                 Column(     //BUTTON DELLE RISPOSTE
                     modifier = Modifier
