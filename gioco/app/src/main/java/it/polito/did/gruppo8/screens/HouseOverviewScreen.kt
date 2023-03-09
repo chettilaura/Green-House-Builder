@@ -106,7 +106,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             Spacer(modifier = Modifier
                 .size(2.dp))
 
-            Button(onClick = { /*TODO: vai a lista di oggetti acquistati*/ },
+            Button(onClick = { /*TODO: vai a lista di oggetti acquistati onViewItemList*/ },
                 colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = emerald)),
                 modifier = Modifier
                     .fillMaxWidth()

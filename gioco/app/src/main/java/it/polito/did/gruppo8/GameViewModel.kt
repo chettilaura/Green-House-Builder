@@ -18,9 +18,15 @@ class GameViewModel: ViewModel() {
     fun onJoinGame(matchId:String) = gameManager.joinGame(matchId)
     fun onStartGame() = gameManager.startGame()
 
+    /*Schermata HouseOverviewScreen*/
+    fun onViewItemList() = null /*TODO: restituisce lista di oggetti acquistati*/
+
 
 
     val players = gameManager.players
     val screenName = gameManager.screenName
     val matchId = gameManager.matchId
+
+    /*Schermata HouseOverviewScreen*/
+    val co2Impact = null /*TODO: parametro per barra co2*/
 }
