@@ -21,6 +21,12 @@ android {
         }
     }
 
+    sourceSets {
+        main{
+            res.srcDirs += 'gioco/app/src/main/res/font/sunnyweather.otf'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -48,7 +54,7 @@ android {
 }
 
 dependencies {
-    def nav_version = "2.5.3"
+
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.activity:activity-compose:1.6.1'
@@ -70,6 +76,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha03")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
     implementation 'com.github.androidmads:QRGenerator:1.0.1'
-    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    implementation "androidx.compose.material:material-icons-core:1.3.0"
+    implementation "androidx.compose.material:material-icons-extended:1.3.0"
 
 }

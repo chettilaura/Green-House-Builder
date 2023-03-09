@@ -8,7 +8,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.*
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import it.polito.did.gruppo8.screens.MainScreen
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
@@ -21,18 +29,20 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            //"fun GameSkeletonTheme" definita in "Theme.kt"
-            GameSkeletonTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    MainScreen()
+        val LocalFont = staticCompositionLocalOf<FontFamily?> { null }
+            setContent {
+                //"fun GameSkeletonTheme" definita in "Theme.kt"
+                GameSkeletonTheme {
+                    // A surface container using the 'background' color from the theme
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colors.background
+                    ) {
+                        MainScreen()
+                    }
                 }
             }
-        }
+
     }
 }
 

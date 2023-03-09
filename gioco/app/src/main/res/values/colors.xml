@@ -7,4 +7,40 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--COLORI AGGIUNTI-->
+
+    <!--VARI DEFAULT-->
+    <color name="sea_green">#FF4B8C59</color>
+    <color name="cal_poly_green">#FF294D31</color>
+    <color name="persian_red">#FFD03A3A</color>
+
+    <!--COLORI SCHERMATE GIALLE-->
+    <color name="moss_green">#FF8A8948</color>
+    <color name="straw">#FFDDDC8C</color>
+    <color name="citron">#FFD4D36D</color>
+    <color name="olivine">#FFA9B86A</color>
+
+    <!--COLORI SCHERMATE ROSSE-->
+    <color name="cordovan">#FF844A4A</color>
+    <color name="rosy_brown">#FFDA9393</color>
+    <color name="beaver">#FFA3786C</color>
+    <color name="old_rose">#FFD07676</color>
+
+    <!--COLORI SCHERMATE VERDI-->
+    <color name="emerald">#FF65B376</color>
+    <color name="fern_green">#FF527546</color>
+    <color name="pistachio">#FF85C071</color>
+    <color name="asparagus">#FF71A468</color>
+
+    <!--COLORI SCHERMATE BLU-->
+    <color name="cornflower_blue">#FF6D95D4</color>
+    <color name="air_force_blue">#FF658DA6</color>
+    <color name="lapis_lazuli">#FF465F84</color>
+    <color name="vista_blue">#FF8CACDD</color>
+
+    <!--COLORI BARRE in ordine: economy, co2, comfort-->
+    <color name="xanthous">#FFE9AF25</color>
+    <color name="glaucous">#FF497ED2</color>
+    <color name="kelly_green">#FF54AB2B</color>
 </resources>

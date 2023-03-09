@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Gioco" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/black</item>
+    <style name="GameTheme" parent="android:Theme.Material.Light.NoActionBar">
+
+        <item name="android:fontFamily">@font/caveat_regular</item>
+
+        <item name="android:statusBarColor">@color/cal_poly_green</item>
+        <item name="android:colorPrimary">@color/sea_green</item>
+
+        <item name="android:colorSecondary">@color/cal_poly_green</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:navigationBarColor">@color/cal_poly_green</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:colorError">@color/old_rose</item>
     </style>
 </resources>
