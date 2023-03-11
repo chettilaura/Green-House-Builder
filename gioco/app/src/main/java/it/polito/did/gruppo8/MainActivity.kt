@@ -46,3 +46,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun Welcome(){
+    Text("Hello")
+}
+
