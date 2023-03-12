@@ -25,12 +25,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             vm::onCreateNewGame,
             vm::onPreJoinGame,
             modifier)
-        is ScreenName.Join -> JoinScreen(modifier) //
-        //Initial non più usato, vedi OpenScreen
-//        is ScreenName.Initial -> InitialScreen(
-//            vm::onCreateNewGame,
-//            vm::onJoinGame,
-//            modifier)
+        is ScreenName.Join -> JoinGameScreen(modifier)
         is ScreenName.Settings -> SettingsScreen(modifier)
         is ScreenName.Tutorial -> TutorialScreen (modifier)
         is ScreenName.CitySetup -> CitySetupScreen(modifier)
@@ -60,3 +55,17 @@ fun MainScreen(modifier: Modifier = Modifier) {
         null -> Box(modifier)
     }
 }
+
+
+
+
+
+
+// CIMITERO SETUP MALNATI
+
+//        is ScreenName.Initial -> InitialScreen(
+//            vm::onCreateNewGame,
+//            vm::onJoinGame,
+//            modifier)
+
+//        is ScreenName.Join -> JoinScreen(modifier)

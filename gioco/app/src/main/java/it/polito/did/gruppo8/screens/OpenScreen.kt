@@ -14,7 +14,7 @@ import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 @Composable
-fun OpenScreen(modifier: Modifier = Modifier)
+fun OpenScreen(onCreateNewGame:() -> Unit,onPreJoinGame:() -> Unit, modifier: Modifier = Modifier)
 {
     Box(modifier = Modifier.fillMaxSize(1f)){
         Image(
@@ -34,8 +34,8 @@ fun OpenScreen(modifier: Modifier = Modifier)
             AppSettings()
             AppName()
             Tutorial()
-            NewGame()
-            JoinGame()
+            NewGame(onCreateNewGame)
+            JoinGame(onPreJoinGame)
             Credits()
 
         }
@@ -82,25 +82,25 @@ fun Tutorial()
 }
 
 @Composable
-fun NewGame()
+fun NewGame(onCreateNewGame: () -> Unit)
 {
     Box() {
         Image(
             painter = painterResource(id = R.drawable.new_game_button),
             contentDescription = null,
-            modifier = Modifier.clickable {/*TODO:passare schermata nuova partita*/}
+            modifier = Modifier.clickable {onCreateNewGame()}
         )
     }
 }
 
 @Composable
-fun JoinGame()
+fun JoinGame(onPreJoinGame: () -> Unit)
 {
     Box() {
         Image(
             painter = painterResource(id = R.drawable.join_button),
             contentDescription = null,
-            modifier = Modifier.clickable {/*TODO:passare schermata join game*/}
+            modifier = Modifier.clickable {onPreJoinGame()}
         )
     }
 }
@@ -125,7 +125,7 @@ fun Credits()
 @Composable
 fun PreviewOpenScreen() {
     GameSkeletonTheme {
-        OpenScreen()
+        OpenScreen({},{})
     }
 }
 
