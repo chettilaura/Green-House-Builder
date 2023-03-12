@@ -98,6 +98,7 @@ class GameManager(private val scope:CoroutineScope) {
         return if (changed) updatedPlayers else null
     }
 
+    //versione Malnati: assegna al player che ha fatto join game il team corrispondente
     private fun watchPlayers() {
         //leggo dal livedata l'ID della partita
         val id = matchId.value ?: throw RuntimeException("Missing match Id")
@@ -105,8 +106,10 @@ class GameManager(private val scope:CoroutineScope) {
         val ref = firebase.getReference(id)
 
         //presa le reference della partita nel DB, si mette in ascolto sul child "players" della struttura
+        //qui lettura da firebase fatta con addValueEventListener
+        // la funzione addValueEventListener prevede override delle due funzioni "onDataChange" & "onCancelled"
         ref.child("players").addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+            override fun onDataChange(snapshot: DataSnapshot) { //snapshot è puntatore a reference nel database (posso fare snapshot.child() etc.)
                 val v = snapshot.value
                 if (v!=null && v is Map<*, *>) {
                     val updatedPlayers = assignTeam(v as Map<String,String>)
@@ -168,15 +171,17 @@ class GameManager(private val scope:CoroutineScope) {
 
 
 
-
+    //funzione che osserva il child "screen" della struttura firebase della partita
+    //in base al valore di "screen" fa apparire la relativa schermata
     private fun watchScreen() {
         val id = matchId.value ?: throw RuntimeException("Missing match Id")
         val ref = firebase.getReference(id)
 
-        //presa le reference della partita nel DB, si mette in ascolto sul child "screen" della struttura
+        //presa le reference della partita nel DB, si mette in ascolto sul child "screen" della struttura in firebase
         ref.child("screen").addValueEventListener(
             object: ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    //legge valore scritto nel child "screen" in firebase a mostra la relativa schermata
                     mutableScreenName.value = getScreenName(snapshot.value?.toString()?: "")
                 }
 
@@ -192,6 +197,7 @@ class GameManager(private val scope:CoroutineScope) {
     private fun getScreenName(name:String): ScreenName {
         return when (name) {
             "WaitingStart" -> ScreenName.WaitingStart
+            //playing corrisponde a "PlayerScreen" ed esce una volta fatto il join game
             "Playing" -> ScreenName.Playing(getMyTeam())
             else -> ScreenName.Error("Unknown screen $name")
         }
@@ -218,8 +224,9 @@ class GameManager(private val scope:CoroutineScope) {
                         .child(firebaseAuth.uid!!)
                         .setValue("").await()
 
+                    //da watchPlayers entra in AssignTeam e riempie il sotto-child con l'id di autentificazione firebase con il team
                     watchPlayers()
-                    //qui entra in AssignTeam da watchPlayers  e riempie il sotto-child con l'id di autentificazione firebase con il team
+                    //chiama watchScreen che carica la schermata contenuta nel child della reference firebase
                     watchScreen()
                 } else {
                     mutableScreenName.value = ScreenName.Error("Invalid gameId")
@@ -237,6 +244,7 @@ class GameManager(private val scope:CoroutineScope) {
             try {
                 val ref = firebase.getReference(matchId.value ?: throw RuntimeException("Invalid State"))
                 //cambia il valore del child "screen" nella "struttura partita" -> da "waitingStart" a "Playing"
+                //la funzione "watchscreen" poi va a leggere questo valore per capire quale schermata caricare
                 ref.child("screen").setValue("Playing").await()
                 //passa al DashboardScreen
                 mutableScreenName.value = ScreenName.Dashboard

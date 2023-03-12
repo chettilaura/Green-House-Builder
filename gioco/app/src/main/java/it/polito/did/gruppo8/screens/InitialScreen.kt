@@ -58,7 +58,8 @@ fun InitialScreen(onStartNewGame: () -> Unit,  onJoinGame: (String) -> Unit,  mo
             TextField(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 singleLine = true,
-                value = matchId.value, onValueChange = {matchId.value = it})
+                value = matchId.value,
+                onValueChange = {matchId.value = it})
             Button(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = {onJoinGame(matchId.value)}) {
