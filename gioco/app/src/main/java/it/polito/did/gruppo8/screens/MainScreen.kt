@@ -20,7 +20,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     //volendo creare un nuovo screen qui definisco passaggio da stato-screen a chiamata alla screen vera e propria (chiamo lo screen quando stato impostato sul corrispondente )
 
     when (val screenName = vm.screenName.observeAsState().value) {
-        is ScreenName.Splash -> SplashScreen(modifier)
+        is ScreenName.Splash -> OpenScreen(modifier)
         is ScreenName.Initial -> InitialScreen(
             vm::onCreateNewGame,
             vm::onJoinGame,
