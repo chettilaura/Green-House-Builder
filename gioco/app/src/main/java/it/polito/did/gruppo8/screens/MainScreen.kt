@@ -21,13 +21,13 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     when (val screenName = vm.screenName.observeAsState().value) {
         is ScreenName.Splash -> SplashScreen(modifier)
-        is ScreenName.Initial -> InitialScreen(
+        is ScreenName.Initial -> OpenScreen(
             vm::onCreateNewGame,
-            vm::onJoinGame,
+            vm::onPreJoinGame,
             modifier)
+        is ScreenName.Join -> JoinGameScreen(modifier)
         is ScreenName.Settings -> SettingsScreen(modifier)
         is ScreenName.Tutorial -> TutorialScreen (modifier)
-        is ScreenName.Join -> JoinScreen(modifier)
         is ScreenName.CitySetup -> CitySetupScreen(modifier)
         is ScreenName.JoinInfo -> JoinInfoScreen(modifier)
         is ScreenName.GameSetup -> GameSetupScreen(modifier)
@@ -55,3 +55,17 @@ fun MainScreen(modifier: Modifier = Modifier) {
         null -> Box(modifier)
     }
 }
+
+
+
+
+
+
+// CIMITERO SETUP MALNATI
+
+//        is ScreenName.Initial -> InitialScreen(
+//            vm::onCreateNewGame,
+//            vm::onJoinGame,
+//            modifier)
+
+//        is ScreenName.Join -> JoinScreen(modifier)

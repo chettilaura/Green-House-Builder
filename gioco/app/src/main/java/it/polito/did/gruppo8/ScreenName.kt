@@ -9,7 +9,7 @@ sealed class ScreenName {
     object Initial: ScreenName()
     class Settings: ScreenName()
     class Tutorial: ScreenName ()
-    class Join: ScreenName()
+    object Join: ScreenName()
     class CitySetup: ScreenName()
     class JoinInfo: ScreenName()
     class GameSetup: ScreenName()

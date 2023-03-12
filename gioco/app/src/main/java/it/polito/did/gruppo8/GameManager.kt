@@ -203,6 +203,10 @@ class GameManager(private val scope:CoroutineScope) {
         }
     }
 
+    //questa funzione rimanda alla pagina 3A (file pdf di tutte le schermate)
+    fun preJoinGame(){
+       mutableScreenName.value = ScreenName.Join
+    }
 
     fun joinGame(matchId:String) {
         if (matchId.isEmpty()) return

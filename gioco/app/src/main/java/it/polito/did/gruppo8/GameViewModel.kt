@@ -15,6 +15,7 @@ class GameViewModel: ViewModel() {
     private val gameManager = GameManager(viewModelScope)
 
     fun onCreateNewGame() = gameManager.createNewGame()
+    fun onPreJoinGame() = gameManager.preJoinGame()
     fun onJoinGame(matchId:String) = gameManager.joinGame(matchId)
     fun onStartGame() = gameManager.startGame()
 
