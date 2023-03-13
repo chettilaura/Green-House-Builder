@@ -1,4 +1,4 @@
-package it.polito.did.gruppo8
+package it.polito.did.gruppo8.model
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,18 +6,17 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import it.polito.did.gruppo8.ScreenName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
 
-class GameManager(private val scope:CoroutineScope) {
+class GameManager(private val scope: CoroutineScope) {
 
     //----------------def variabili GameManager
     //MVVM __ view(screen.kt)-viewmodel(gameviewmodel)-model(database->gamemanager)
@@ -72,7 +71,7 @@ class GameManager(private val scope:CoroutineScope) {
                 mutableScreenName.value = ScreenName.Initial
             } catch (e: Exception) {
                 //assegno come screen-corrente Error
-                mutableScreenName.value = ScreenName.Error(e.message?:"Unknown error")
+                mutableScreenName.value = ScreenName.Error(e.message ?: "Unknown error")
             }
         }
     }
@@ -144,7 +143,7 @@ class GameManager(private val scope:CoroutineScope) {
                 val ref = firebase.getReference("game_Id_Prova")
 
                 //se vado a vedere nel logcat mi mostra "creating match -MatchName-"
-                Log.d("GameManager","Creating match ${ref.key}")
+                Log.d("GameManager", "Creating match ${ref.key}")
 
                 //riempie la "struttura partita" con info date/owner/screen -> saranno i suoi child
                 ref.setValue(
@@ -215,7 +214,7 @@ class GameManager(private val scope:CoroutineScope) {
                 val ref = firebase.getReference(matchId)
 
                 //se vado a vedere nel logcat mi mostra "joined match matchName"
-                Log.d("GameManager","joined match ${ref.key}")
+                Log.d("GameManager", "joined match ${ref.key}")
 
                 //val data = ref.get().await()
                 if (ref.get().await() != null) {
@@ -236,7 +235,7 @@ class GameManager(private val scope:CoroutineScope) {
                     mutableScreenName.value = ScreenName.Error("Invalid gameId")
                 }
             } catch (e: Exception) {
-                mutableScreenName.value = ScreenName.Error(e.message?: "Generic error")
+                mutableScreenName.value = ScreenName.Error(e.message ?: "Generic error")
             }
         }
     }

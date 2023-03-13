@@ -2,6 +2,7 @@ package it.polito.did.gruppo8
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import it.polito.did.gruppo8.model.GameManager
 
 //gameViewModel è l'intermediatore tra le view (gli screens) & il database (gameManager)
 
