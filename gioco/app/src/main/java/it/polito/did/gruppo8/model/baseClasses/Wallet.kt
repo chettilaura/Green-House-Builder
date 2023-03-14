@@ -1,7 +1,7 @@
 package it.polito.did.gruppo8.model.baseClasses
 
 class Wallet {
-    private var _coins : Int = 0
+    var _coins : Int = 0
 
     fun totalCoins(): Int{
         return _coins

@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import it.polito.did.gruppo8.ScreenName
+import it.polito.did.gruppo8.model.baseClasses.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -139,7 +140,7 @@ class GameManager(private val scope: CoroutineScope) {
         scope.launch {
             try {
 
-            //crea nel DB un puntatore a "struttura partita" specificandone un nome
+                //crea nel DB un puntatore a "struttura partita" specificandone un nome
                 val ref = firebase.getReference("game_Id_Prova")
 
                 //se vado a vedere nel logcat mi mostra "creating match -MatchName-"
