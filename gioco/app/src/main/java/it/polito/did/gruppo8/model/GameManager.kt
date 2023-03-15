@@ -10,11 +10,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import it.polito.did.gruppo8.ScreenName
-import it.polito.did.gruppo8.model.baseClasses.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import java.time.LocalDateTime
 
 class GameManager(private val scope: CoroutineScope) {
@@ -25,34 +23,36 @@ class GameManager(private val scope: CoroutineScope) {
 
     //screeName è un liveData -> contiene mutableScreenName che è un MutableLiveData
     //mutableScreenName contiene il nome dello screen corrente
-    private val mutableScreenName = MutableLiveData<ScreenName>().also {
+    private val _mutableScreenName = MutableLiveData<ScreenName>().also {
         //prima assegnazione dello screen (fatta di default) è lo Splash
         //qui uso 'it.value' anzichè 'mutableScreenName.value' perché l'ho definito qui
         it.value = ScreenName.Splash
     }
-    val screenName: LiveData<ScreenName> = mutableScreenName
+    val screenName: LiveData<ScreenName> = _mutableScreenName
 
 
     //matchId è un liveData -> contiene mutableMatchId che è un MutableLiveData
     //mutableMatchId contiene l'ID della partita
-    private val mutableMatchId = MutableLiveData<String>()
-    val matchId: LiveData<String> = mutableMatchId
+    private val _mutableMatchId = MutableLiveData<String>()
+    val matchId: LiveData<String> = _mutableMatchId
 
 
     //players è un liveData -> contiene mutablePlayers che è un MutableLiveData
     //mutablePlayers contiene elenco (Map) dei giocatori (string,string)-> (authId, team)
-    private val mutablePlayers = MutableLiveData<Map<String, String>>().also {
+    private val _mutablePlayers = MutableLiveData<Map<String, String>>().also {
         it.value = emptyMap()
     }
-    val players: LiveData<Map<String, String>> = mutablePlayers
+    val players: LiveData<Map<String, String>> = _mutablePlayers
 
 
     //qui creo la referenza al DataBase tramite URL
+    /*
     private val URL = "https://gioco8-32e43-default-rtdb.europe-west1.firebasedatabase.app/"
     private val firebase = Firebase.database(URL)
     private val firebaseAuth = Firebase.auth
+    */
 
-
+    private val dbManager: DatabaseManager = DatabaseManager(scope)
 
 
 
@@ -62,6 +62,8 @@ class GameManager(private val scope: CoroutineScope) {
 
     init {
         //firebase.setLogLevel(Logger.Level.DEBUG)
+
+        /*
         scope.launch {
             try {
                 //accedo al DB autenticandomi
@@ -73,6 +75,19 @@ class GameManager(private val scope: CoroutineScope) {
             } catch (e: Exception) {
                 //assegno come screen-corrente Error
                 mutableScreenName.value = ScreenName.Error(e.message ?: "Unknown error")
+            }
+        }
+
+         */
+
+        // DatabaseManager version
+        scope.launch {
+            try {
+                dbManager.authenticate()
+                delay(500)
+                _mutableScreenName.value = ScreenName.Initial
+            } catch (e: Exception) {
+                _mutableScreenName.value = ScreenName.Error(e.message ?: "Unknown error")
             }
         }
     }
@@ -100,6 +115,7 @@ class GameManager(private val scope: CoroutineScope) {
 
     //versione Malnati: assegna al player che ha fatto join game il team corrispondente
     private fun watchPlayers() {
+        /*
         //leggo dal livedata l'ID della partita
         val id = matchId.value ?: throw RuntimeException("Missing match Id")
         //cerco nel DB il puntatore con il nome della partita cercata
@@ -126,17 +142,51 @@ class GameManager(private val scope: CoroutineScope) {
                 mutableScreenName.value = ScreenName.Error(error.message)
             }
         })
+         */
 
+        //DatabaseManager version
+        val id = matchId.value ?: throw RuntimeException("Missing match Id")
+
+        val playersListener = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val currentPlayers = snapshot.value ?: return
+
+                if(currentPlayers !is Map<*,*>)
+                    throw RuntimeException("Error occurred reading Players data structure in Database")
+
+                val updatedPlayers = assignTeam(currentPlayers as Map<String, String>)
+                if(updatedPlayers != null)
+                    dbManager.writeData("$id/players", updatedPlayers)
+                else
+                    dbManager.writeData("$id/players", currentPlayers)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                _mutableScreenName.value = ScreenName.Error(error.message)
+            }
+        }
+
+        dbManager.addListener("$id/players", playersListener)
     }
 
     private fun getMyTeam(): String {
+        /*
         Log.d("GameManager", "players: ${players.value}")
         Log.d("GameManager", "uid: ${firebaseAuth.uid}")
         return players.value?.get(firebaseAuth.uid) ?: ""
+        */
+
+        //DatabaseManager version
+        val uid = dbManager.getCurrentUserID()
+        Log.d("GameManager", "players: ${players.value}")
+        Log.d("GameManager", "uid: $uid")
+        return players.value?.get(uid) ?: ""
     }
 
     //funzione che parte dopo aver premuto "Start new match" in InitialScreen
     fun createNewGame() {
+
+        /*
         scope.launch {
             try {
 
@@ -159,6 +209,7 @@ class GameManager(private val scope: CoroutineScope) {
 
                 //riempie la variabile MatchId
                 mutableMatchId.value = ref.key
+                Log.d("GameManager", "Match ID = ${mutableMatchId.value}")
                 //dopo aver premuto "Start new match" va alla schermata "SetUpMatchScreen" che crea il codice QR
                 mutableScreenName.value = ScreenName.SetupMatch(ref.key!!)
                 //chiama la funzione "watchPlayers"
@@ -167,6 +218,28 @@ class GameManager(private val scope: CoroutineScope) {
                 mutableScreenName.value = ScreenName.Error(e.message ?: "Generic error")
             }
         }
+
+         */
+
+        // DatabaseManager version
+        val gameSessionId = "test_game_session"
+        try {
+            dbManager.writeData(gameSessionId,
+                mapOf(
+                    "date" to LocalDateTime.now().toString(),
+                    "owner" to dbManager.getCurrentUserID(),
+                    "screen" to "WaitingStart"
+                )
+            )
+            Log.d("GameManager", "Match creation succeeded")
+
+            _mutableMatchId.value = gameSessionId
+            _mutableScreenName.value = ScreenName.SetupMatch(gameSessionId)
+
+            watchPlayers()
+        } catch (e: Exception) {
+            _mutableScreenName.value = ScreenName.Error(e.message ?: "Generic error")
+        }
     }
 
 
@@ -174,6 +247,7 @@ class GameManager(private val scope: CoroutineScope) {
     //funzione che osserva il child "screen" della struttura firebase della partita
     //in base al valore di "screen" fa apparire la relativa schermata
     private fun watchScreen() {
+        /*
         val id = matchId.value ?: throw RuntimeException("Missing match Id")
         val ref = firebase.getReference(id)
 
@@ -191,6 +265,22 @@ class GameManager(private val scope: CoroutineScope) {
             }
         )
 
+         */
+
+        //DatabaseManager version
+        val id = matchId.value ?: throw RuntimeException("Missing match Id")
+
+        val screenListener = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                _mutableScreenName.value = getScreenName(snapshot.value?.toString()?: "")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                _mutableScreenName.value = ScreenName.Error(error.message)
+            }
+        }
+
+        dbManager.addListener("$id/screen", screenListener)
     }
 
     //si riferisce al terzo elemento della "struttura partita" nel DB
@@ -205,10 +295,11 @@ class GameManager(private val scope: CoroutineScope) {
 
     //questa funzione rimanda alla pagina 3A (file pdf di tutte le schermate)
     fun preJoinGame(){
-       mutableScreenName.value = ScreenName.Join
+       _mutableScreenName.value = ScreenName.Join
     }
 
     fun joinGame(matchId:String) {
+        /*
         if (matchId.isEmpty()) return
         scope.launch {
             try {
@@ -239,11 +330,29 @@ class GameManager(private val scope: CoroutineScope) {
                 mutableScreenName.value = ScreenName.Error(e.message ?: "Generic error")
             }
         }
+        */
+
+        //DatabaseManager version
+        try {
+            if (matchId.isEmpty()) return
+
+            if(!dbManager.isDataPresent(matchId))
+                _mutableScreenName.value = ScreenName.Error("Invalid gameId")
+
+            _mutableMatchId.value = matchId
+
+            dbManager.writeData("$matchId/${dbManager.getCurrentUserID()}", "")
+            watchPlayers()
+            watchScreen()
+        } catch (e: Exception) {
+            _mutableScreenName.value = ScreenName.Error(e.message ?: "Generic error")
+        }
     }
 
 
 
     fun startGame() {
+        /*
         scope.launch {
             try {
                 val ref = firebase.getReference(matchId.value ?: throw RuntimeException("Invalid State"))
@@ -257,7 +366,17 @@ class GameManager(private val scope: CoroutineScope) {
                 mutableScreenName.value = ScreenName.Error(e.message ?: "Generic error")
             }
         }
+        */
+
+        //DatabaseManager version
+        val id = matchId.value ?: throw RuntimeException("Missing match Id")
+
+        try {
+            dbManager.writeData("$id/screen", "Playing")
+            _mutableScreenName.value = ScreenName.Dashboard
+        }
+        catch (e: Exception) {
+            _mutableScreenName.value = ScreenName.Error(e.message ?: "Generic error")
+        }
     }
-
-
 }
