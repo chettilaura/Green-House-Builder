@@ -3,17 +3,16 @@ package it.polito.did.gruppo8.model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import it.polito.did.gruppo8.ScreenName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+
+import it.polito.did.gruppo8.ScreenName
+import it.polito.did.gruppo8.model.baseClasses.*
 
 class GameManager(private val scope: CoroutineScope) {
 
@@ -36,13 +35,22 @@ class GameManager(private val scope: CoroutineScope) {
     private val _mutableMatchId = MutableLiveData<String>()
     val matchId: LiveData<String> = _mutableMatchId
 
+    // TODO: Rework players with Player class (no teams?)
 
     //players è un liveData -> contiene mutablePlayers che è un MutableLiveData
     //mutablePlayers contiene elenco (Map) dei giocatori (string,string)-> (authId, team)
+
+    /*
     private val _mutablePlayers = MutableLiveData<Map<String, String>>().also {
         it.value = emptyMap()
     }
     val players: LiveData<Map<String, String>> = _mutablePlayers
+     */
+
+    private val _mutablePlayers = MutableLiveData<Map<String, Player>>().also{
+        it.value = emptyMap()
+    }
+    val players: LiveData<Map<String, Player>> = _mutablePlayers
 
 
     //qui creo la referenza al DataBase tramite URL
@@ -51,8 +59,7 @@ class GameManager(private val scope: CoroutineScope) {
     private val firebase = Firebase.database(URL)
     private val firebaseAuth = Firebase.auth
     */
-
-    private val dbManager: DatabaseManager = DatabaseManager(scope)
+    private val _dbManager: DatabaseManager = DatabaseManager(scope)
 
 
 
@@ -64,6 +71,7 @@ class GameManager(private val scope: CoroutineScope) {
         //firebase.setLogLevel(Logger.Level.DEBUG)
 
         /*
+
         scope.launch {
             try {
                 //accedo al DB autenticandomi
@@ -83,7 +91,7 @@ class GameManager(private val scope: CoroutineScope) {
         // DatabaseManager version
         scope.launch {
             try {
-                dbManager.authenticate()
+                _dbManager.authenticate()
                 delay(500)
                 _mutableScreenName.value = ScreenName.Initial
             } catch (e: Exception) {
@@ -93,9 +101,9 @@ class GameManager(private val scope: CoroutineScope) {
     }
 
 
-
     //--------------------inizio funzioni GameManager
 
+    /*      MALNATI
     private fun assignTeam(players: Map<String,String>): Map<String,String>? {
         val teams = players.keys.groupBy { players[it].toString() }
         val teamNames = listOf("team1", "team2", "team3", "team4")
@@ -112,6 +120,7 @@ class GameManager(private val scope: CoroutineScope) {
         //ritorna updatedPlayers che contiene il nome del team assegnato
         return if (changed) updatedPlayers else null
     }
+     */
 
     //versione Malnati: assegna al player che ha fatto join game il team corrispondente
     private fun watchPlayers() {
@@ -151,14 +160,18 @@ class GameManager(private val scope: CoroutineScope) {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val currentPlayers = snapshot.value ?: return
 
-                if(currentPlayers !is Map<*,*>)
+                if(currentPlayers !is Map<*, *>)
                     throw RuntimeException("Error occurred reading Players data structure in Database")
 
+                /*      MALNATI
                 val updatedPlayers = assignTeam(currentPlayers as Map<String, String>)
                 if(updatedPlayers != null)
-                    dbManager.writeData("$id/players", updatedPlayers)
+                    _dbManager.writeData("$id/players", updatedPlayers)
                 else
-                    dbManager.writeData("$id/players", currentPlayers)
+                    _dbManager.writeData("$id/players", currentPlayers)
+                 */
+
+                _mutablePlayers.value = currentPlayers as Map<String, Player>
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -166,9 +179,10 @@ class GameManager(private val scope: CoroutineScope) {
             }
         }
 
-        dbManager.addListener("$id/players", playersListener)
+        _dbManager.addListener("$id/players", playersListener)
     }
 
+    /*      MALNATI
     private fun getMyTeam(): String {
         /*
         Log.d("GameManager", "players: ${players.value}")
@@ -177,11 +191,13 @@ class GameManager(private val scope: CoroutineScope) {
         */
 
         //DatabaseManager version
-        val uid = dbManager.getCurrentUserID()
+        val uid = _dbManager.getCurrentUserID()
         Log.d("GameManager", "players: ${players.value}")
         Log.d("GameManager", "uid: $uid")
         return players.value?.get(uid) ?: ""
     }
+
+     */
 
     //funzione che parte dopo aver premuto "Start new match" in InitialScreen
     fun createNewGame() {
@@ -224,10 +240,10 @@ class GameManager(private val scope: CoroutineScope) {
         // DatabaseManager version
         val gameSessionId = "test_game_session"
         try {
-            dbManager.writeData(gameSessionId,
+            _dbManager.writeData(gameSessionId,
                 mapOf(
                     "date" to LocalDateTime.now().toString(),
-                    "owner" to dbManager.getCurrentUserID(),
+                    "hostId" to _dbManager.getCurrentUserID(),
                     "screen" to "WaitingStart"
                 )
             )
@@ -280,7 +296,7 @@ class GameManager(private val scope: CoroutineScope) {
             }
         }
 
-        dbManager.addListener("$id/screen", screenListener)
+        _dbManager.addListener("$id/screen", screenListener)
     }
 
     //si riferisce al terzo elemento della "struttura partita" nel DB
@@ -288,7 +304,7 @@ class GameManager(private val scope: CoroutineScope) {
         return when (name) {
             "WaitingStart" -> ScreenName.WaitingStart
             //playing corrisponde a "PlayerScreen" ed esce una volta fatto il join game
-            "Playing" -> ScreenName.Playing(getMyTeam())
+            "Playing" -> ScreenName.Playing()
             else -> ScreenName.Error("Unknown screen $name")
         }
     }
@@ -298,7 +314,7 @@ class GameManager(private val scope: CoroutineScope) {
        _mutableScreenName.value = ScreenName.Join
     }
 
-    fun joinGame(matchId:String) {
+    fun joinGame(matchId:String, nickname:String) {
         /*
         if (matchId.isEmpty()) return
         scope.launch {
@@ -336,12 +352,26 @@ class GameManager(private val scope: CoroutineScope) {
         try {
             if (matchId.isEmpty()) return
 
-            if(!dbManager.isDataPresent(matchId))
+            val playerId = _dbManager.getCurrentUserID()
+            if(playerId == null)
+                _mutableScreenName.value = ScreenName.Error("User not authenticated to the database")
+            Log.d("GameManager","joinGame: playerId is $playerId")
+
+            /*
+            //TODO: Do more test on blocking function isDataPresent
+            if(!_dbManager.isDataPresent(matchId)) {
                 _mutableScreenName.value = ScreenName.Error("Invalid gameId")
+            }
+            */
 
             _mutableMatchId.value = matchId
+            Log.d("GameManager","joinGame: matchId is $matchId")
 
-            dbManager.writeData("$matchId/${dbManager.getCurrentUserID()}", "")
+            val playerObj = playerId?.let { Player(it, nickname) }
+
+            _dbManager.writeData("$matchId/players/$playerId", playerObj)
+
+            Log.d("GameManager","joinGame: player data written")
             watchPlayers()
             watchScreen()
         } catch (e: Exception) {
@@ -372,7 +402,7 @@ class GameManager(private val scope: CoroutineScope) {
         val id = matchId.value ?: throw RuntimeException("Missing match Id")
 
         try {
-            dbManager.writeData("$id/screen", "Playing")
+            _dbManager.writeData("$id/screen", "Playing")
             _mutableScreenName.value = ScreenName.Dashboard
         }
         catch (e: Exception) {

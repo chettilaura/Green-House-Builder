@@ -27,7 +27,7 @@ sealed class ScreenName {
     class PlayersRank: ScreenName()
     class SetupMatch(val matchId: String): ScreenName()
     object WaitingStart: ScreenName()
-    class Playing(val team: String): ScreenName()
+    class Playing(): ScreenName()
     object Dashboard: ScreenName()
     class Error(val message:String): ScreenName()
 }

@@ -14,7 +14,10 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 //eventualmente anche possibilità di leggere codice QR
 
 @Composable
-fun JoinScreen(modifier: Modifier = Modifier){
+fun MalnatiJoinScreen(
+    onJoinGame: (String, String) -> Unit,
+    modifier: Modifier = Modifier
+){
     var gameID by remember { mutableStateOf(TextFieldValue("")) }
     var playerName by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -65,7 +68,7 @@ fun JoinScreen(modifier: Modifier = Modifier){
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.Center
                 ){
-                    Button(onClick = { /*TODO*/ }
+                    Button(onClick = { onJoinGame(gameID.text, playerName.text) }
                     ) {
                         Text(text = "Partecipa!")
                         //NOTA: deve funzionare solo se i campi sono compilati correttamente
@@ -110,6 +113,6 @@ fun JoinScreen(modifier: Modifier = Modifier){
 @Composable
 fun JoinScreenPreview(modifier: Modifier = Modifier) {
     GameSkeletonTheme() {
-        JoinScreen()
+        MalnatiJoinScreen(fun (_:String, _:String){})
     }
 }

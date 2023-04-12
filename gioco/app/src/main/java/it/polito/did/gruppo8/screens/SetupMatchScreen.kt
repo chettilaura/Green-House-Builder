@@ -12,18 +12,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.graphics.asImageBitmap
 
+import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
+import it.polito.did.gruppo8.model.baseClasses.*
+
+
 @Composable
-fun SetupMatchScreen(matchId: String,
-                     players: State<Map<String,String>?>,
-                     onStartMatch: () -> Unit,
-                     modifier: Modifier = Modifier) {
+fun SetupMatchScreen(
+    matchId: String,
+    players: State<Map<String, Player>?>,
+    onStartMatch: () -> Unit,
+    modifier: Modifier = Modifier) {
 
     GenericScreen(title = "Waiting for Players", modifier) {
         BoxWithConstraints() {
@@ -136,9 +140,14 @@ fun SetupMatchScreen(matchId: String,
 @Preview(showBackground = true, widthDp = 600, heightDp = 1280)
 @Composable
 fun DefaultPreview1() {
-    val players: State<Map<String,String>> = remember {
-        mutableStateOf(mapOf("Mario" to "team1", "Paola" to "team2"))
+    val defPlayer = Player("0", "Antonio")
+
+    val players: State<Map<String, Player>> = remember {
+        mutableStateOf(mapOf(
+            "0" to defPlayer
+        ))
     }
+
     GameSkeletonTheme {
         SetupMatchScreen("abc", players, {})
     }

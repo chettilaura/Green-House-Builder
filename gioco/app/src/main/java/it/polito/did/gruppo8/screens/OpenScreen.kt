@@ -14,7 +14,7 @@ import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 @Composable
-fun OpenScreen(onCreateNewGame:() -> Unit,onPreJoinGame:() -> Unit, modifier: Modifier = Modifier)
+fun OpenScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifier: Modifier = Modifier)
 {
     Box(modifier = Modifier.fillMaxSize(1f)){
         Image(

@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.ScreenName
@@ -25,7 +24,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
             vm::onCreateNewGame,
             vm::onPreJoinGame,
             modifier)
-        is ScreenName.Join -> JoinGameScreen(modifier)
+        // TODO: Implementare la nostra JoinScreen (usiamo quella di Malnati per testare cose) -Mattia
+        is ScreenName.Join -> MalnatiJoinScreen(vm::onJoinGame, modifier)
         is ScreenName.Settings -> SettingsScreen(modifier)
         is ScreenName.Tutorial -> TutorialScreen (modifier)
         is ScreenName.CitySetup -> CitySetupScreen(modifier)
@@ -50,7 +50,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             modifier)
         is ScreenName.WaitingStart -> WaitScreen(modifier)
         is ScreenName.Dashboard -> DashboardScreen(modifier)
-        is ScreenName.Playing -> PlayerScreen(screenName.team, modifier)
+        is ScreenName.Playing -> PlayerScreen(modifier)
         is ScreenName.Error -> ErrorScreen(screenName.message, modifier)
         null -> Box(modifier)
     }

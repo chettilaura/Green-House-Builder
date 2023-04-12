@@ -16,13 +16,16 @@ class GameViewModel: ViewModel() {
     private val gameManager = GameManager(viewModelScope)
 
     fun onCreateNewGame() = gameManager.createNewGame()
+    //OnPreJoinGame: cambia la schermata alla screen JoinGame
     fun onPreJoinGame() = gameManager.preJoinGame()
-    fun onJoinGame(matchId:String) = gameManager.joinGame(matchId)
+
+    //OnJoinGame: aggiunge il player alla partita
+    fun onJoinGame(matchId:String, nickname:String) = gameManager.joinGame(matchId, nickname)
+
     fun onStartGame() = gameManager.startGame()
 
     /*Schermata HouseOverviewScreen*/
     fun onViewItemList() = null /*TODO: restituisce lista di oggetti acquistati*/
-
 
 
     val players = gameManager.players
@@ -31,4 +34,8 @@ class GameViewModel: ViewModel() {
 
     /*Schermata HouseOverviewScreen*/
     val co2Impact = null /*TODO: parametro per barra co2*/
+
+
+
+
 }

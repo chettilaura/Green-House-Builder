@@ -6,8 +6,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 @Composable
-fun PlayerScreen(team: String, modifier: Modifier = Modifier) {
-    GenericScreen(title = "Player(${team})", modifier) {
+fun PlayerScreen(modifier: Modifier = Modifier) {
+    GenericScreen(title = "Player", modifier) {
 
     }
 }
@@ -16,6 +16,6 @@ fun PlayerScreen(team: String, modifier: Modifier = Modifier) {
 @Composable
 fun PreviewPlayerScreen() {
     GameSkeletonTheme {
-        PlayerScreen("Team A")
+        PlayerScreen()
     }
 }
