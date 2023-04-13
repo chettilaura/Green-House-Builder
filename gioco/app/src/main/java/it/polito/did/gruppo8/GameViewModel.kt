@@ -15,27 +15,24 @@ import it.polito.did.gruppo8.model.GameManager
 class GameViewModel: ViewModel() {
     private val gameManager = GameManager(viewModelScope)
 
+    val players = gameManager.players
+    val currentScreenName = gameManager.currentScreenName
+    val lobbyId = gameManager.lobbyId
+
+    /*Schermata HouseOverviewScreen*/
+    val co2Impact = null /*TODO: parametro per barra co2*/
+
     fun onCreateNewGame() = gameManager.createNewGame()
     //OnPreJoinGame: cambia la schermata alla screen JoinGame
+    //TODO: Ripensare ai nomi di queste operazioni, troppo fuorvianti e confusi -Mattia
     fun onPreJoinGame() = gameManager.preJoinGame()
 
     //OnJoinGame: aggiunge il player alla partita
-    fun onJoinGame(matchId:String, nickname:String) = gameManager.joinGame(matchId, nickname)
+    fun onJoinGame(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
 
     fun onStartGame() = gameManager.startGame()
 
     /*Schermata HouseOverviewScreen*/
     fun onViewItemList() = null /*TODO: restituisce lista di oggetti acquistati*/
-
-
-    val players = gameManager.players
-    val screenName = gameManager.screenName
-    val matchId = gameManager.matchId
-
-    /*Schermata HouseOverviewScreen*/
-    val co2Impact = null /*TODO: parametro per barra co2*/
-
-
-
 
 }

@@ -22,6 +22,7 @@ class DatabaseManager(private val scope: CoroutineScope) {
      * Authenticates anonymously to the database.
      */
     fun authenticate(){
+        //_firebase.setLogLevel(Logger.Level.DEBUG)
         scope.launch {
             _auth.signInAnonymously().await()
             Log.d("DatabaseManager", "Current User: ${_auth.uid}")
@@ -45,6 +46,7 @@ class DatabaseManager(private val scope: CoroutineScope) {
      * @return true if data are present, false if not.
      */
     fun isDataPresent(path: String): Boolean{
+        //TODO: More test to check if runBlocking generates unwanted behaviour -Mattia
         val result = runBlocking {
             _firebase.getReference(path).get().await() != null
         }

@@ -30,6 +30,40 @@ sealed class ScreenName {
     class Playing(): ScreenName()
     object Dashboard: ScreenName()
     class Error(val message:String): ScreenName()
+
+    companion object{
+        /**
+         * Static method that retrieves the ScreenName class corresponding to the String stringName.
+         *
+         * @param stringName a String containing the name of the corresponding ScreenName.
+         *
+         * @return a ScreenName class corresponding to the passed String. An Error ScreenName if no match was found.
+         */
+        fun stringToScreenName(stringName: String): ScreenName{
+            //NOTA: Il metodo va aggiornato di volta in volta con l'elenco di tutte le possibili ScreenName necessarie, se mancanti -Mattia
+            return when (stringName) {
+                "WaitingStart" -> WaitingStart
+                "Playing" -> Playing()
+                else -> Error("Unknown screen $stringName")
+            }
+        }
+
+        /**
+         * Static method that retrieves the String corresponding to the ScreenName screenName.
+         *
+         * @param screenName a ScreenName class corresponding to the desired String.
+         *
+         * @return a String containing the name of the corresponding ScreenName. An "Error" String if no match was found.
+         */
+        fun screenNameToString(screenName: ScreenName): String{
+            return when(screenName){
+                //NOTA: Il metodo va aggiornato di volta in volta con l'elenco di tutte le possibili ScreenName necessarie, se mancanti -Mattia
+                WaitingStart -> "WaitingStart"
+                Playing() -> "Playing"
+                else -> "Error"
+            }
+        }
+    }
 }
 
 

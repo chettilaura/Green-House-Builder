@@ -18,12 +18,20 @@ fun MainScreen(modifier: Modifier = Modifier) {
     //i nomi degli stati sono definiti nella classe ScreenName (che non fa però il collegamento allo screen vero e proprio, quello lo fa main screen (loader))
     //volendo creare un nuovo screen qui definisco passaggio da stato-screen a chiamata alla screen vera e propria (chiamo lo screen quando stato impostato sul corrispondente )
 
-    when (val screenName = vm.screenName.observeAsState().value) {
+    //TODO: Questo elenco di screen fatto tutto insieme a priori penso possa essere più fuorviante che di aiuto. Piuttosto che buttar giù già tutto insieme, forse è il caso di procedere per gradi, implementando una cosa per volta -Mattia
+
+    when (val screenName = vm.currentScreenName.observeAsState().value) {
         is ScreenName.Splash -> SplashScreen(modifier)
         is ScreenName.Initial -> OpenScreen(
             vm::onCreateNewGame,
             vm::onPreJoinGame,
             modifier)
+        is ScreenName.SetupMatch -> SetupMatchScreen(
+            screenName.matchId,
+            players,
+            vm::onStartGame,
+            modifier)
+        is ScreenName.WaitingStart -> WaitScreen(modifier)
         // TODO: Implementare la nostra JoinScreen (usiamo quella di Malnati per testare cose) -Mattia
         is ScreenName.Join -> MalnatiJoinScreen(vm::onJoinGame, modifier)
         is ScreenName.Settings -> SettingsScreen(modifier)
@@ -34,6 +42,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
         is ScreenName.FreeItem -> FreeItemScreen(modifier)
         is ScreenName.ItemRecap -> ItemRecapScreen(modifier)
         is ScreenName.Quiz -> QuizScreen(modifier)
+        is ScreenName.Dashboard -> DashboardScreen(modifier)
+        is ScreenName.Playing -> PlayerScreen(modifier)
         is ScreenName.Shop -> ShopScreen(modifier)
         is ScreenName.BuyItem -> BuyItemScreen(modifier)
         is ScreenName.GenericLoading -> GenericLoadingScreen(modifier)
@@ -43,14 +53,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
         is ScreenName.GameOver -> GameOverScreen(modifier)
         is ScreenName.DistrictRank -> DistrictRankingScreen(modifier)
         is ScreenName.PlayersRank -> PlayersRankingScreen(modifier)
-        is ScreenName.SetupMatch -> SetupMatchScreen(
-            screenName.matchId,
-            players,
-            vm::onStartGame,
-            modifier)
-        is ScreenName.WaitingStart -> WaitScreen(modifier)
-        is ScreenName.Dashboard -> DashboardScreen(modifier)
-        is ScreenName.Playing -> PlayerScreen(modifier)
         is ScreenName.Error -> ErrorScreen(screenName.message, modifier)
         null -> Box(modifier)
     }
