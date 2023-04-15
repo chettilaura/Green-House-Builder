@@ -19,12 +19,28 @@ class GameViewModel: ViewModel() {
     val currentScreenName = gameManager.currentScreenName
     val lobbyId = gameManager.lobbyId
 
-    /*Schermata HouseOverviewScreen*/
-    val co2Impact = null /*TODO: parametro per barra co2*/
+    val co2Impact = null /*parametro per barra co2*/
 
+
+
+    // OpenScreen TODO: Rinominare in MainMenuScreen -Mattia
+    fun onNewGameButtonPressed() = null
+    fun onJoinGameButtonPressed() = null
+    fun onCreditsButtonPressed() = null
+
+    // NewGameScreen
+    fun onCreateCityButtonPressed() = null
+    fun onGameSetupButtonPressed() = null
+    fun onStartButtonPressed() = null
+
+    // JoinGameScreen
+    fun onCreateHouseButtonPressed() = null
+
+
+
+    //TODO: questi metodi vanno tutti un po' rinominati e riordinati, riassegnandoli in un'organizzazione tipo quella di sopra. -Mattia
     fun onCreateNewGame() = gameManager.createNewGame()
     //OnPreJoinGame: cambia la schermata alla screen JoinGame
-    //TODO: Ripensare ai nomi di queste operazioni, troppo fuorvianti e confusi -Mattia
     fun onPreJoinGame() = gameManager.preJoinGame()
 
     //OnJoinGame: aggiunge il player alla partita

@@ -83,6 +83,7 @@ class GameManager(private val scope: CoroutineScope) {
     fun createNewGame() {
 
         // DatabaseManager version
+        //TODO: Randomizzare la generazione del gameSessionId (stringa alfanumerica di 5-6 caratteri) -Mattia
         val gameSessionId = "test_game_session"
         try {
             _dbManager.writeData(gameSessionId,
@@ -107,7 +108,7 @@ class GameManager(private val scope: CoroutineScope) {
     }
 
     //questa funzione rimanda alla pagina 3A (file pdf di tutte le schermate)
-    //TODO: Ripensare ai nomi di queste operazioni, troppo fuorvianti e confusi -Mattia
+    //TODO: Questo metodo non servirà ora che c'è il metodo switchScreen() -Mattia
     fun preJoinGame(){
         _mutableCurrentScreenName.value = ScreenName.Join
     }
@@ -211,7 +212,8 @@ class GameManager(private val scope: CoroutineScope) {
         _dbManager.addListener("$id/screen", screenListener)
     }
 
-    /*  MALNATI, funzionalità spostata come metodo statico nella classe ScreenName
+    /*  MALNATI, funzionalità spostata come metodo statico nella classe ScreenName -Mattia
+
     private fun getScreenName(name:String): ScreenName {
         return when (name) {
             "WaitingStart" -> ScreenName.WaitingStart
