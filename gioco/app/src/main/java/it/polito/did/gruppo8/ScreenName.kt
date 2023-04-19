@@ -10,6 +10,9 @@ sealed class ScreenName {
     class Settings: ScreenName()
     class Tutorial: ScreenName ()
     object Join: ScreenName()
+    // TODO: RealJoin è nome nuovo della schermata di join nuova, poi da scambiare con quella vecchia
+    class RealJoin: ScreenName()
+
     class CitySetup: ScreenName()
     class JoinInfo: ScreenName()
     class GameSetup: ScreenName()

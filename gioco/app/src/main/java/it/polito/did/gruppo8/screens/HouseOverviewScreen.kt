@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -24,6 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.R.color.*
+
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 //Contiene vista generale della propria casa. Contiene: box con info sui parametri (barre),
 //box con casetta, timer, soldi e info sul round di gioco
@@ -57,6 +61,18 @@ val caveatBold = FontFamily(
 
 fun HouseOverviewScreen(modifier: Modifier = Modifier)
 {
+    val colorTurn = rememberSaveable {
+        mutableStateOf ("RED")
+    }
+    val colorResId = rememberSaveable {
+        mutableStateOf (old_rose)
+    }
+    val numeroTurno = rememberSaveable{
+        mutableStateOf("1/8")
+    }
+    val money = rememberSaveable{
+        mutableStateOf (534)
+    }
 
     Box(modifier = Modifier.fillMaxSize(1f)){
         Image(
@@ -68,7 +84,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .padding(2.dp),
+                .padding(8.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -83,21 +99,21 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                TurnCard(
-                    colorTurn = "RED", colorResId = old_rose
-                    /*TODO: passare parametro della squadra con turno attivo
+                /*TurnCard(
+                    colorTurn.value, colorResId = old_rose
+                    *//*TODO: passare colore della squadra con turno attivo
                     *  il colore è in formato Int e il nome è contenuto nel file colors.xml dentro res,
-                    *  il nome deve essere corrispondente al colore */
+                    *  il nome deve essere corrispondente al colore *//*
                 )
+                Spacer(modifier = Modifier.weight(1f))*/
+
+                RoundCard(numeroTurno.value)
                 Spacer(modifier = Modifier.weight(1f))
 
-                RoundCard("1/8"/*TODO: passare parametro del numero di turno*/)
+                TimerCard()
                 Spacer(modifier = Modifier.weight(1f))
 
-                TimerCard(/*TODO: passare parametro del tempo rimanente per la fine del turno*/)
-                Spacer(modifier = Modifier.weight(1f))
-
-                MoneyCard("534"/*TODO: passare valore dei soldi*/)
+                MoneyCard(money.value)
             }
             Spacer(modifier = Modifier
                 .size(2.dp))
@@ -106,7 +122,9 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             Spacer(modifier = Modifier
                 .size(2.dp))
 
-            Button(onClick = { /*TODO: vai a lista di oggetti acquistati onViewItemList*/ },
+            OutlinedButton(onClick = { /*TODO: vai a lista di oggetti acquistati onViewItemList*/ },
+                shape = RoundedCornerShape(10.dp),
+                border = BorderStroke(2.dp, Color.Black),
                 colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = emerald)),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -121,15 +139,21 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             Spacer(modifier = Modifier
                 .size(4.dp))
 
-            Button(onClick = { /*TODO: vai a vista del quartiere*/ },
+            OutlinedButton(onClick = { /*TODO: vai a vista del quartiere*/ },
+                border = BorderStroke(2.dp, Color.Black),
+                shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = emerald)),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(2.dp)
             ) {
-                Text(text = "DISTRICT VIEW",  fontFamily = caveatBold, color = Color.White, style = MaterialTheme.typography.h6)
+                Text(
+                    text = "DISTRICT VIEW",
+                    fontFamily = caveatBold,
+                    color = Color.White,
+                    style = MaterialTheme.typography.h5
+                )
             }
-
         }
 
     }
@@ -160,7 +184,8 @@ fun SeasonCard(season: String, fact: String) {
         .padding(2.dp),
         backgroundColor = colorResource(id = emerald),
         elevation = 4.dp,
-        border = BorderStroke(2.dp, Color.DarkGray)) {
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(2.dp, Color.Black)) {
         Column(
             modifier = Modifier
                 .padding(8.dp),
@@ -173,15 +198,19 @@ fun SeasonCard(season: String, fact: String) {
                 .padding(2.dp),
                 backgroundColor = colorResource(id = asparagus),
                 elevation = (2).dp,
+                shape = RoundedCornerShape(10.dp),
                 border = BorderStroke(2.dp, Color.DarkGray)
             ) {
                 Column(
                     modifier = Modifier
                         .padding(8.dp),
                     verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.Start
+                    horizontalAlignment = Alignment.Start,
                 ) {
-                    Text(text = fact, fontFamily = caveatRegular, color=Color.White, style = MaterialTheme.typography.body1)
+                    Text(text = fact,
+                        fontFamily = caveatRegular,
+                        color=Color.White,
+                        style = MaterialTheme.typography.body1)
                 }
             }
         }
@@ -189,19 +218,21 @@ fun SeasonCard(season: String, fact: String) {
 }
 
 @Composable
-fun MoneyCard(money : String) {
+fun MoneyCard(money : Int) {
+
     Card(modifier = Modifier
-        .width(100.dp)
-        .height(70.dp)
+        .width(120.dp)
+        .height(80.dp)
         .padding(2.dp),
         elevation = 4.dp,
+        shape = RoundedCornerShape(10.dp),
         border = BorderStroke(2.dp, Color.DarkGray)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(1.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.Center
         ) {
             Image(painter = painterResource(id = R.drawable.coin),
                 contentDescription = "coin",
@@ -214,7 +245,7 @@ fun MoneyCard(money : String) {
                 horizontalAlignment = Alignment.End
             ) {
                /* Text(text = "MONEY", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)*/
-                Text(text = money, fontFamily = caveatBold, style = MaterialTheme.typography.h6)
+                Text(text = "$money", fontFamily = caveatBold, style = MaterialTheme.typography.h6)
             }
         }
     }
@@ -223,10 +254,11 @@ fun MoneyCard(money : String) {
 @Composable
 fun RoundCard(roundNum : String) {
     Card(modifier = Modifier
-        .width(80.dp)
+        .width(120.dp)
         .height(80.dp)
         .padding(2.dp),
         elevation = 4.dp,
+        shape = RoundedCornerShape(10.dp),
         border = BorderStroke(2.dp, Color.DarkGray)) {
         Column(
             modifier = Modifier
@@ -241,12 +273,13 @@ fun RoundCard(roundNum : String) {
 }
 
 @Composable
+
 fun TurnCard(colorTurn: String, colorResId: Int) {
     val color = colorResource(id = colorResId)
 
     Card(modifier = Modifier
         .width(100.dp)
-        .height(70.dp)
+        .height(80.dp)
         .padding(2.dp),
         backgroundColor = Color.White,
         elevation = 4.dp,
@@ -267,13 +300,36 @@ fun TurnCard(colorTurn: String, colorResId: Int) {
     }
 }
 
+
+@Composable
+//funzione per il timer
+/*TODO: impostare inizio del timer e cambio di schermata allo scadere del timer*/
+fun rememberCountdownTimerState(
+    initialMillis: Long,
+    step: Long = 1000
+): MutableState<Long> {
+    val timeLeft = remember {mutableStateOf(initialMillis)}
+    LaunchedEffect(initialMillis, step) {
+        while (isActive && timeLeft.value > 0) {
+            timeLeft.value = (timeLeft.value - step).coerceAtLeast(0)
+            delay(step)
+        }
+    }
+    return timeLeft
+}
+
 @Composable
 fun TimerCard() {
+    //valore del tempo rimanente
+    val timeLeftMs by rememberCountdownTimerState (30_000) //tempo in ms
+    val showTime = timeLeftMs / 1000 //tempo in secondi
+
     Card(modifier = Modifier
-        .width(80.dp)
+        .width(100.dp)
         .height(80.dp)
-        .padding(4.dp),
+        .padding(2.dp),
         elevation = 4.dp,
+        shape = RoundedCornerShape(10.dp),
         border = BorderStroke(2.dp, Color.DarkGray)
     ) {
         Column(
@@ -288,22 +344,29 @@ fun TimerCard() {
                 contentScale = ContentScale.FillHeight
             )
             /*Text(text = "TIMER", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)*/
-            Text(text = "00:34", fontFamily = caveatBold, style = MaterialTheme.typography.h6)
+            Text(text = "$showTime" + " sec", fontFamily = caveatBold, style = MaterialTheme.typography.h6)
         }
     }
 }
 
 @Composable
 fun ParameterBars() {
-    /*val customFont = FontFamily(
-        Font(R.font.sunnyweather, FontWeight.Normal, FontStyle.Normal)
-    )*/
+    val co2Impact = rememberSaveable {
+        mutableStateOf (0.7f)
+    }
+    val comfort = rememberSaveable {
+        mutableStateOf (0.4f)
+    }
+    val economy = rememberSaveable {
+        mutableStateOf (0.5f)
+    }
 
     Card(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(0.15f)
         .padding(4.dp),
         elevation = 4.dp,
+        shape = RoundedCornerShape(10.dp),
         border = BorderStroke(2.dp, Color.DarkGray)
     ) {
         Column(
@@ -320,7 +383,6 @@ fun ParameterBars() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
-                //TODO: aggiungere icona
                 Box(modifier = Modifier.fillMaxWidth(0.4f)) {
                     Row(  //Parametro CO2
                         modifier = Modifier
@@ -345,7 +407,7 @@ fun ParameterBars() {
                         .height(2.dp)
                 )
                 LinearProgressIndicator(
-                    progress = 0.7f, //TODO: passare qui valore della lunghezza della barra
+                    progress = co2Impact.value,
                     color = colorResource(id = kelly_green),
                     backgroundColor = Color.LightGray,
                     modifier = Modifier
@@ -361,7 +423,6 @@ fun ParameterBars() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
-                //TODO: aggiungere icona
                 Box(modifier = Modifier.fillMaxWidth(0.4f)){
                     Row(  //Parametro CO2
                         modifier = Modifier
@@ -387,7 +448,7 @@ fun ParameterBars() {
                         .height(8.dp)
                 )
                 LinearProgressIndicator(
-                    progress = 0.4f, //TODO: passare qui valore della lunghezza della barra
+                    progress = comfort.value,
                     color = colorResource(id = glaucous),
                     backgroundColor = Color.LightGray,
                     modifier = Modifier
@@ -404,7 +465,6 @@ fun ParameterBars() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ) {
-                //TODO: aggiungere icona
                 Box(modifier = Modifier.fillMaxWidth(0.4f)) {
                     Row(  //Parametro CO2
                         modifier = Modifier
@@ -430,7 +490,7 @@ fun ParameterBars() {
                         .height(8.dp)
                 )
                 LinearProgressIndicator(
-                    progress = 0.5f,  //TODO: passare qui valore della lunghezza della barra
+                    progress = economy.value,
                     color = colorResource(id = xanthous),
                     backgroundColor = Color.LightGray,
                     modifier = Modifier

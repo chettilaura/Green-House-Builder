@@ -5,9 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -39,7 +37,7 @@ fun QuizScreen(modifier: Modifier = Modifier) {
             )
 
             Column(modifier = Modifier.fillMaxWidth()
-                .padding(16.dp),
+                .padding(8.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -50,30 +48,36 @@ fun QuizScreen(modifier: Modifier = Modifier) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ){
-                    TurnCard(colorTurn = "RED", colorResId = R.color.old_rose
-                        /*TODO: passare parametro della squadra con turno attivo
+                    /*TurnCard(colorTurn = "RED", colorResId = R.color.old_rose
+                        *//*TODO: passare parametro della squadra con turno attivo
                         *  il colore è in formato Int e il nome è contenuto nel file colors.xml dentro res,
-                        *  il nome deve essere corrispondente al colore */)
+                        *  il nome deve essere corrispondente al colore *//*)
 
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = Modifier.weight(1f))*/
+
                     RoundCard("1/8"/*TODO: passare parametro del numero di turno*/)
                     Spacer(modifier = Modifier.weight(1f))
                     TimerCard(/*TODO: passare parametro del tempo rimanente per la fine del turno*/)
                     Spacer(modifier = Modifier.weight(1f))
-                    MoneyCard("534"/*TODO: passare valore dei soldi*/)
+                    MoneyCard(534 /*TODO: passare valore dei soldi*/)
                 }
+                Spacer(modifier = Modifier.weight(1f))
                 QuizCard(
-                    "Questa è la domanda del quiz che deve essere pescata dal database",
+                    "THIS IS THE QUIZ THAT IS PICKED FROM THE DATABASE",
                     listOf(
-                        "This is Answer number 1",
-                        "This is Answer number 2",
-                        "This is Answer number 3",
-                        "This is Answer number 4"),
+                        "THIS IS ANSWER NUMBER 1",
+                        "THIS IS ANSWER NUMBER 2",
+                        "THIS IS ANSWER NUMBER 3",
+                        "THIS IS ANSWER NUMBER 4"),
                     R.color.old_rose
                 )
-                Spacer(modifier = Modifier.size(16.dp))
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = "Salta domanda")
+                Spacer(modifier = Modifier.weight(1f))
+                Button(onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.emerald)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(2.dp)) {
+                    Text(text = "SALTA DOMANDA", fontFamily = caveatBold, color = Color.White, style = MaterialTheme.typography.h6)
                 }
             }
         }
@@ -86,11 +90,13 @@ fun QuizScreen(modifier: Modifier = Modifier) {
 fun QuizCard(question : String, answers : List<String>, colorResId : Int ) {
     val color = colorResource(id = colorResId)
     Card(
-        modifier = Modifier.fillMaxSize(0.9f),
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxSize(0.9f),
         backgroundColor = color,
         elevation = 5.dp,
-        border = BorderStroke(2.dp, Color.DarkGray),
-        shape = RoundedCornerShape(15.dp)
+        border = BorderStroke(2.dp, Color.DarkGray)
+        /*shape = RoundedCornerShape(15.dp)*/
     ) {
             Column(
                 modifier = Modifier
@@ -104,14 +110,16 @@ fun QuizCard(question : String, answers : List<String>, colorResId : Int ) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxSize(0.6f)
-                        .padding(16.dp),
+                        .padding(8.dp),
                     backgroundColor = Color.White,
                     elevation = 5.dp,
-                    border = BorderStroke(2.dp, Color.DarkGray),
-                    shape = RoundedCornerShape(15.dp)
+                    border = BorderStroke(2.dp, Color.DarkGray)
+                    /*shape = RoundedCornerShape(15.dp)*/
                 ) {
                     Text(text = question,
-                        Modifier.padding(16.dp))
+                        Modifier.padding(8.dp),
+                        fontFamily = caveatBold,
+                        style = MaterialTheme.typography.h5)
                 }
                 /*Spacer(modifier = Modifier.size(8.dp))*/
 
@@ -127,14 +135,28 @@ fun QuizCard(question : String, answers : List<String>, colorResId : Int ) {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
+                        //BUTTON 1
                         Button(onClick = { /*TODO*/ },
-                        modifier = Modifier.weight(0.5f)) {
-                            Text(text = answers[0])
+                        modifier = Modifier.weight(0.5f),
+                            colors = ButtonDefaults
+                                .buttonColors(backgroundColor = colorResource(id = R.color.cordovan))
+                        ) {
+                            Text(text = answers[0],
+                                fontFamily = caveatBold,
+                                color = Color.White,
+                                style = MaterialTheme.typography.h6)
                         }
                         Spacer(modifier = Modifier.size(8.dp))
+                        //BUTTON 2
                         Button(onClick = { /*TODO*/ },
-                            modifier = Modifier.weight(0.5f)) {
-                            Text(text = answers[1])
+                            modifier = Modifier.weight(0.5f),
+                                    colors = ButtonDefaults
+                                    .buttonColors(backgroundColor = colorResource(id = R.color.cordovan))
+                        ) {
+                            Text(text = answers[1],
+                                fontFamily = caveatBold,
+                                color = Color.White,
+                                style = MaterialTheme.typography.h6)
                         }
                     }
                     Spacer(modifier = Modifier.size(16.dp))
@@ -142,14 +164,28 @@ fun QuizCard(question : String, answers : List<String>, colorResId : Int ) {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly,
                     ) {
+                        //BUTTON 3
                         Button(onClick = { /*TODO*/ },
-                            modifier = Modifier.weight(0.5f)) {
-                            Text(text = answers[2])
+                            modifier = Modifier.weight(0.5f),
+                            colors = ButtonDefaults
+                                .buttonColors(backgroundColor = colorResource(id = R.color.cordovan))
+                        ) {
+                            Text(text = answers[2],
+                                fontFamily = caveatBold,
+                                color = Color.White,
+                                style = MaterialTheme.typography.h6)
                         }
                         Spacer(modifier = Modifier.size(8.dp))
+                        //BUTTON 4
                         Button(onClick = { /*TODO*/ },
-                            modifier = Modifier.weight(0.5f)) {
-                            Text(text = answers[3])
+                            modifier = Modifier.weight(0.5f),
+                            colors = ButtonDefaults
+                                .buttonColors(backgroundColor = colorResource(id = R.color.cordovan))
+                        ) {
+                            Text(text = answers[3],
+                                fontFamily = caveatBold,
+                                color = Color.White,
+                                style = MaterialTheme.typography.h6)
                         }
                     }
                 }

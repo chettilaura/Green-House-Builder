@@ -34,6 +34,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
         is ScreenName.WaitingStart -> WaitScreen(modifier)
         // TODO: Implementare la nostra JoinScreen (usiamo quella di Malnati per testare cose) -Mattia
         is ScreenName.Join -> MalnatiJoinScreen(vm::onJoinGame, modifier)
+
+        // TODO: controllare se così è corretto per la schermata nuova -Edo
+        is ScreenName.RealJoin -> JoinGameScreen(vm::onJoinGame, modifier)
+
         is ScreenName.Settings -> SettingsScreen(modifier)
         is ScreenName.Tutorial -> TutorialScreen (modifier)
         is ScreenName.CitySetup -> CitySetupScreen(modifier)
