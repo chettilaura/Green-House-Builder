@@ -39,7 +39,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         is ScreenName.RealJoin -> JoinGameScreen(vm::onJoinGame, modifier)
 
         is ScreenName.Settings -> SettingsScreen(modifier)
-        is ScreenName.Tutorial -> TutorialScreen (modifier)
+        //is ScreenName.Tutorial -> TutorialScreen (modifier)
         is ScreenName.CitySetup -> CitySetupScreen(modifier)
         is ScreenName.JoinInfo -> JoinInfoScreen(modifier)
         is ScreenName.GameSetup -> GameSetupScreen(modifier)
@@ -59,6 +59,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         is ScreenName.PlayersRank -> PlayersRankingScreen(modifier)
         is ScreenName.Error -> ErrorScreen(screenName.message, modifier)
         null -> Box(modifier)
+        else -> {}
     }
 }
 
