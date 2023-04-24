@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
@@ -84,12 +85,15 @@ fun OpenScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifier: M
 //TUTORIAL POP UP
 
                 var tutorialPopUpControl by remember { mutableStateOf(false) }
-                TextButton(onClick = {tutorialPopUpControl = true}){
-                    Text("GUIDE",
-                        fontFamily = caveatBold,
-                        color = Color.Black,
-                        style = MaterialTheme.typography.h4)
+                Surface(shape = MaterialTheme.shapes.medium) {
+                    TextButton(onClick = {tutorialPopUpControl = true}){
+                        Text("GUIDE",
+                            fontFamily = caveatBold,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.h4)
+                    }
                 }
+
 
                 if(tutorialPopUpControl) {
                     Popup(onDismissRequest = {tutorialPopUpControl = false}) {
@@ -128,6 +132,7 @@ fun popUpTutorial(){
                     ) {
                         Spacer(modifier = Modifier
                             .size(60.dp))
+
 
                         Text("GUIDE",
                             fontFamily = caveatBold,
