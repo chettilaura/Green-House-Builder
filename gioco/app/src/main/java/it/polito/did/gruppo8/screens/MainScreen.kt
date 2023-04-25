@@ -38,7 +38,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
         // TODO: controllare se così è corretto per la schermata nuova -Edo
         is ScreenName.RealJoin -> JoinGameScreen(vm::onJoinGame, modifier)
 
-        is ScreenName.Settings -> SettingsScreen(modifier)
+        //is ScreenName.Settings -> SettingsScreen(modifier)
         //is ScreenName.Tutorial -> TutorialScreen (modifier)
         is ScreenName.CitySetup -> CitySetupScreen(modifier)
         is ScreenName.JoinInfo -> JoinInfoScreen(modifier)
