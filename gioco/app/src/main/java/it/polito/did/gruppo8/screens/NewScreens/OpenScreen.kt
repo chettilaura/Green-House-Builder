@@ -21,7 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -45,43 +48,24 @@ fun OpenScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifier: M
             modifier = Modifier.fillMaxHeight(),
             contentScale = ContentScale.FillHeight
         )
-
-        Box(modifier = Modifier.fillMaxSize(1f)) {
-            Column(
+        InitialTopBar(title = "SETTINGS", colorId = colorResource(id = R.color.cal_poly_green))
+    }
+        Column(
                 modifier = Modifier
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Top,
+                    .fillMaxHeight()
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                InitialTopBar(
-                    title = "SETTINGS",
-                    colorId = colorResource(id = R.color.cal_poly_green)
-                )
 
-                Spacer(
-                    modifier = Modifier
-                        .size(60.dp)
-                )
+                Spacer(modifier = Modifier.size(60.dp)                )
                 AppName()
-                Spacer(
-                    modifier = Modifier
-                        .size(60.dp)
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .size(20.dp)
-                )
+                Spacer(modifier = Modifier.size(30.dp))
+                Spacer(modifier = Modifier.size(20.dp))
                 NewGameButton("NEW GAME", "Create house button")
-                Spacer(
-                    modifier = Modifier
-                        .size(20.dp)
-                )
+                Spacer(modifier = Modifier.size(20.dp))
                 JoinGameButton("JOIN GAME", "Create house button")
-                Spacer(
-                    modifier = Modifier
-                        .size(20.dp)
-                )
+                Spacer(modifier = Modifier.size(20.dp))
 //TUTORIAL POP UP
 
                 var tutorialPopUpControl by remember { mutableStateOf(false) }
@@ -96,21 +80,31 @@ fun OpenScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifier: M
 
 
                 if(tutorialPopUpControl) {
-                    Popup(onDismissRequest = {tutorialPopUpControl = false}) {
-                        popUpTutorial()
+
+                            Popup(
+                                alignment = Center,
+                                onDismissRequest = { tutorialPopUpControl = false }) {
+                                popUpTutorial()
+                            }
+
 
                     }
                 }
 
-            }
+
         }
-    }
-}
+
+
 /*-----------------tutorial-------------------------------------------*/
 
 @Composable
-fun popUpTutorial(){
-    Box {
+fun popUpTutorial() {
+    val shape = RoundedCornerShape(30.dp)
+    Box(
+        modifier = Modifier
+            .size(400.dp, 400.dp)
+            .clip(shape)
+    ) {
         Image(
             painter = painterResource(R.drawable.bg),
             contentDescription = "Immagine di sfondo",
@@ -126,18 +120,19 @@ fun popUpTutorial(){
             )
 
             Box(modifier = Modifier.fillMaxSize()) {
-                Column(modifier = Modifier.padding(10.dp)) {
-                    Row(modifier = Modifier.fillMaxWidth(),
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start
                     ) {
-                        Spacer(modifier = Modifier
-                            .size(60.dp))
+                        Spacer(modifier = Modifier.size(60.dp))
 
-
-                        Text("GUIDE",
+                        Text(
+                            "GUIDE",
                             fontFamily = caveatBold,
                             color = Color.White,
-                            style = MaterialTheme.typography.h3)
+                            style = MaterialTheme.typography.h3
+                        )
                     }
                     Instructions()
                 }
@@ -146,16 +141,17 @@ fun popUpTutorial(){
         }
 
     }
-
-
 }
+
+
+
 
 /*--------------------------------------------------------------------*/
 
 @Composable
 fun InitialTopBar(title: String, colorId: Color) {
     TopAppBar (
-        modifier = Modifier.height(80.dp),
+        modifier = Modifier.fillMaxWidth(5f),
         title = {
             Text(title,
                 fontFamily = caveatBold,
@@ -181,7 +177,8 @@ fun AppName(){
     Row(horizontalArrangement = Arrangement.Center) {
         Image(
             painter = painterResource(id = R.drawable.app_name),
-            contentDescription = null,
+            contentDescription = null
+            //modifier = Modifier.size(150.dp) eventuale modifica size immagine
         )
     }
 }
