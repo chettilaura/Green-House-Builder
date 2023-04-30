@@ -40,8 +40,13 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 
 @Composable
-fun GameStartScreen(modifier: Modifier) {
-
+fun GameSetupScreen(
+    cityName: String,
+    gameId: String,
+    onGameSetupButtonPressed: ()->Unit,
+    onStartButtonPressed: ()->Unit,
+    modifier: Modifier)
+{
     var nPlayers by remember { mutableStateOf(TextFieldValue("")) }
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
@@ -62,11 +67,25 @@ fun GameStartScreen(modifier: Modifier) {
         ) {
 
             Spacer(modifier = Modifier.size(30.dp))
-            NewGameButton("NEW GAME", "Create house button")
+
+            /*
+            TODO: I campi di testo Players e GameID non sono text field interagibili, servono solo a mostrare
+             dei valori che vengono letti dal database, non decisi dall'utente.
+             GameID viene generato come string randomica e deve essere mostrata a schermo nel campo di testo.
+             I Players dovrebbero essere una lista di nickname che si va a popolare di volta in volta quando varia
+             il database ogni volta che un player joina la partita.
+             -Mattia
+             */
+            CityNameField(cityName, "Create house button")
             Spacer(modifier = Modifier.size(10.dp))
             NPlayers ("players", "players", nPlayers, 0.3f)
             Spacer(modifier = Modifier.size(10.dp))
-            FormCard(title = "Game ID", label = "Id number", fieldValue = nPlayers , fraction = 0.3f)
+            /*
+            TODO: FormCard è un componente appartenente ad un file totalmente diverso (JoinGame...).
+             Se volete riutilizzare pezzi di codice, allora fatelo anche con cose tipo Buttons, TextField non interattivi eccetera
+             -Mattia
+             */
+            FormCard(title = "Game ID", label = "Id string (test ${gameId})", fieldValue = nPlayers , fraction = 0.3f)
             Spacer(modifier = Modifier.size(30.dp))
 
 //TUTORIAL POP UP
@@ -111,7 +130,7 @@ fun GameStartScreen(modifier: Modifier) {
                 }
             }
 
-            StartGameButton(title = "START", description = "start game button")
+            StartGameButton(title = "START", description = "start game button", onStartButtonPressed)
 
         }
 
@@ -225,7 +244,7 @@ fun SetUpPopUp() {
 
 
 @Composable
-fun NewGameButton(title: String, description: String) {
+fun CityNameField(title: String, description: String) {
     Box(modifier = Modifier
         .height(100.dp)
     ){
@@ -246,7 +265,7 @@ fun NewGameButton(title: String, description: String) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                Text("CITY NAME" , //DA PASSARE DA SCHERMATA NEW GAME SCREEN
+                Text(title , //DA PASSARE DA SCHERMATA NEW GAME SCREEN
                     fontFamily = caveatBold,
                     color = Color.White,
                     style = MaterialTheme.typography.h4)
@@ -257,14 +276,14 @@ fun NewGameButton(title: String, description: String) {
 }
 
 @Composable
-fun StartGameButton(title: String, description: String) {
+fun StartGameButton(title: String, description: String, onButtonPressed: () -> Unit) {
     Box(modifier = Modifier
         .height(100.dp)
     ){
         Image(
             painter = painterResource(R.drawable.empty_button),
             contentDescription = description,
-            Modifier.fillMaxSize().clickable {  }
+            Modifier.fillMaxSize().clickable { onButtonPressed() }
         )
         Column(
             modifier = Modifier
@@ -296,7 +315,11 @@ fun StartGameButton(title: String, description: String) {
 @Composable
 fun PreviewGameStartScreen() {
     GameSkeletonTheme {
-        GameStartScreen(modifier = Modifier)
+        GameSetupScreen("_cityName_",
+            "_testId_",
+            {},
+            {},
+            modifier = Modifier)
     }
 }
 

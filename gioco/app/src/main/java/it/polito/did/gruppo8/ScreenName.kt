@@ -6,16 +6,16 @@ package it.polito.did.gruppo8
 
 sealed class ScreenName {
     object Splash: ScreenName()
-    object Initial: ScreenName()
+    object MainMenu: ScreenName()
     class Settings: ScreenName()
     class Tutorial: ScreenName ()
-    object Join: ScreenName()
-    // TODO: RealJoin è nome nuovo della schermata di join nuova, poi da scambiare con quella vecchia
-    class RealJoin: ScreenName()
+    object NewGame: ScreenName()
+    object GameSetup: ScreenName()
+    object JoinGame: ScreenName()
 
-    class CitySetup: ScreenName()
-    class JoinInfo: ScreenName()
-    class GameSetup: ScreenName()
+
+
+
     class FreeItem: ScreenName()
     class ItemRecap: ScreenName()
     class Quiz: ScreenName()
@@ -28,7 +28,6 @@ sealed class ScreenName {
     object GameOver: ScreenName()
     class DistrictRank: ScreenName()
     class PlayersRank: ScreenName()
-    class SetupMatch(val matchId: String): ScreenName()
     object WaitingStart: ScreenName()
     class Playing(): ScreenName()
     object Dashboard: ScreenName()

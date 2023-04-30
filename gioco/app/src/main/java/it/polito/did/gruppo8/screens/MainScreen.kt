@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.ScreenName
+import it.polito.did.gruppo8.screens.NewScreens.*
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
@@ -22,27 +23,30 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     when (val screenName = vm.currentScreenName.observeAsState().value) {
         is ScreenName.Splash -> SplashScreen(modifier)
-        is ScreenName.Initial -> OpenScreen(
-            vm::onCreateNewGame,
-            vm::onPreJoinGame,
-            modifier)
-        is ScreenName.SetupMatch -> SetupMatchScreen(
-            screenName.matchId,
-            players,
-            vm::onStartGame,
-            modifier)
-        is ScreenName.WaitingStart -> WaitScreen(modifier)
-        // TODO: Implementare la nostra JoinScreen (usiamo quella di Malnati per testare cose) -Mattia
-        is ScreenName.Join -> MalnatiJoinScreen(vm::onJoinGame, modifier)
 
-        // TODO: controllare se così è corretto per la schermata nuova -Edo
-        is ScreenName.RealJoin -> JoinGameScreen(vm::onJoinGame, modifier)
+        is ScreenName.MainMenu -> MainMenuScreen(
+            vm::onNewGameButtonPressed,
+            vm::onJoinGameButtonPressed,
+            modifier)
+
+        is ScreenName.NewGame -> NewGameScreen(
+            vm::onCreateCityButtonPressed,
+            modifier)
+        is ScreenName.GameSetup -> GameSetupScreen(
+            vm.cityName.value!!,
+            vm.lobbyId.value!!,
+            {},
+            vm::onStartButtonPressed,
+            modifier)
+        //is ScreenName.WaitingStart -> WaitScreen(modifier)
+
+        is ScreenName.JoinGame -> JoinGameScreen(
+            vm::onCreateHouseButtonPressed,
+            modifier)
+
 
         //is ScreenName.Settings -> SettingsScreen(modifier)
         //is ScreenName.Tutorial -> TutorialScreen (modifier)
-        is ScreenName.CitySetup -> CitySetupScreen(modifier)
-        is ScreenName.JoinInfo -> JoinInfoScreen(modifier)
-        is ScreenName.GameSetup -> GameSetupScreen(modifier)
         is ScreenName.FreeItem -> FreeItemScreen(modifier)
         is ScreenName.ItemRecap -> ItemRecapScreen(modifier)
         is ScreenName.Quiz -> QuizScreen(modifier)

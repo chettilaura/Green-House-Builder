@@ -15,40 +15,25 @@ import it.polito.did.gruppo8.model.GameManager
 class GameViewModel: ViewModel() {
     private val gameManager = GameManager(viewModelScope)
 
-    val players = gameManager.players
     val currentScreenName = gameManager.currentScreenName
+
+    val cityName = gameManager.cityName
     val lobbyId = gameManager.lobbyId
 
-    val co2Impact = null /*parametro per barra co2*/
+    val players = gameManager.players
 
-
-
-    // OpenScreen TODO: Rinominare in MainMenuScreen -Mattia
-    fun onNewGameButtonPressed() = null
-    fun onJoinGameButtonPressed() = null
+    // MainMenuScreen
+    fun onNewGameButtonPressed() = gameManager.switchScreen(ScreenName.NewGame)
+    fun onJoinGameButtonPressed() = gameManager.switchScreen(ScreenName.JoinGame)
     fun onCreditsButtonPressed() = null
 
     // NewGameScreen
-    fun onCreateCityButtonPressed() = null
+    fun onCreateCityButtonPressed(cityName: String) = gameManager.createNewGame(cityName)
     fun onGameSetupButtonPressed() = null
-    fun onStartButtonPressed() = null
+    fun onStartButtonPressed() = gameManager.startGame()
 
     // JoinGameScreen
-    fun onCreateHouseButtonPressed() = null
+    fun onCreateHouseButtonPressed(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
 
-
-
-    //TODO: questi metodi vanno tutti un po' rinominati e riordinati, riassegnandoli in un'organizzazione tipo quella di sopra. -Mattia
-    fun onCreateNewGame() = gameManager.createNewGame()
-    //OnPreJoinGame: cambia la schermata alla screen JoinGame
-    fun onPreJoinGame() = gameManager.preJoinGame()
-
-    //OnJoinGame: aggiunge il player alla partita
-    fun onJoinGame(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
-
-    fun onStartGame() = gameManager.startGame()
-
-    /*Schermata HouseOverviewScreen*/
-    fun onViewItemList() = null /*TODO: restituisce lista di oggetti acquistati*/
 
 }

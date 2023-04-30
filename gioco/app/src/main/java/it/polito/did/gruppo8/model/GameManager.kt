@@ -16,11 +16,8 @@ import it.polito.did.gruppo8.model.baseClasses.*
 
 class GameManager(private val scope: CoroutineScope) {
 
-    //----------------def campi GameManager
     //region Fields
 
-    //screeName è un liveData -> contiene mutableScreenName che è un MutableLiveData
-    //mutableScreenName contiene il nome dello screen corrente
     private val _mutableCurrentScreenName = MutableLiveData<ScreenName>().also {
         it.value = ScreenName.Splash
     }
@@ -28,6 +25,9 @@ class GameManager(private val scope: CoroutineScope) {
 
     private val _mutableLobbyId = MutableLiveData<String>()
     val lobbyId: LiveData<String> = _mutableLobbyId
+
+    private val _mutableCityName = MutableLiveData<String>()
+    val cityName: LiveData<String> = _mutableCityName
 
     private val _mutablePlayers = MutableLiveData<Map<String, Player>>().also{
         it.value = emptyMap()
@@ -38,7 +38,6 @@ class GameManager(private val scope: CoroutineScope) {
 
     //endregion
 
-
     //--------------------funzione init
 
     init {
@@ -48,7 +47,7 @@ class GameManager(private val scope: CoroutineScope) {
                 _dbManager.authenticate()
                 delay(500)
                 //_mutableCurrentScreenName.value = ScreenName.Initial
-                switchScreen(ScreenName.Initial)
+                switchScreen(ScreenName.MainMenu)
             } catch (e: Exception) {
                 //_mutableCurrentScreenName.value = ScreenName.Error(e.message ?: "Unknown error")
                 switchScreen(ScreenName.Error(e.message ?: "Unknown error"))
@@ -80,8 +79,9 @@ class GameManager(private val scope: CoroutineScope) {
     }
 
     //funzione che parte dopo aver premuto "Start new match" in InitialScreen
-    fun createNewGame() {
+    fun createNewGame(cityName: String) {
 
+        Log.d("createNewGame", "city name: $cityName")
         // DatabaseManager version
         //TODO: Randomizzare la generazione del gameSessionId (stringa alfanumerica di 5-6 caratteri) -Mattia
         val gameSessionId = "test_game_session"
@@ -90,15 +90,17 @@ class GameManager(private val scope: CoroutineScope) {
                 mapOf(
                     "date" to LocalDateTime.now().toString(),
                     "hostId" to _dbManager.getCurrentUserID(),
-                    "screen" to "WaitingStart"
+                    "screen" to "WaitingStart",
+                    "cityName" to cityName
                 )
             )
             Log.d("GameManager", "Match creation succeeded")
 
             _mutableLobbyId.value = gameSessionId
+            _mutableCityName.value = cityName
 
             //_mutableCurrentScreenName.value = ScreenName.SetupMatch(gameSessionId)
-            switchScreen(ScreenName.SetupMatch(gameSessionId))
+            switchScreen(ScreenName.GameSetup)
 
             watchPlayers()
         } catch (e: Exception) {
@@ -110,7 +112,7 @@ class GameManager(private val scope: CoroutineScope) {
     //questa funzione rimanda alla pagina 3A (file pdf di tutte le schermate)
     //TODO: Questo metodo non servirà ora che c'è il metodo switchScreen() -Mattia
     fun preJoinGame(){
-        _mutableCurrentScreenName.value = ScreenName.Join
+        _mutableCurrentScreenName.value = ScreenName.JoinGame
     }
 
     fun joinGame(matchId:String, nickname:String) {

@@ -98,6 +98,15 @@ fun MyTopBar(title: String, colorId: Color) {
     )
 }
 
+/*
+TODO: Il component FormCard (che è un bene sia generalizzato) ha un problema intrinseco nel parametro
+ fieldValue. Testandolo, si prova che in realtà il parametro fieldValue non registra il contenuto del
+ campo di testo. Questo perchè all'interno del codice del component viene ridichiarata un'altra variabile
+ mutableStateOf con lo stesso nome. Cancellare la dichiarazione della variabile tuttavia non basta,
+ poichè nella onValueChange non è possibile riassegnare il parametro della funzione fieldValue in quanto
+ i parametri sono sempre dei val, non possono mutare come i var.
+ -Mattia
+ */
 @Composable
 public fun FormCard (title: String, label: String, fieldValue: TextFieldValue, fraction:Float) {
 

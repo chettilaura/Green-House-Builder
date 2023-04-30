@@ -54,7 +54,7 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun NewGameScreen(modifier: Modifier) {
+fun NewGameScreen(onCreateCityButtonPressed: (String)->Unit, modifier: Modifier) {
 
     var cityName by remember { mutableStateOf(TextFieldValue("")) }
     var showLoading by remember { mutableStateOf(false) }
@@ -93,7 +93,7 @@ fun NewGameScreen(modifier: Modifier) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable { showLoading = true },
+                        .clickable { showLoading = true; onCreateCityButtonPressed(cityName.text) },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -267,7 +267,7 @@ fun LoadingAnimation(
 @Composable
 fun PreviewNewGameScreen(modifier: Modifier = Modifier) {
     GameSkeletonTheme {
-        NewGameScreen(modifier = Modifier)
+        NewGameScreen({}, modifier = Modifier)
     }
 }
 

@@ -31,7 +31,7 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 
 @Composable
-fun OpenScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifier: Modifier = Modifier) {
+fun MainMenuScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifier: Modifier = Modifier) {
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
             painter = painterResource(R.drawable.bg),
@@ -49,8 +49,8 @@ fun OpenScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifier: M
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AppName()
-            NewGameButton("NEW GAME", "Create house button")
-            JoinGameButton("JOIN GAME", "Create house button")
+            NewGameButton("NEW GAME", "Create house button", onCreateNewGame)
+            JoinGameButton("JOIN GAME", "Create house button", onPreJoinGame)
             Spacer(modifier = Modifier.size(30.dp))
 
 //TUTORIAL POP UP
@@ -274,7 +274,7 @@ fun AppName(){
 }
 
 @Composable
-fun NewGameButton(title: String, description: String) {
+fun NewGameButton(title: String, description: String, onButtonPressed: () -> Unit) {
     Box(modifier = Modifier
         .height(100.dp)
     ){
@@ -282,7 +282,7 @@ fun NewGameButton(title: String, description: String) {
             painter = painterResource(R.drawable.empty_button),
             contentDescription = description,
             modifier = Modifier
-                .clickable { }  // TODO: rimanda a scermata new game
+                .clickable { onButtonPressed() }  // TODO: rimanda a scermata new game
         )
         Column(
             modifier = Modifier
@@ -307,7 +307,7 @@ fun NewGameButton(title: String, description: String) {
 }
 
 @Composable
-fun JoinGameButton(title: String, description: String) {
+fun JoinGameButton(title: String, description: String, onButtonPressed: () -> Unit) {
     Box(modifier = Modifier
         .height(100.dp)
     ){
@@ -315,7 +315,7 @@ fun JoinGameButton(title: String, description: String) {
             painter = painterResource(R.drawable.empty_button),
             contentDescription = description,
             modifier = Modifier
-                .clickable { }  // TODO: rimanda a schermata join game
+                .clickable { onButtonPressed() }  // TODO: rimanda a schermata join game
         )
         Column(
             modifier = Modifier
@@ -364,7 +364,7 @@ fun SwitchDemo() {
 @Composable
 fun PreviewOpenScreen() {
     GameSkeletonTheme {
-        OpenScreen({},{})
+        MainMenuScreen({},{})
     }
 }
 
