@@ -34,6 +34,4 @@ class GameViewModel: ViewModel() {
 
     // JoinGameScreen
     fun onCreateHouseButtonPressed(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
-
-
 }

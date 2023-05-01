@@ -109,12 +109,6 @@ class GameManager(private val scope: CoroutineScope) {
         }
     }
 
-    //questa funzione rimanda alla pagina 3A (file pdf di tutte le schermate)
-    //TODO: Questo metodo non servirà ora che c'è il metodo switchScreen() -Mattia
-    fun preJoinGame(){
-        _mutableCurrentScreenName.value = ScreenName.JoinGame
-    }
-
     fun joinGame(matchId:String, nickname:String) {
 
         //DatabaseManager version

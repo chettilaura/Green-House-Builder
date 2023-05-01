@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -32,11 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import it.polito.did.gruppo8.R
-import it.polito.did.gruppo8.screens.FormCard
 import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.screens.caveatRegular
 import it.polito.did.gruppo8.screens.caveatSemiBold
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
+import it.polito.did.gruppo8.util.myComposable.*
 
 
 @Composable
@@ -57,7 +55,7 @@ fun GameSetupScreen(
             contentScale = ContentScale.FillHeight
         )
 
-        GameStartTopBar(title = "NEW GAME", colorId = colorResource(id = R.color.cal_poly_green))
+        MyTopBar(title = "NEW GAME", colorId = colorResource(id = R.color.cal_poly_green))
         Column(
             modifier = Modifier
                 .fillMaxHeight()
@@ -68,6 +66,11 @@ fun GameSetupScreen(
 
             Spacer(modifier = Modifier.size(30.dp))
 
+            //TODO: anche questo box può essere generalizzato e spostato nel package util.myComposable
+            CityNameField(cityName, "Create house button")
+
+            Spacer(modifier = Modifier.size(10.dp))
+
             /*
             TODO: I campi di testo Players e GameID non sono text field interagibili, servono solo a mostrare
              dei valori che vengono letti dal database, non decisi dall'utente.
@@ -76,62 +79,30 @@ fun GameSetupScreen(
              il database ogni volta che un player joina la partita.
              -Mattia
              */
-            CityNameField(cityName, "Create house button")
+            //MyFormLine("players", "players")
+
             Spacer(modifier = Modifier.size(10.dp))
-            NPlayers ("players", "players", nPlayers, 0.3f)
-            Spacer(modifier = Modifier.size(10.dp))
-            /*
-            TODO: FormCard è un componente appartenente ad un file totalmente diverso (JoinGame...).
-             Se volete riutilizzare pezzi di codice, allora fatelo anche con cose tipo Buttons, TextField non interattivi eccetera
-             -Mattia
-             */
-            FormCard(title = "Game ID", label = "Id string (test ${gameId})", fieldValue = nPlayers , fraction = 0.3f)
+
+            //MyFormBox(title = "Game ID", label = "Id string (test ${gameId})", fieldValue = nPlayers,  fraction = 0.3f)
             Spacer(modifier = Modifier.size(30.dp))
 
 //TUTORIAL POP UP
-
-            var SetGamePopUpControl by remember { mutableStateOf(false) }
-            Surface(
-                shape = MaterialTheme.shapes.medium,
-                color = Color.Transparent
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.empty_button),
-                    contentDescription = null
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    TextButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { SetGamePopUpControl = true }) {
-                        Text(
-                            "GAME SETUP",
-                            fontFamily = caveatBold,
-                            color = Color.White,
-                            style = MaterialTheme.typography.h4
-                        )
-                    }
-                }
-            }
+            var setGamePopUpControl by remember { mutableStateOf(false) }
+            MyButton(title = "GAME SETUP", description = "Setup", {setGamePopUpControl = true})
 
             Spacer(modifier = Modifier.size(5.dp))
 
-            if (SetGamePopUpControl) {
+            if (setGamePopUpControl) {
 
                 Popup(
                     alignment = Center,
-                    onDismissRequest = { SetGamePopUpControl = false }) {
+                    onDismissRequest = { setGamePopUpControl = false }) {
                     SetUpPopUp()
                 }
             }
 
-            StartGameButton(title = "START", description = "start game button", onStartButtonPressed)
-
+            //StartGameButton(title = "START", description = "start game button", onStartButtonPressed)
+            MyButton(title = "START", description = "start game button", onStartButtonPressed)
         }
 
     }
@@ -140,74 +111,10 @@ fun GameSetupScreen(
 //COMPOSABLES FUNCTIONS
 
 @Composable
-fun GameStartTopBar(title: String, colorId: Color) {
-    TopAppBar (
-        modifier = Modifier.height(100.dp),
-        title = {
-            Text(title,
-                fontFamily = caveatBold,
-                color = Color.White,
-                style = MaterialTheme.typography.h2)
-        },
-        navigationIcon = {},
-        backgroundColor = colorId,
-        elevation = 40.dp
-    )
-}
-
-@Composable
-public fun NPlayers (title: String, label: String, fieldValue: TextFieldValue, fraction:Float) {
-
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(2.dp),
-        backgroundColor = colorResource(id = R.color.emerald),
-        elevation = 4.dp,
-        shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(2.dp, Color.Black)) {
-        Row(
-            modifier = Modifier
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = CenterVertically
-        ) {
-            Text(
-                text = title,
-                fontFamily = caveatSemiBold,
-                color = Color.White,
-                style = MaterialTheme.typography.h4)
-            Spacer(modifier = Modifier.size(4.dp))
-
-            var fieldValue by remember { mutableStateOf(TextFieldValue(""))}
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    /*.background(colorResource(id = emerald))*/
-                    .border(
-                        width = 2.dp,
-                        color = colorResource(id = R.color.cal_poly_green),
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                value = fieldValue,
-                onValueChange = { fieldValue = it },
-                label = {
-                    Text(text = label,
-                        color = Color.White,
-                        fontFamily = caveatRegular,
-                        style = MaterialTheme.typography.body1
-                    )},
-                /*colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = colorResource(id = asparagus)
-                )*/
-            )
-        }
-    }
-}
-
-@Composable
 fun SetUpPopUp() {
     val shape = RoundedCornerShape(30.dp)
-    var tofill by remember { mutableStateOf(TextFieldValue("")) }
+    //TODO: manca implementare la logica delle impostazioni della partita nel backend
+    var tofill by remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .size(400.dp, 400.dp)
@@ -231,14 +138,12 @@ fun SetUpPopUp() {
                     verticalArrangement = Arrangement.SpaceAround,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    NPlayers(title ="max players" , label = "players", fieldValue = tofill, fraction = 0.3f )
-                    NPlayers(title ="turns" , label = "players", fieldValue = tofill, fraction = 0.3f )
-                    NPlayers(title ="time" , label = "players", fieldValue = tofill, fraction = 0.3f )
+                    //TODO: sono campi fantasma per ora, perchè manca la logica in backend
+                    MyFormLine(title ="Max Players" , label = "players", targetValue = tofill, {})
+                    MyFormLine(title ="Turns" , label = "players", targetValue = tofill, {})
+                    MyFormLine(title ="Time" , label = "players", targetValue = tofill, {})
                 }
-
-
         }
-
     }
 }
 
@@ -283,7 +188,9 @@ fun StartGameButton(title: String, description: String, onButtonPressed: () -> U
         Image(
             painter = painterResource(R.drawable.empty_button),
             contentDescription = description,
-            Modifier.fillMaxSize().clickable { onButtonPressed() }
+            Modifier
+                .fillMaxSize()
+                .clickable { onButtonPressed() }
         )
         Column(
             modifier = Modifier

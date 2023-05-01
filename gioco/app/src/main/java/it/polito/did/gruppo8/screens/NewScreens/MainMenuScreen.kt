@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
+import it.polito.did.gruppo8.util.myComposable.*
 
 
 @Composable
@@ -49,13 +50,15 @@ fun MainMenuScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifie
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AppName()
-            NewGameButton("NEW GAME", "Create house button", onCreateNewGame)
-            JoinGameButton("JOIN GAME", "Create house button", onPreJoinGame)
+            MyButton("NEW GAME", "Create house button", onCreateNewGame)
+            MyButton("JOIN GAME", "Create house button", onPreJoinGame)
             Spacer(modifier = Modifier.size(30.dp))
 
 //TUTORIAL POP UP
 
             var tutorialPopUpControl by remember { mutableStateOf(false) }
+            MyButton(title = "TUTORIAL", description = "Tutorial", {tutorialPopUpControl = true})
+            /*
             Surface(
                 shape = MaterialTheme.shapes.medium,
                 color = Color.Transparent
@@ -83,6 +86,7 @@ fun MainMenuScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifie
                     }
                 }
             }
+             */
 
             Spacer(modifier = Modifier.size(5.dp))
 
@@ -99,6 +103,8 @@ fun MainMenuScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifie
 //SETTINGS POP UP
 
             var settingsPopUpControl by remember { mutableStateOf(false) }
+            MyButton(title = "SETTINGS", description = "Settings", {settingsPopUpControl = true})
+            /*
             Surface(
                 shape = MaterialTheme.shapes.medium,
                 color = Color.Transparent
@@ -126,6 +132,7 @@ fun MainMenuScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifie
                     }
                 }
             }
+            */
 
             Spacer(modifier = Modifier.size(5.dp))
 
@@ -145,6 +152,10 @@ fun MainMenuScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifie
 
 //COMPOSABLES FUNCTIONS
 
+/*
+    TODO: Valutare un metodo per generalizzare anche il PopUp, se fattibile.
+     -Mattia
+ */
 @Composable
 fun popUpTutorial() {
     val shape = RoundedCornerShape(30.dp)
@@ -270,72 +281,6 @@ fun AppName(){
             contentDescription = null,
             modifier = Modifier.size(200.dp)
         )
-    }
-}
-
-@Composable
-fun NewGameButton(title: String, description: String, onButtonPressed: () -> Unit) {
-    Box(modifier = Modifier
-        .height(100.dp)
-    ){
-        Image(
-            painter = painterResource(R.drawable.empty_button),
-            contentDescription = description,
-            modifier = Modifier
-                .clickable { onButtonPressed() }  // TODO: rimanda a scermata new game
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(0.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(title,
-                    fontFamily = caveatBold,
-                    color = Color.White,
-                    style = MaterialTheme.typography.h4)
-            }
-            Spacer(modifier = Modifier.size(10.dp))
-        }
-    }
-}
-
-@Composable
-fun JoinGameButton(title: String, description: String, onButtonPressed: () -> Unit) {
-    Box(modifier = Modifier
-        .height(100.dp)
-    ){
-        Image(
-            painter = painterResource(R.drawable.empty_button),
-            contentDescription = description,
-            modifier = Modifier
-                .clickable { onButtonPressed() }  // TODO: rimanda a schermata join game
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(0.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(title,
-                    fontFamily = caveatBold,
-                    color = Color.White,
-                    style = MaterialTheme.typography.h4)
-            }
-            Spacer(modifier = Modifier.size(10.dp))
-        }
     }
 }
 
