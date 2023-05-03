@@ -9,6 +9,7 @@ import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.screens.NewScreens.*
 
+/*
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val vm: GameViewModel = viewModel()
@@ -68,7 +69,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 }
 
 
-
+*/
 
 
 

@@ -4,18 +4,19 @@ package it.polito.did.gruppo8
 
 //volendo creare nuovo screen prima ne definisco il nome-variabile qui e poi assegno la relativa funzione kotlin in MainScreen
 
-sealed class ScreenName {
-    object Splash: ScreenName()
-    object MainMenu: ScreenName()
-    class Settings: ScreenName()
-    class Tutorial: ScreenName ()
-    object NewGame: ScreenName()
-    object GameSetup: ScreenName()
-    object JoinGame: ScreenName()
+
+sealed class ScreenName (val route: String) {
+    object Splash : ScreenName("splash_screen")
+    object MainMenu : ScreenName("main_menu_screen")
+    object NewGame : ScreenName("new_game_screen")
+    object GameSetup : ScreenName("game_setup_screen")
+    object JoinGame : ScreenName("join_game_screen")
+    object Error : ScreenName("error_screen")
+    object Dashboard : ScreenName("dashboard_screen")
+}
 
 
-
-
+    /*
     class FreeItem: ScreenName()
     class ItemRecap: ScreenName()
     class Quiz: ScreenName()
@@ -32,7 +33,12 @@ sealed class ScreenName {
     class Playing(): ScreenName()
     object Dashboard: ScreenName()
     class Error(val message:String): ScreenName()
+     */
 
+    //class Settings: ScreenName("settings_screen")
+    //class Tutorial: ScreenName ("tutorial_screen")
+
+    /*
     companion object{
         /**
          * Static method that retrieves the ScreenName class corresponding to the String stringName.
@@ -50,6 +56,8 @@ sealed class ScreenName {
             }
         }
 
+     */
+
         /**
          * Static method that retrieves the String corresponding to the ScreenName screenName.
          *
@@ -57,6 +65,7 @@ sealed class ScreenName {
          *
          * @return a String containing the name of the corresponding ScreenName. An "Error" String if no match was found.
          */
+        /*
         fun screenNameToString(screenName: ScreenName): String{
             return when(screenName){
                 //NOTA: Il metodo va aggiornato di volta in volta con l'elenco di tutte le possibili ScreenName necessarie, se mancanti -Mattia
@@ -65,8 +74,12 @@ sealed class ScreenName {
                 else -> "Error"
             }
         }
+
+
     }
-}
+
+         */
+
 
 
 

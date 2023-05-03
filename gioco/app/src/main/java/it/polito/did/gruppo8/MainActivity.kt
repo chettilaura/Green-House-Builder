@@ -1,6 +1,7 @@
 package it.polito.did.gruppo8
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +19,9 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import it.polito.did.gruppo8.screens.MainScreen
+import androidx.navigation.compose.rememberNavController
+//import androidx.navigation.compose.rememberNavController
+//import it.polito.did.gruppo8.screens.MainScreen
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 //classe lanciata all'avvio -> definita nel manifest file come "android:name=".MainActivity
@@ -27,10 +30,14 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 
 class MainActivity : ComponentActivity() {
+
+    private val nv = Navigator()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val LocalFont = staticCompositionLocalOf<FontFamily?> { null }
             setContent {
+
                 //"fun GameSkeletonTheme" definita in "Theme.kt"
                 GameSkeletonTheme {
                     // A surface container using the 'background' color from the theme
@@ -38,7 +45,9 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
-                        MainScreen()
+                        //MainScreen()
+                        val navController = rememberNavController()
+                        Navigation(navController,nv)
                     }
                 }
             }

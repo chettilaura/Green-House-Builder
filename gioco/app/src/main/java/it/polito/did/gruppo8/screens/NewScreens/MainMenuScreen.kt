@@ -26,13 +26,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 import it.polito.did.gruppo8.util.myComposable.*
 
 
 @Composable
-fun MainMenuScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifier: Modifier = Modifier) {
+fun MainMenuScreen(navController: NavController,/* onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit,*/ modifier: Modifier = Modifier) {
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
             painter = painterResource(R.drawable.bg),
@@ -50,8 +53,72 @@ fun MainMenuScreen(onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, modifie
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AppName()
-            MyButton("NEW GAME", "Create house button", onCreateNewGame)
-            MyButton("JOIN GAME", "Create house button", onPreJoinGame)
+
+        //MyButton("NEW GAME", "Create house button", onCreateNewGame)
+                Box(modifier = Modifier
+                    .height(100.dp)
+                ){
+                    Image(
+                        painter = painterResource(R.drawable.empty_button),
+                        contentDescription = "Create house button",
+                        modifier = Modifier
+                            //.clickable { onJoinGame(gameID, playerName) }
+                            .clickable(onClick = { navController.navigate(ScreenName.NewGame.route)})
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(0.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text("NEW GAME",
+                                fontFamily = caveatBold,
+                                color = Color.White,
+                                style = MaterialTheme.typography.h4)
+                        }
+                        Spacer(modifier = Modifier.size(10.dp))
+                    }
+                }
+
+            //MyButton("JOIN GAME", "Create house button", onPreJoinGame)
+
+                Box(modifier = Modifier
+                    .height(100.dp)
+                ){
+                    Image(
+                        painter = painterResource(R.drawable.empty_button),
+                        contentDescription = "Create house button",
+                        modifier = Modifier
+                            //.clickable { onJoinGame(gameID, playerName) }
+                            .clickable(onClick = { navController.navigate(ScreenName.JoinGame.route)})
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(0.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text("JOIN GAME",
+                                fontFamily = caveatBold,
+                                color = Color.White,
+                                style = MaterialTheme.typography.h4)
+                        }
+                        Spacer(modifier = Modifier.size(10.dp))
+                    }
+                }
+
             Spacer(modifier = Modifier.size(30.dp))
 
 //TUTORIAL POP UP
@@ -309,7 +376,7 @@ fun SwitchDemo() {
 @Composable
 fun PreviewOpenScreen() {
     GameSkeletonTheme {
-        MainMenuScreen({},{})
+        MainMenuScreen(navController = rememberNavController())
     }
 }
 

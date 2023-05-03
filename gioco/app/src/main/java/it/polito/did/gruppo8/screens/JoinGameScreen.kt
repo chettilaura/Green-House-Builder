@@ -3,9 +3,12 @@ package it.polito.did.gruppo8.screens
 import androidx.compose.foundation.*
 /*import androidx.compose.foundation.gestures.ModifierLocalScrollableContainerProvider.value*/
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -15,6 +18,7 @@ import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 import it.polito.did.gruppo8.R.color.*
 import it.polito.did.gruppo8.util.myComposable.*
+import it.polito.did.gruppo8.GameViewModel
 
 
 //contiene form per inserire nome del giocatore, form per inserire ID della partita, pulsante per creare la casa
@@ -22,9 +26,12 @@ import it.polito.did.gruppo8.util.myComposable.*
 
 @Composable
 fun JoinGameScreen(
-    onCreateHouseButtonPressed: (String, String) -> Unit,
+    /*onCreateHouseButtonPressed: (String, String) -> Unit,*/
     modifier: Modifier = Modifier
 ){
+
+    val vm = GameViewModel()
+
     var gameID by remember { mutableStateOf("") }
     var playerName by remember { mutableStateOf("") }
 
@@ -54,15 +61,49 @@ fun JoinGameScreen(
             .fillMaxHeight()
             .padding(8.dp),
         verticalArrangement = Arrangement.Bottom) {
-        MyButton("CREATE HOUSE", "Create house button", { onCreateHouseButtonPressed(gameID, playerName) })
+        //MyButton("CREATE HOUSE", "Create house button", { onCreateHouseButtonPressed(gameID, playerName) })
+
+
+            Box(modifier = Modifier
+                .height(100.dp)
+            ){
+                Image(
+                    painter = painterResource(R.drawable.empty_button),
+                    contentDescription = "Create house button",
+                    modifier = Modifier
+                        //.clickable { onJoinGame(gameID, playerName) }
+                        //.clickable(onClick = onClickEvent)
+                        .clickable ( onClick = {vm::onCreateHouseButtonPressed} )
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(0.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text("CREATE HOUSE",
+                            fontFamily = caveatBold,
+                            color = Color.White,
+                            style = MaterialTheme.typography.h4)
+                    }
+                    Spacer(modifier = Modifier.size(10.dp))
+                }
+            }
+        }
         Spacer(modifier = Modifier.size(8.dp))
     }
-}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun JoinGameScreenPreview(modifier: Modifier = Modifier) {
     GameSkeletonTheme() {
-        JoinGameScreen( fun(_:String, _:String){} ) //se metti dei parametri qui vanno le graffe ({},{})
+        JoinGameScreen( /*fun(_:String, _:String){}*/ ) //se metti dei parametri qui vanno le graffe ({},{})
     }
 }

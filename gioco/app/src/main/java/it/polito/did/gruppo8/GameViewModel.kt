@@ -2,6 +2,9 @@ package it.polito.did.gruppo8
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+//import androidx.navigation.NavController
+//import androidx.navigation.compose.NavHost
+//import androidx.navigation.compose.rememberNavController
 import it.polito.did.gruppo8.model.GameManager
 
 //gameViewModel è l'intermediatore tra le view (gli screens) & il database (gameManager)
@@ -13,25 +16,31 @@ import it.polito.did.gruppo8.model.GameManager
 
 //estende la classe ViewModel
 class GameViewModel: ViewModel() {
-    private val gameManager = GameManager(viewModelScope)
 
-    val currentScreenName = gameManager.currentScreenName
+    val navigator = Navigator()
 
-    val cityName = gameManager.cityName
+
+    private val gameManager = GameManager(viewModelScope/*, navController = navController*/)
+
+
+    //val currentScreenName = gameManager.currentScreenName
+
+    public val cityName = gameManager.cityName
     val lobbyId = gameManager.lobbyId
 
     val players = gameManager.players
 
     // MainMenuScreen
-    fun onNewGameButtonPressed() = gameManager.switchScreen(ScreenName.NewGame)
-    fun onJoinGameButtonPressed() = gameManager.switchScreen(ScreenName.JoinGame)
+    //fun onNewGameButtonPressed() = gameManager.switchScreen(ScreenName.NewGame)
+    //fun onJoinGameButtonPressed() = gameManager.switchScreen(ScreenName.JoinGame)
     fun onCreditsButtonPressed() = null
 
     // NewGameScreen
-    fun onCreateCityButtonPressed(cityName: String) = gameManager.createNewGame(cityName)
+    fun onCreateCityButtonPressed(cityName: String) = gameManager.createNewGame(cityName/*,navController = navController*/)
     fun onGameSetupButtonPressed() = null
-    fun onStartButtonPressed() = gameManager.startGame()
+    fun onStartButtonPressed() = gameManager.startGame(/*navController = navController*/)
+
 
     // JoinGameScreen
-    fun onCreateHouseButtonPressed(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
+    fun onCreateHouseButtonPressed(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname/*,navController = navController*/)
 }

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 @Composable
-fun ErrorScreen(message: String, modifier: Modifier = Modifier) {
+fun ErrorScreen(/*message: String,*/ modifier: Modifier = Modifier) {
     GenericScreen(title = "Error", modifier) {
         Box(
             Modifier
@@ -24,7 +24,7 @@ fun ErrorScreen(message: String, modifier: Modifier = Modifier) {
                 .background(Color(1.0f,0.8f, 0.8f))
                 .padding(16.dp)
         ) {
-            Text(text = message,
+            Text(text = "errore",
                 style = MaterialTheme.typography.h4,
                 modifier = Modifier.align(Alignment.Center))
         }
@@ -35,6 +35,6 @@ fun ErrorScreen(message: String, modifier: Modifier = Modifier) {
 @Composable
 fun PreviewErrorScreen() {
     GameSkeletonTheme {
-        ErrorScreen("Unknown MatchID")
+        ErrorScreen()
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.screens.caveatRegular
@@ -39,12 +40,14 @@ import it.polito.did.gruppo8.util.myComposable.*
 
 @Composable
 fun GameSetupScreen(
-    cityName: String,
+   /* cityName: String,
     gameId: String,
     onGameSetupButtonPressed: ()->Unit,
-    onStartButtonPressed: ()->Unit,
-    modifier: Modifier)
+    onStartButtonPressed: ()->Unit,*/
+   modifier: Modifier = Modifier)
 {
+    val vm = GameViewModel()
+
     var nPlayers by remember { mutableStateOf(TextFieldValue("")) }
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
@@ -67,7 +70,7 @@ fun GameSetupScreen(
             Spacer(modifier = Modifier.size(30.dp))
 
             //TODO: anche questo box può essere generalizzato e spostato nel package util.myComposable
-            CityNameField(cityName, "Create house button")
+            CityNameField(vm::cityName.toString(), "Create house button")
 
             Spacer(modifier = Modifier.size(10.dp))
 
@@ -102,7 +105,7 @@ fun GameSetupScreen(
             }
 
             //StartGameButton(title = "START", description = "start game button", onStartButtonPressed)
-            MyButton(title = "START", description = "start game button", onStartButtonPressed)
+            MyButton(title = "START", description = "start game button", vm::onStartButtonPressed)
         }
 
     }
@@ -222,10 +225,10 @@ fun StartGameButton(title: String, description: String, onButtonPressed: () -> U
 @Composable
 fun PreviewGameStartScreen() {
     GameSkeletonTheme {
-        GameSetupScreen("_cityName_",
+        GameSetupScreen(/*"_cityName_",
             "_testId_",
             {},
-            {},
+            {},*/
             modifier = Modifier)
     }
 }
