@@ -27,10 +27,11 @@ import it.polito.did.gruppo8.GameViewModel
 @Composable
 fun JoinGameScreen(
     /*onCreateHouseButtonPressed: (String, String) -> Unit,*/
+    vm : GameViewModel,
     modifier: Modifier = Modifier
 ){
 
-    val vm = GameViewModel()
+
 
     var gameID by remember { mutableStateOf("") }
     var playerName by remember { mutableStateOf("") }
@@ -61,41 +62,9 @@ fun JoinGameScreen(
             .fillMaxHeight()
             .padding(8.dp),
         verticalArrangement = Arrangement.Bottom) {
-        //MyButton("CREATE HOUSE", "Create house button", { onCreateHouseButtonPressed(gameID, playerName) })
+        MyButton("CREATE HOUSE", "Create house button", {vm.onCreateHouseButtonPressed(gameID,playerName)})
+    }
 
-
-            Box(modifier = Modifier
-                .height(100.dp)
-            ){
-                Image(
-                    painter = painterResource(R.drawable.empty_button),
-                    contentDescription = "Create house button",
-                    modifier = Modifier
-                        //.clickable { onJoinGame(gameID, playerName) }
-                        //.clickable(onClick = onClickEvent)
-                        .clickable ( onClick = {vm::onCreateHouseButtonPressed} )
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(0.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text("CREATE HOUSE",
-                            fontFamily = caveatBold,
-                            color = Color.White,
-                            style = MaterialTheme.typography.h4)
-                    }
-                    Spacer(modifier = Modifier.size(10.dp))
-                }
-            }
-        }
         Spacer(modifier = Modifier.size(8.dp))
     }
 
@@ -103,7 +72,8 @@ fun JoinGameScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun JoinGameScreenPreview(modifier: Modifier = Modifier) {
+    val vm = GameViewModel()
     GameSkeletonTheme() {
-        JoinGameScreen( /*fun(_:String, _:String){}*/ ) //se metti dei parametri qui vanno le graffe ({},{})
+        JoinGameScreen(vm)
     }
 }

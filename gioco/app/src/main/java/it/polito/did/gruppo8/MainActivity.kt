@@ -31,7 +31,7 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val nv = Navigator()
+    //private val nv = Navigator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +46,9 @@ class MainActivity : ComponentActivity() {
                         color = MaterialTheme.colors.background
                     ) {
                         //MainScreen()
+
                         val navController = rememberNavController()
-                        Navigation(navController,nv)
+                        Navigation(navController)
                     }
                 }
             }

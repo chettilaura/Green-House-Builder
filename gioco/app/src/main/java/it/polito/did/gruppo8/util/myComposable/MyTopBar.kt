@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import it.polito.did.gruppo8.Navigator
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.screens.caveatBold
 
 /***
@@ -37,7 +39,7 @@ fun MyTopBar(title: String, colorId: Color) {
                 contentDescription = "Back button",
                 modifier = Modifier
                     .padding(3.dp)
-                    .clickable { /*TODO: tornare a schermata precedente*/ }
+                    .clickable { Navigator.back(ScreenName.Splash) }
             )
         },
         backgroundColor = colorId,

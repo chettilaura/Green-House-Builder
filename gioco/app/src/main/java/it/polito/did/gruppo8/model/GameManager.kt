@@ -19,7 +19,7 @@ import it.polito.did.gruppo8.model.baseClasses.*
 class GameManager(private val scope: CoroutineScope/*, navController: NavController*/) {
 
     //region Fields
-    val navigator = Navigator()
+
     /*
     private val _mutableCurrentScreenName = MutableLiveData<ScreenName>().also {
         it.value = ScreenName.Splash
@@ -51,12 +51,12 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 delay(500)
                 //_mutableCurrentScreenName.value = ScreenName.Initial
                 //switchScreen(ScreenName.MainMenu)
-                navigator.navigateTo(ScreenName.MainMenu)
+                Navigator.navigateTo(ScreenName.MainMenu)
             } catch (e: Exception) {
                 //_mutableCurrentScreenName.value = ScreenName.Error(e.message ?: "Unknown error")
                 //switchScreen(ScreenName.Error(e.message ?: "Unknown error"))
                 //navController.navigate(ScreenName.Error.route)
-                navigator.navigateTo(ScreenName.Error)
+                Navigator.navigateTo(ScreenName.Error)
             }
         }
     }
@@ -113,7 +113,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             //_mutableCurrentScreenName.value = ScreenName.SetupMatch(gameSessionId)
             //switchScreen(ScreenName.GameSetup)
             //navController.navigate(ScreenName.GameSetup.route)
-            navigator.navigateTo(ScreenName.GameSetup)
+            Navigator.navigateTo(ScreenName.GameSetup)
 
 
             watchPlayers()
@@ -121,7 +121,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             //_mutableCurrentScreenName.value = ScreenName.Error(e.message ?: "Generic error")
             //switchScreen(ScreenName.Error(e.message ?: "Generic error"))
             //navController.navigate(ScreenName.Error.route)
-            navigator.navigateTo(ScreenName.Error)
+            Navigator.navigateTo(ScreenName.Error)
         }
     }
 
@@ -156,7 +156,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             //_mutableCurrentScreenName.value = ScreenName.Error(e.message ?: "Generic error")
             //switchScreen(ScreenName.Error(e.message ?: "Generic error"))
             //navController.navigate(ScreenName.Error.route)
-            navigator.navigateTo(ScreenName.Error)
+            Navigator.navigateTo(ScreenName.Error)
         }
     }
 
@@ -176,7 +176,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
          */
         //switchScreen(ScreenName.Dashboard, true)
         //navController.navigate(ScreenName.Dashboard.route)
-        navigator.navigateTo(ScreenName.Dashboard)
+        Navigator.navigateTo(ScreenName.Dashboard)
     }
 
     //endregion
@@ -202,7 +202,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             override fun onCancelled(error: DatabaseError) {
                 //switchScreen(ScreenName.Error(error.message))
                 //navController.navigate(ScreenName.Error.route)
-                navigator.navigateTo(ScreenName.Error)
+                Navigator.navigateTo(ScreenName.Error)
             }
         }
 

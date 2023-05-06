@@ -44,9 +44,10 @@ fun GameSetupScreen(
     gameId: String,
     onGameSetupButtonPressed: ()->Unit,
     onStartButtonPressed: ()->Unit,*/
+   vm : GameViewModel,
    modifier: Modifier = Modifier)
 {
-    val vm = GameViewModel()
+
 
     var nPlayers by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -70,7 +71,7 @@ fun GameSetupScreen(
             Spacer(modifier = Modifier.size(30.dp))
 
             //TODO: anche questo box può essere generalizzato e spostato nel package util.myComposable
-            CityNameField(vm::cityName.toString(), "Create house button")
+            CityNameField(vm.cityName.value!!, "Create house button")
 
             Spacer(modifier = Modifier.size(10.dp))
 
@@ -105,7 +106,7 @@ fun GameSetupScreen(
             }
 
             //StartGameButton(title = "START", description = "start game button", onStartButtonPressed)
-            MyButton(title = "START", description = "start game button", vm::onStartButtonPressed)
+            MyButton(title = "START", description = "start game button", {vm.onStartButtonPressed()})
         }
 
     }
@@ -225,11 +226,12 @@ fun StartGameButton(title: String, description: String, onButtonPressed: () -> U
 @Composable
 fun PreviewGameStartScreen() {
     GameSkeletonTheme {
+        val vm = GameViewModel()
         GameSetupScreen(/*"_cityName_",
             "_testId_",
             {},
             {},*/
-            modifier = Modifier)
+            vm,modifier = Modifier)
     }
 }
 

@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import it.polito.did.gruppo8.GameViewModel
+import it.polito.did.gruppo8.Navigator
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
@@ -35,7 +37,9 @@ import it.polito.did.gruppo8.util.myComposable.*
 
 
 @Composable
-fun MainMenuScreen(navController: NavController,/* onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit,*/ modifier: Modifier = Modifier) {
+fun MainMenuScreen(/*navController: NavController,*//* onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, navigator: Navigator,*/ vm:GameViewModel,modifier: Modifier = Modifier) {
+
+
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
             painter = painterResource(R.drawable.bg),
@@ -53,71 +57,14 @@ fun MainMenuScreen(navController: NavController,/* onCreateNewGame:() -> Unit, o
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AppName()
+        /*
+        MyButton("NEW GAME", "Create house button", {navController.navigate(ScreenName.NewGame.route) })
+        MyButton("JOIN GAME", "Create house button", { navController.navigate(ScreenName.JoinGame.route)})
 
-        //MyButton("NEW GAME", "Create house button", onCreateNewGame)
-                Box(modifier = Modifier
-                    .height(100.dp)
-                ){
-                    Image(
-                        painter = painterResource(R.drawable.empty_button),
-                        contentDescription = "Create house button",
-                        modifier = Modifier
-                            //.clickable { onJoinGame(gameID, playerName) }
-                            .clickable(onClick = { navController.navigate(ScreenName.NewGame.route)})
-                    )
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .padding(0.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text("NEW GAME",
-                                fontFamily = caveatBold,
-                                color = Color.White,
-                                style = MaterialTheme.typography.h4)
-                        }
-                        Spacer(modifier = Modifier.size(10.dp))
-                    }
-                }
+         */
+            MyButton("NEW GAME", "Create house button", {vm.onNewGameButtonPressed()})
+            MyButton("JOIN GAME", "Create house button", { vm.onJoinGameButtonPressed() })
 
-            //MyButton("JOIN GAME", "Create house button", onPreJoinGame)
-
-                Box(modifier = Modifier
-                    .height(100.dp)
-                ){
-                    Image(
-                        painter = painterResource(R.drawable.empty_button),
-                        contentDescription = "Create house button",
-                        modifier = Modifier
-                            //.clickable { onJoinGame(gameID, playerName) }
-                            .clickable(onClick = { navController.navigate(ScreenName.JoinGame.route)})
-                    )
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .padding(0.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text("JOIN GAME",
-                                fontFamily = caveatBold,
-                                color = Color.White,
-                                style = MaterialTheme.typography.h4)
-                        }
-                        Spacer(modifier = Modifier.size(10.dp))
-                    }
-                }
 
             Spacer(modifier = Modifier.size(30.dp))
 
@@ -125,35 +72,7 @@ fun MainMenuScreen(navController: NavController,/* onCreateNewGame:() -> Unit, o
 
             var tutorialPopUpControl by remember { mutableStateOf(false) }
             MyButton(title = "TUTORIAL", description = "Tutorial", {tutorialPopUpControl = true})
-            /*
-            Surface(
-                shape = MaterialTheme.shapes.medium,
-                color = Color.Transparent
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.empty_button),
-                    contentDescription = null
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    TextButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { tutorialPopUpControl = true }) {
-                        Text(
-                            "GUIDE",
-                            fontFamily = caveatBold,
-                            color = Color.White,
-                            style = MaterialTheme.typography.h4
-                        )
-                    }
-                }
-            }
-             */
+
 
             Spacer(modifier = Modifier.size(5.dp))
 
@@ -171,35 +90,7 @@ fun MainMenuScreen(navController: NavController,/* onCreateNewGame:() -> Unit, o
 
             var settingsPopUpControl by remember { mutableStateOf(false) }
             MyButton(title = "SETTINGS", description = "Settings", {settingsPopUpControl = true})
-            /*
-            Surface(
-                shape = MaterialTheme.shapes.medium,
-                color = Color.Transparent
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.empty_button),
-                    contentDescription = null
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    TextButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { settingsPopUpControl = true }) {
-                        Text(
-                            "SETTINGS",
-                            fontFamily = caveatBold,
-                            color = Color.White,
-                            style = MaterialTheme.typography.h4
-                        )
-                    }
-                }
-            }
-            */
+
 
             Spacer(modifier = Modifier.size(5.dp))
 
@@ -375,8 +266,11 @@ fun SwitchDemo() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewOpenScreen() {
+    //val navigator = Navigator()
+    val vm = GameViewModel()
     GameSkeletonTheme {
-        MainMenuScreen(navController = rememberNavController())
+        //MainMenuScreen(navController = rememberNavController())
+        MainMenuScreen(vm)
     }
 }
 

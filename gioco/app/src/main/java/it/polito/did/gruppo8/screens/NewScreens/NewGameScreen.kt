@@ -39,16 +39,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.ui.platform.LocalDensity
 import it.polito.did.gruppo8.GameViewModel
+import it.polito.did.gruppo8.Navigator
+import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.screens.caveatBold
 import kotlinx.coroutines.delay
 
 
 @Composable
-fun NewGameScreen(/*onCreateCityButtonPressed: (String)->Unit,*/ modifier: Modifier = Modifier) {
+fun NewGameScreen(/*onCreateCityButtonPressed: (String)->Unit,*/ vm:GameViewModel,modifier: Modifier = Modifier) {
 
-    val vm = GameViewModel()
+
 
     var cityName by remember { mutableStateOf("") }
     var showLoading by remember { mutableStateOf(false) }
@@ -62,6 +65,10 @@ fun NewGameScreen(/*onCreateCityButtonPressed: (String)->Unit,*/ modifier: Modif
             contentScale = ContentScale.FillHeight
         )
         MyTopBar(title = "NEW GAME", colorId = colorResource(id = R.color.cal_poly_green))
+
+
+
+
         Column (
             modifier = Modifier
                 .fillMaxHeight()
@@ -74,38 +81,8 @@ fun NewGameScreen(/*onCreateCityButtonPressed: (String)->Unit,*/ modifier: Modif
             Spacer(modifier = Modifier.size(32.dp))
             Spacer(modifier = Modifier.size(15.dp))
 
-        //MyButton(title = "CREATE CITY", description = "Create City", {onCreateCityButtonPressed(cityName)})
+        MyButton(title = "CREATE CITY", description = "Create City", {vm.onCreateCityButtonPressed(cityName)})
 
-                Box(modifier = Modifier
-                    .height(100.dp)
-                ){
-                    Image(
-                        painter = painterResource(R.drawable.empty_button),
-                        contentDescription = "NAME",
-                        modifier = Modifier
-                            //.clickable { onJoinGame(gameID, playerName) }
-                            .clickable ( onClick = {vm::onCreateCityButtonPressed} )
-                    )
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .padding(0.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text("CREATE CITY",
-                                fontFamily = caveatBold,
-                                color = Color.White,
-                                style = MaterialTheme.typography.h4)
-                        }
-                        Spacer(modifier = Modifier.size(10.dp))
-                    }
-                }
 
 
             Spacer(modifier = Modifier.size(50.dp))
@@ -184,14 +161,16 @@ fun LoadingAnimation(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PreviewNewGameScreen(modifier: Modifier = Modifier) {
+    val vm = GameViewModel()
     GameSkeletonTheme {
-        NewGameScreen(/*{},*/ modifier = Modifier)
+        NewGameScreen(vm,modifier = Modifier)
     }
 }
 
 @Preview
 @Composable
 fun PreviewLoadingAnimation(modifier: Modifier = Modifier) {
+
     LoadingAnimation()
 }
 
