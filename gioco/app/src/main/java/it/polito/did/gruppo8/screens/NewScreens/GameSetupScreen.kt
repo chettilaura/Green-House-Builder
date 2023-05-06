@@ -39,16 +39,8 @@ import it.polito.did.gruppo8.util.myComposable.*
 
 
 @Composable
-fun GameSetupScreen(
-   /* cityName: String,
-    gameId: String,
-    onGameSetupButtonPressed: ()->Unit,
-    onStartButtonPressed: ()->Unit,*/
-   vm : GameViewModel,
-   modifier: Modifier = Modifier)
+fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
 {
-
-
     var nPlayers by remember { mutableStateOf(TextFieldValue("")) }
 
     Box(modifier = Modifier.fillMaxSize(1f)) {

@@ -22,12 +22,12 @@ class GameViewModel: ViewModel() {
     //val navigator = Navigator()
 
 
-    //val currentScreenName = gameManager.currentScreenName
+    val currentScreenName = gameManager.currentScreenName
+
     val cityName = gameManager.cityName
     val lobbyId = gameManager.lobbyId
     val players = gameManager.players
 
-    fun onCreditsButtonPressed() = null
 
     // NewGameScreen
     fun onCreateCityButtonPressed(cityName: String) = gameManager.createNewGame(cityName)
@@ -39,8 +39,6 @@ class GameViewModel: ViewModel() {
     fun onCreateHouseButtonPressed(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
 
     // MainMenuScreen
-    //fun onNewGameButtonPressed() = gameManager.switchScreen(ScreenName.NewGame)
-    //fun onJoinGameButtonPressed() = gameManager.switchScreen(ScreenName.JoinGame)
-    fun onNewGameButtonPressed() = Navigator.navigateTo(ScreenName.NewGame)
-    fun onJoinGameButtonPressed() =  Navigator.navigateTo(ScreenName.JoinGame)
+    fun onNewGameButtonPressed() = gameManager.switchScreen(ScreenName.NewGame)
+    fun onJoinGameButtonPressed() =  gameManager.switchScreen(ScreenName.JoinGame)
 }

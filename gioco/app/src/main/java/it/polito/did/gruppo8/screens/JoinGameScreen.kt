@@ -22,16 +22,9 @@ import it.polito.did.gruppo8.GameViewModel
 
 
 //contiene form per inserire nome del giocatore, form per inserire ID della partita, pulsante per creare la casa
-//eventualmente anche possibilità di leggere codice QR
 
 @Composable
-fun JoinGameScreen(
-    /*onCreateHouseButtonPressed: (String, String) -> Unit,*/
-    vm : GameViewModel,
-    modifier: Modifier = Modifier
-){
-
-
+fun JoinGameScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
 
     var gameID by remember { mutableStateOf("") }
     var playerName by remember { mutableStateOf("") }

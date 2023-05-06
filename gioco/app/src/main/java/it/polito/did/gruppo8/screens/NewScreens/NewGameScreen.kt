@@ -49,7 +49,7 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun NewGameScreen(/*onCreateCityButtonPressed: (String)->Unit,*/ vm:GameViewModel,modifier: Modifier = Modifier) {
+fun NewGameScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
 
 
 
@@ -81,9 +81,7 @@ fun NewGameScreen(/*onCreateCityButtonPressed: (String)->Unit,*/ vm:GameViewMode
             Spacer(modifier = Modifier.size(32.dp))
             Spacer(modifier = Modifier.size(15.dp))
 
-        MyButton(title = "CREATE CITY", description = "Create City", {vm.onCreateCityButtonPressed(cityName)})
-
-
+            MyButton(title = "CREATE CITY", description = "Create City", {vm.onCreateCityButtonPressed(cityName)})
 
             Spacer(modifier = Modifier.size(50.dp))
 

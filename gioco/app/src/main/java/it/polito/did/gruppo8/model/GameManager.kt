@@ -3,7 +3,6 @@ package it.polito.did.gruppo8.model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.NavController
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -20,12 +19,11 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
     //region Fields
 
-    /*
     private val _mutableCurrentScreenName = MutableLiveData<ScreenName>().also {
         it.value = ScreenName.Splash
     }
     val currentScreenName: LiveData<ScreenName> = _mutableCurrentScreenName
-*/
+
     private val _mutableLobbyId = MutableLiveData<String>()
     val lobbyId: LiveData<String> = _mutableLobbyId
 
@@ -44,18 +42,12 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     //--------------------funzione init
 
     init {
-        // DatabaseManager version
         scope.launch {
             try {
                 _dbManager.authenticate()
                 delay(500)
-                //_mutableCurrentScreenName.value = ScreenName.Initial
-                //switchScreen(ScreenName.MainMenu)
                 Navigator.navigateTo(ScreenName.MainMenu)
             } catch (e: Exception) {
-                //_mutableCurrentScreenName.value = ScreenName.Error(e.message ?: "Unknown error")
-                //switchScreen(ScreenName.Error(e.message ?: "Unknown error"))
-                //navController.navigate(ScreenName.Error.route)
                 Navigator.navigateTo(ScreenName.Error)
             }
         }
@@ -71,29 +63,25 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
      * @param screenName the ScreenName class corresponding to the desired screen.
      * @param updateDatabase a Boolean telling if the screen switch must be notified to the Database. Default value is false.
      */
-    /*
-    fun switchScreen(screenName: ScreenName, updateDatabase: Boolean = false, navController: NavController){
+
+    fun switchScreen(screenName: ScreenName, updateDatabase: Boolean = false){
         try {
             if(updateDatabase){
                 val id = lobbyId.value ?: throw RuntimeException("Missing match Id")
-                //_dbManager.writeData("$id/screen", ScreenName.screenNameToString(screenName))
+                _dbManager.writeData("$id/screen", screenName.route)
             }
             _mutableCurrentScreenName.value = screenName
+            Navigator.navigateTo(screenName)
         }
         catch (e:Exception){
-            //switchScreen(ScreenName.Error(e.message ?: "Generic error"))
-            //navController.navigate(ScreenName.Error.route)
-            navigator.navigateTo(ScreenName.Error)
+            Navigator.navigateTo(ScreenName.Error)
         }
     }
 
-     */
-
     //funzione che parte dopo aver premuto "Start new match" in InitialScreen
-    fun createNewGame(cityName: String/*, navController: NavController*/) {
+    fun createNewGame(cityName: String) {
 
         Log.d("createNewGame", "city name: $cityName")
-        // DatabaseManager version
         //TODO: Randomizzare la generazione del gameSessionId (stringa alfanumerica di 5-6 caratteri) -Mattia
         val gameSessionId = "test_game_session"
         try {
@@ -101,7 +89,8 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 mapOf(
                     "date" to LocalDateTime.now().toString(),
                     "hostId" to _dbManager.getCurrentUserID(),
-                    "screen" to "WaitingStart",
+                    //TODO: Sostituire con waiting_screen quando è pronta
+                    "screen" to "error_screen",
                     "cityName" to cityName
                 )
             )
@@ -110,24 +99,16 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             _mutableLobbyId.value = gameSessionId
             _mutableCityName.value = cityName
 
-            //_mutableCurrentScreenName.value = ScreenName.SetupMatch(gameSessionId)
-            //switchScreen(ScreenName.GameSetup)
-            //navController.navigate(ScreenName.GameSetup.route)
-            Navigator.navigateTo(ScreenName.GameSetup)
-
+            switchScreen(ScreenName.GameSetup)
 
             watchPlayers()
         } catch (e: Exception) {
-            //_mutableCurrentScreenName.value = ScreenName.Error(e.message ?: "Generic error")
-            //switchScreen(ScreenName.Error(e.message ?: "Generic error"))
-            //navController.navigate(ScreenName.Error.route)
-            Navigator.navigateTo(ScreenName.Error)
+            switchScreen(ScreenName.Error)
         }
     }
 
-    fun joinGame(matchId:String, nickname:String/*, navController: NavController*/) {
+    fun joinGame(matchId:String, nickname:String) {
 
-        //DatabaseManager version
         try {
             if (matchId.isEmpty()) return
 
@@ -151,32 +132,17 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
             Log.d("GameManager","joinGame: player data written")
             watchPlayers()
-            //watchScreen()
+            watchScreen()
         } catch (e: Exception) {
-            //_mutableCurrentScreenName.value = ScreenName.Error(e.message ?: "Generic error")
-            //switchScreen(ScreenName.Error(e.message ?: "Generic error"))
-            //navController.navigate(ScreenName.Error.route)
-            Navigator.navigateTo(ScreenName.Error)
+            switchScreen(ScreenName.Error)
         }
     }
 
-    fun startGame(/*navController: NavController*/) {
+    fun startGame() {
 
-        //DatabaseManager version
-        /*
-        val id = lobbyId.value ?: throw RuntimeException("Missing match Id")
+        switchScreen(ScreenName.Dashboard)
 
-        try {
-            _dbManager.writeData("$id/screen", "Playing")
-            _mutableCurrentScreenName.value = ScreenName.Dashboard
-        }
-        catch (e: Exception) {
-            _mutableCurrentScreenName.value = ScreenName.Error(e.message ?: "Generic error")
-        }
-         */
-        //switchScreen(ScreenName.Dashboard, true)
-        //navController.navigate(ScreenName.Dashboard.route)
-        Navigator.navigateTo(ScreenName.Dashboard)
+        //TODO: Da implementare
     }
 
     //endregion
@@ -184,9 +150,8 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     //-------------------- private methods GameManager
     //region Private Methods
 
-    private fun watchPlayers(/*navController: NavController*/) {
+    private fun watchPlayers() {
 
-        //DatabaseManager version
         val id = lobbyId.value ?: throw RuntimeException("Missing match Id")
 
         val playersListener = object : ValueEventListener{
@@ -200,9 +165,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             }
 
             override fun onCancelled(error: DatabaseError) {
-                //switchScreen(ScreenName.Error(error.message))
-                //navController.navigate(ScreenName.Error.route)
-                Navigator.navigateTo(ScreenName.Error)
+                switchScreen(ScreenName.Error)
             }
         }
 
@@ -213,37 +176,23 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
     //funzione che osserva il child "screen" della struttura firebase della partita
     //in base al valore di "screen" fa apparire la relativa schermata
-    /*
+
     private fun watchScreen() {
 
-        //DatabaseManager version
         val id = lobbyId.value ?: throw RuntimeException("Missing match Id")
 
         val screenListener = object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                switchScreen(ScreenName.stringToScreenName(snapshot.value?.toString()?: ""))
+                switchScreen(ScreenName.routeToScreenName(snapshot.value?.toString()?: ""))
             }
 
             override fun onCancelled(error: DatabaseError) {
-                switchScreen(ScreenName.Error(error.message))
+                switchScreen(ScreenName.Error)
             }
         }
 
         _dbManager.addListener("$id/screen", screenListener)
     }
-    */
-
-    /*  MALNATI, funzionalità spostata come metodo statico nella classe ScreenName -Mattia
-
-    private fun getScreenName(name:String): ScreenName {
-        return when (name) {
-            "WaitingStart" -> ScreenName.WaitingStart
-            //playing corrisponde a "PlayerScreen" ed esce una volta fatto il join game
-            "Playing" -> ScreenName.Playing
-            else -> ScreenName.Error("Unknown screen $name")
-        }
-    }
-     */
 
     //endregion
 }

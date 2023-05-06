@@ -37,8 +37,7 @@ import it.polito.did.gruppo8.util.myComposable.*
 
 
 @Composable
-fun MainMenuScreen(/*navController: NavController,*//* onCreateNewGame:() -> Unit, onPreJoinGame:() -> Unit, navigator: Navigator,*/ vm:GameViewModel,modifier: Modifier = Modifier) {
-
+fun MainMenuScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
@@ -57,11 +56,7 @@ fun MainMenuScreen(/*navController: NavController,*//* onCreateNewGame:() -> Uni
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AppName()
-        /*
-        MyButton("NEW GAME", "Create house button", {navController.navigate(ScreenName.NewGame.route) })
-        MyButton("JOIN GAME", "Create house button", { navController.navigate(ScreenName.JoinGame.route)})
 
-         */
             MyButton("NEW GAME", "Create house button", {vm.onNewGameButtonPressed()})
             MyButton("JOIN GAME", "Create house button", { vm.onJoinGameButtonPressed() })
 

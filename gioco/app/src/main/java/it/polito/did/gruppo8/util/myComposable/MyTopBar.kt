@@ -39,7 +39,7 @@ fun MyTopBar(title: String, colorId: Color) {
                 contentDescription = "Back button",
                 modifier = Modifier
                     .padding(3.dp)
-                    .clickable { Navigator.back(ScreenName.Splash) }
+                    .clickable { Navigator.back() }
             )
         },
         backgroundColor = colorId,
