@@ -6,9 +6,13 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import kotlin.reflect.KClass
 
 class DatabaseManager(private val scope: CoroutineScope) {
 
@@ -47,10 +51,9 @@ class DatabaseManager(private val scope: CoroutineScope) {
      */
     fun isDataPresent(path: String): Boolean{
         //TODO: More test to check if runBlocking generates unwanted behaviour -Mattia
-        val result = runBlocking {
-            _firebase.getReference(path).get().await() != null
+        return runBlocking {
+            _firebase.getReference(path).get().await().getValue() != null
         }
-        return result
     }
 
     // Reference for read/write operations: https://firebase.google.com/docs/database/android/read-and-write -Mattia
@@ -77,6 +80,7 @@ class DatabaseManager(private val scope: CoroutineScope) {
         }
     }
 
+
     /**
      * Reads a specific data once from the database.
      *
@@ -86,20 +90,17 @@ class DatabaseManager(private val scope: CoroutineScope) {
      *
      * @return n object of type T that can be null if the read operation has failed.
      */
-    fun <T> readData(path: String, valueType: Class<T>): T?{
-        var value : T? = null
-        runBlocking {
+    fun <T> readData(path: String, valueType: Class<T>): T? {
+        return runBlocking{
             _firebase.getReference(path).get()
-                .addOnSuccessListener {
-                    value = it.getValue(valueType)
-                    Log.d("DatabaseManager", "Data $value read from path $path")
-                }
-                .addOnFailureListener{
-                    Log.d("DatabaseManager", "ERROR: Could not read from path $path")
-                }
-                .await()
+            .addOnSuccessListener {
+                Log.d("DatabaseManager", "Data ${it.getValue()} read from path $path")
+            }
+            .addOnFailureListener{
+                Log.d("DatabaseManager", "ERROR: Could not read from path $path")
+            }
+            .await().getValue(valueType)
         }
-        return value
     }
 
     //TODO: Still test all listeners methods -Mattia

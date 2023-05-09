@@ -216,14 +216,10 @@ fun StartGameButton(title: String, description: String, onButtonPressed: () -> U
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PreviewGameStartScreen() {
+fun PreviewGameSetupScreen() {
     GameSkeletonTheme {
         val vm = GameViewModel()
-        GameSetupScreen(/*"_cityName_",
-            "_testId_",
-            {},
-            {},*/
-            vm,modifier = Modifier)
+        GameSetupScreen(vm,modifier = Modifier)
     }
 }
 

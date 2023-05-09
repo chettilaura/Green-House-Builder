@@ -1,6 +1,7 @@
 package it.polito.did.gruppo8.model
 
 import android.util.Log
+import androidx.compose.ui.text.toUpperCase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.DataSnapshot
@@ -14,6 +15,10 @@ import java.time.LocalDateTime
 
 import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.model.baseClasses.*
+import it.polito.did.gruppo8.util.myLibs.MyRandom
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlin.random.Random
 
 class GameManager(private val scope: CoroutineScope/*, navController: NavController*/) {
 
@@ -46,9 +51,9 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             try {
                 _dbManager.authenticate()
                 delay(500)
-                Navigator.navigateTo(ScreenName.MainMenu)
+                switchScreen(ScreenName.MainMenu)
             } catch (e: Exception) {
-                Navigator.navigateTo(ScreenName.Error)
+                switchScreen(ScreenName.Error)
             }
         }
     }
@@ -78,12 +83,16 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         }
     }
 
-    //funzione che parte dopo aver premuto "Start new match" in InitialScreen
     fun createNewGame(cityName: String) {
 
         Log.d("createNewGame", "city name: $cityName")
-        //TODO: Randomizzare la generazione del gameSessionId (stringa alfanumerica di 5-6 caratteri) -Mattia
+
+        // VERSIONE RANDOM
+        //val gameSessionId = MyRandom.string(5).uppercase()
+
+        // VERSIONE DI DEBUG
         val gameSessionId = "test_game_session"
+
         try {
             _dbManager.writeData(gameSessionId,
                 mapOf(
@@ -142,7 +151,16 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
         switchScreen(ScreenName.Dashboard)
 
+        val quiz = getRandomQuiz()!!
+
         //TODO: Da implementare
+    }
+
+    fun getRandomQuiz() : Quiz? {
+        val totNum = _dbManager.readData("quiz/totNum", Int::class.java)
+        val quizId = MyRandom.int(0 until totNum!!)
+        Log.d("TestQuiz", "Tot Quiz: $totNum, Range: ${0 until totNum!!}, Id: $quizId")
+        return _dbManager.readData("quiz/$quizId", Quiz::class.java)
     }
 
     //endregion
@@ -176,7 +194,6 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
     //funzione che osserva il child "screen" della struttura firebase della partita
     //in base al valore di "screen" fa apparire la relativa schermata
-
     private fun watchScreen() {
 
         val id = lobbyId.value ?: throw RuntimeException("Missing match Id")
