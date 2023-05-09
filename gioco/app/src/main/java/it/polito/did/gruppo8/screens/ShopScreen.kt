@@ -20,8 +20,8 @@ import it.polito.did.gruppo8.GameViewModel
 
 
 @Composable
-fun ShopScreen(modifier: Modifier = Modifier) {
-    GenericScreen(title = "Negozio", modifier){
+fun ShopScreen(modifier: Modifier = Modifier) {}
+    /*GenericScreen(title = "Negozio", modifier){
         Box(modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
@@ -55,21 +55,11 @@ fun ShopScreen(modifier: Modifier = Modifier) {
     }
 
 //TODO
-}
 
-//Occorre passargli valore dell'oggetto preso dal database, descrizione e immagine
-@Composable
-fun ItemCard(title:String) {
-    Card(
-        elevation = 5.dp,
-        backgroundColor = Color.LightGray
-    ){
-      Text(text = title)
-    }
-}
+
 
 @Preview(showBackground = true)
 @Composable
 fun ShopScreenPreview() {
     ShopScreen()
-}
+}*/

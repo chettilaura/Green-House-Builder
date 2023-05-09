@@ -22,7 +22,7 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
  * @param label short text over the input field.
  * @param targetValue the string in which you want to save the user input.
  * @param updateTargetCallback action to trigger when field value change. ex. function: {targetValue = it}.
- * @param fraction ???
+ * @param fraction used to set the height of the box
  */
 @Composable
 fun MyFormBox (title: String, label: String, targetValue: String, updateTargetCallback : (String)->Unit, fraction:Float) {

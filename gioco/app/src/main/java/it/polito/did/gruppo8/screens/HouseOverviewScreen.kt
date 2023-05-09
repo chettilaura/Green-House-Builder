@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.R.color.*
+import it.polito.did.gruppo8.util.myComposable.ParameterBars
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -88,7 +89,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ParameterBars(/*TODO: passare parametri per definire lunghezza delle barre*/)
+            ParameterBars(0.7f, 0.4f, 0.5f)
             Spacer(modifier = Modifier
                 .size(2.dp))
 
@@ -225,7 +226,7 @@ fun MoneyCard(money : Int) {
         .height(80.dp)
         .padding(2.dp),
         elevation = 4.dp,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(15.dp),
         border = BorderStroke(2.dp, Color.DarkGray)) {
         Row(
             modifier = Modifier
@@ -258,7 +259,7 @@ fun RoundCard(roundNum : String) {
         .height(80.dp)
         .padding(2.dp),
         elevation = 4.dp,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(15.dp),
         border = BorderStroke(2.dp, Color.DarkGray)) {
         Column(
             modifier = Modifier
@@ -329,7 +330,7 @@ fun TimerCard() {
         .height(80.dp)
         .padding(2.dp),
         elevation = 4.dp,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(15.dp),
         border = BorderStroke(2.dp, Color.DarkGray)
     ) {
         Column(
@@ -345,160 +346,6 @@ fun TimerCard() {
             )
             /*Text(text = "TIMER", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)*/
             Text(text = "$showTime" + " sec", fontFamily = caveatBold, style = MaterialTheme.typography.h6)
-        }
-    }
-}
-
-@Composable
-fun ParameterBars() {
-    val co2Impact = rememberSaveable {
-        mutableStateOf (0.7f)
-    }
-    val comfort = rememberSaveable {
-        mutableStateOf (0.4f)
-    }
-    val economy = rememberSaveable {
-        mutableStateOf (0.5f)
-    }
-
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(0.15f)
-        .padding(4.dp),
-        elevation = 4.dp,
-        shape = RoundedCornerShape(10.dp),
-        border = BorderStroke(2.dp, Color.DarkGray)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(  //Parametro CO2
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(1.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                Box(modifier = Modifier.fillMaxWidth(0.4f)) {
-                    Row(  //Parametro CO2
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(1.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Image(painter = painterResource(R.drawable.leaf),
-                            contentDescription = "leaf")
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(text = "CO2 IMPACT",
-                            fontFamily = caveatSemiBold,
-                            style = MaterialTheme.typography.h6
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-                Spacer(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(2.dp)
-                )
-                LinearProgressIndicator(
-                    progress = co2Impact.value,
-                    color = colorResource(id = kelly_green),
-                    backgroundColor = Color.LightGray,
-                    modifier = Modifier
-                        .fillMaxWidth(1f)
-                        .size(10.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                )
-            }
-            Row( //Parametro COMFORT
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(1.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                Box(modifier = Modifier.fillMaxWidth(0.4f)){
-                    Row(  //Parametro CO2
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(1.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Image(painter = painterResource(R.drawable.sofa),
-                            contentDescription = "sofa")
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(text = "COMFORT",
-                            fontFamily = caveatSemiBold,
-                            style = MaterialTheme.typography.h6,
-                            textAlign = TextAlign.Left
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-                Spacer(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(8.dp)
-                )
-                LinearProgressIndicator(
-                    progress = comfort.value,
-                    color = colorResource(id = glaucous),
-                    backgroundColor = Color.LightGray,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(10.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                )
-            }
-
-            Row(  //Parametro ECONOMY
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(1.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                Box(modifier = Modifier.fillMaxWidth(0.4f)) {
-                    Row(  //Parametro CO2
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(1.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Image(painter = painterResource(R.drawable.coin),
-                            contentDescription = "coin")
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(text = "ECONOMY",
-                            fontFamily = caveatSemiBold,
-                            style = MaterialTheme.typography.h6,
-                            textAlign = TextAlign.Left
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-                Spacer(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(8.dp)
-                )
-                LinearProgressIndicator(
-                    progress = economy.value,
-                    color = colorResource(id = xanthous),
-                    backgroundColor = Color.LightGray,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .size(10.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                )
-            }
         }
     }
 }
