@@ -21,7 +21,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.util.myComposable.MoneyCard
 import it.polito.did.gruppo8.util.myComposable.MyButton
+import it.polito.did.gruppo8.util.myComposable.RoundCard
+import it.polito.did.gruppo8.util.myComposable.TimerCard
 
 //contiene quiz: un box contiene la domanda, 6 pulsanti con le risposte da scegliere, pulsante per saltare il quiz
 //è presente anche indicazione del tempo rimanente per rispondere
@@ -66,7 +69,7 @@ fun QuizScreen(modifier: Modifier = Modifier) {
 
                 RoundCard("1/8"/*TODO: passare parametro del numero di turno*/)
                 Spacer(modifier = Modifier.weight(1f))
-                TimerCard(/*TODO: passare parametro del tempo rimanente per la fine del turno*/)
+                TimerCard(30_000/*TODO: passare il tempo del timer in ms*/)
                 Spacer(modifier = Modifier.weight(1f))
                 MoneyCard(534 /*TODO: passare valore dei soldi*/)
             }

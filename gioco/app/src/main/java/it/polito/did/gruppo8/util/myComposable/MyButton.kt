@@ -53,8 +53,7 @@ fun MyButton(title: String,
             verticalArrangement = Arrangement.Center
         ) {
             Row(
-                modifier = Modifier
-                    .padding(0.dp),
+                modifier = Modifier,
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {

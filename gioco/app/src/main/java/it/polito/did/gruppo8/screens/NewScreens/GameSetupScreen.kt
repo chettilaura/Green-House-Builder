@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.screens.caveatRegular
 import it.polito.did.gruppo8.screens.caveatSemiBold
@@ -77,7 +80,22 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
              */
             //MyFormLine("players", "players")
 
+            /*
+            TODO: playerNames deve essere una lista di tipo LiveData, che contiene le stringhe dei
+             dei giocatori. Ancora da implementare l'aspetto grafico del composable che mostra
+             a schermo la lista.
+             Si potrebbe definire nel ViewModel nel modo seguente:
+             val playerNames: LiveData <List<String>> = playerDataObserver.getPlayerNames()
+             -Edo
+
+             PlayerList(names = viewModel.players.value.map { it.name })
+             */
+
+
             Spacer(modifier = Modifier.size(10.dp))
+            /*TODO: passare parametro dentro info l'ID univoco della partita
+            *  -Edo*/
+            InformationCard(title = "GAME ID", info = "12345XYZ", 0.3f)
 
             //MyFormBox(title = "Game ID", label = "Id string (test ${gameId})", fieldValue = nPlayers,  fraction = 0.3f)
             Spacer(modifier = Modifier.size(30.dp))
@@ -105,6 +123,14 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
 }
 
 //COMPOSABLES FUNCTIONS
+@Composable
+fun PlayersList(names: List<String>) {
+    LazyColumn {
+        items(names) { name ->
+            Text(name)
+        }
+    }
+}
 
 @Composable
 fun SetUpPopUp() {
