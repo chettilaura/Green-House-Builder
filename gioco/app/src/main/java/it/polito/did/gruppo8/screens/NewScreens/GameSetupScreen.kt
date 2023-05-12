@@ -94,6 +94,7 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
 
             Spacer(modifier = Modifier.size(10.dp))
             /*TODO: passare parametro dentro info l'ID univoco della partita
+               
             *  -Edo*/
             InformationCard(title = "GAME ID", info = "12345XYZ", 0.3f)
 
