@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.screens.caveatRegular
@@ -24,6 +25,7 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
  * @param updateTargetCallback action to trigger when field value change. ex. function: {targetValue = it}.
  * @param fraction used to set the height of the box
  */
+
 @Composable
 fun MyFormBox (title: String, label: String, targetValue: String, updateTargetCallback : (String)->Unit, fraction:Float) {
     Card(modifier = Modifier
@@ -74,4 +76,10 @@ fun MyFormBox (title: String, label: String, targetValue: String, updateTargetCa
             )
         }
     }
+}
+
+@Preview (showSystemUi = true, showBackground = true)
+@Composable
+fun MyFormBoxPreview() {
+
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.screens.caveatSemiBold
@@ -38,12 +40,13 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
  * @param co2Impact shows progress indicator for the CO2 bar
  * @param comfort shows progress indicator for the comfort bar
  * @param economy shows progress indicator for the economy bar
+ * @param fraction indicates the relative height of the card in the screen
  *
  *
  */
 
 @Composable
-fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float) {
+fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float, fraction: Float) {
    /* val co2Impact = rememberSaveable {
         mutableStateOf (0.7f)
     }
@@ -56,7 +59,7 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float) {
 
     Card(modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight(0.15f),
+        .fillMaxHeight(fraction),
         elevation = 5.dp,
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(2.dp, Color.DarkGray)
@@ -64,7 +67,7 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(8.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -95,8 +98,7 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float) {
                 }
                 Spacer(
                     modifier = Modifier
-                        .weight(1f)
-                        .height(2.dp)
+                        .weight(0.2f)
                 )
                 LinearProgressIndicator(
                     progress = co2Impact,
@@ -136,8 +138,7 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float) {
                 }
                 Spacer(
                     modifier = Modifier
-                        .weight(1f)
-                        .height(8.dp)
+                        .weight(0.2f)
                 )
                 LinearProgressIndicator(
                     progress = comfort,
@@ -178,8 +179,7 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float) {
                 }
                 Spacer(
                     modifier = Modifier
-                        .weight(1f)
-                        .height(8.dp)
+                        .weight(0.2f)
                 )
                 LinearProgressIndicator(
                     progress = economy,
@@ -194,3 +194,18 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float) {
         }
     }
 }
+
+/*
+@Preview (showBackground = true, showSystemUi = true)
+@Composable
+fun MyParameterBarCardPreview() {
+    Column(modifier = Modifier
+        .fillMaxSize()
+    ) {
+        Spacer(modifier = Modifier.height(10.dp))
+        ParameterBars(co2Impact = 0.3f, comfort = 0.5f, economy = 0.7f, fraction = 0.15f)
+        Spacer(modifier = Modifier.height(10.dp))
+        ParameterBars(co2Impact = 0.3f, comfort = 0.5f, economy = 0.7f, fraction = 1f)
+        Spacer(modifier = Modifier.height(10.dp))
+    }
+}*/

@@ -28,6 +28,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.util.myComposable.ItemCard
 import it.polito.did.gruppo8.util.myComposable.MyButton
@@ -62,7 +63,7 @@ fun FreeItemScreen(modifier: Modifier = Modifier){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             //Inserire anche top bar?
-            ParameterBars(0.2f, 0.1f, 0.05f)
+            ParameterBars(0.2f, 0.1f, 0.05f, 0.15f)
             Spacer(modifier = Modifier.weight(0.02f))
 
             Card(
