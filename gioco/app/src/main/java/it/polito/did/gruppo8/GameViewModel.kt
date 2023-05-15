@@ -16,29 +16,28 @@ import it.polito.did.gruppo8.model.GameManager
 
 //estende la classe ViewModel
 class GameViewModel: ViewModel() {
-
     private val gameManager = GameManager(viewModelScope)
-
-    //val navigator = Navigator()
-
 
     val currentScreenName = gameManager.currentScreenName
 
+    /*
     val cityName = gameManager.cityName
     val lobbyId = gameManager.lobbyId
+     */
+    val gameInfos = gameManager.gameInfos
     val players = gameManager.players
 
 
-    // NewGameScreen
-    fun onCreateCityButtonPressed(cityName: String) = gameManager.createNewGame(cityName)
-    fun onGameSetupButtonPressed() = null
-    fun onStartButtonPressed() = gameManager.startGame()
-
-
-    // JoinGameScreen
-    fun onCreateHouseButtonPressed(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
 
     // MainMenuScreen
     fun onNewGameButtonPressed() = gameManager.switchScreen(ScreenName.NewGame)
     fun onJoinGameButtonPressed() =  gameManager.switchScreen(ScreenName.JoinGame)
+
+    // NewGameScreen
+    fun onCreateCityButtonPressed(cityName: String) = gameManager.createNewGame(cityName)
+    //fun onGameSetupButtonPressed() = null
+    fun onStartButtonPressed() = gameManager.startGame()
+
+    // JoinGameScreen
+    fun onCreateHouseButtonPressed(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
 }

@@ -2,32 +2,35 @@ package it.polito.did.gruppo8.model
 
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import kotlin.reflect.KClass
 
-class DatabaseManager(private val scope: CoroutineScope) {
+class DatabaseManager() {
 
     private val _url = "https://gioco8-32e43-default-rtdb.europe-west1.firebasedatabase.app/"
     private val _firebase = Firebase.database(_url)
     private val _auth = Firebase.auth
 
-    private var _listenerRegister: MutableMap<String, MutableList<ValueEventListener>> = mutableMapOf()
+    private val _dbScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+
+    private var _listenerRegister: MutableMap<String, MutableMap<String, ValueEventListener>> = mutableMapOf()
 
     /**
      * Authenticates anonymously to the database.
      */
     fun authenticate(){
         //_firebase.setLogLevel(Logger.Level.DEBUG)
-        scope.launch {
+        _dbScope.launch {
             _auth.signInAnonymously().await()
             Log.d("DatabaseManager", "Current User: ${_auth.uid}")
         }
@@ -49,11 +52,8 @@ class DatabaseManager(private val scope: CoroutineScope) {
      *
      * @return true if data are present, false if not.
      */
-    fun isDataPresent(path: String): Boolean{
-        //TODO: More test to check if runBlocking generates unwanted behaviour -Mattia
-        return runBlocking {
-            _firebase.getReference(path).get().await().getValue() != null
-        }
+    suspend fun isDataPresent(path: String): Boolean{
+        return _firebase.getReference(path).get().await().value != null
     }
 
     // Reference for read/write operations: https://firebase.google.com/docs/database/android/read-and-write -Mattia
@@ -68,7 +68,7 @@ class DatabaseManager(private val scope: CoroutineScope) {
      * @param T the data type.
      */
     fun <T> writeData(path: String, data: T){
-        scope.launch {
+        _dbScope.launch{
             _firebase.getReference(path).setValue(data)
                 .addOnSuccessListener {
                     Log.d("DatabaseManager", "Data $data written at path $path")
@@ -90,17 +90,15 @@ class DatabaseManager(private val scope: CoroutineScope) {
      *
      * @return n object of type T that can be null if the read operation has failed.
      */
-    fun <T> readData(path: String, valueType: Class<T>): T? {
-        return runBlocking{
-            _firebase.getReference(path).get()
-            .addOnSuccessListener {
-                Log.d("DatabaseManager", "Data ${it.getValue()} read from path $path")
-            }
-            .addOnFailureListener{
-                Log.d("DatabaseManager", "ERROR: Could not read from path $path")
-            }
-            .await().getValue(valueType)
-        }
+    suspend fun <T> readData(path: String, valueType: Class<T>): T? {
+        return _firebase.getReference(path).get()
+                .addOnSuccessListener {
+                    Log.d("DatabaseManager", "Data ${it.value} read from path $path")
+                }
+                .addOnFailureListener {
+                    Log.d("DatabaseManager", "ERROR: Could not read from path $path")
+                }
+                .await().getValue(valueType)
     }
 
     //TODO: Still test all listeners methods -Mattia
@@ -111,6 +109,7 @@ class DatabaseManager(private val scope: CoroutineScope) {
      * @param path the path of the target data
      * @param listener a listener operation which implements ValueEventListener
      */
+    /*
     fun addListener(path: String, listener: ValueEventListener){
         _firebase.getReference(path).addValueEventListener(listener)
 
@@ -118,26 +117,46 @@ class DatabaseManager(private val scope: CoroutineScope) {
         _listenerRegister.putIfAbsent(path, mutableListOf())
         _listenerRegister[path]!!.add(listener)
     }
-
-    fun removeListener(path: String, listener: ValueEventListener){
-        _firebase.getReference(path).removeEventListener(listener)
+     */
+    fun addListener(path: String,
+                    listenerId: String,
+                    onDataChange: (snapshot: DataSnapshot)->Unit,
+                    onCancelled: (error: DatabaseError)->Unit)
+    {
+        val listener = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) = onDataChange(snapshot)
+            override fun onCancelled(error: DatabaseError) = onCancelled(error)
+        }
+        _firebase.getReference(path).addValueEventListener(listener)
+        Log.d("DatabaseManager", "Listener $listenerId subscribed to $path")
 
         //Update listener register
-        val list = _listenerRegister[path]
-        list?.remove(listener)
-        if(list != null && list.isEmpty())
-            _listenerRegister.remove(path)
+        _listenerRegister.putIfAbsent(path, mutableMapOf())
+        _listenerRegister[path]!!.putIfAbsent(listenerId, listener)
+    }
+
+    fun removeListener(path: String, listenerId: String){
+        val map = _listenerRegister[path] ?: return
+        if(map.contains(listenerId)){
+            _firebase.getReference(path).removeEventListener(map[listenerId]!!)
+
+            //Update listener register
+            map.remove(listenerId)
+            if(map.isEmpty())
+                _listenerRegister.remove(path)
+        }
     }
 
     fun removeAllListeners(path: String){
         val ref = _firebase.getReference(path)
 
-        val list = _listenerRegister[path] ?: return
-        for (listener in list){
-            ref.removeEventListener(listener)
+        val map = _listenerRegister[path] ?: return
+        for (entry in map){
+            ref.removeEventListener(entry.value)
 
             //Update listener register
-            _listenerRegister[path]!!.remove(listener)
+            map.remove(entry.key)
         }
+        _listenerRegister.remove(path)
     }
 }

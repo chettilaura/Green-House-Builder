@@ -12,6 +12,7 @@ import it.polito.did.gruppo8.screens.JoinGameScreen
 import it.polito.did.gruppo8.screens.MainMenuScreen
 import it.polito.did.gruppo8.screens.NewScreens.GameSetupScreen
 import it.polito.did.gruppo8.screens.NewScreens.NewGameScreen
+import it.polito.did.gruppo8.screens.NewScreens.WaitingScreen
 import it.polito.did.gruppo8.screens.SplashScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -47,16 +48,21 @@ fun Navigation(navController: NavHostController) {
             MainMenuScreen(vm)
         }
 
-        composable(route = ScreenName.GameSetup.route) {
-            GameSetupScreen(vm)
-        }
-
         composable(route = ScreenName.JoinGame.route) {
             JoinGameScreen(vm)
         }
 
         composable(route = ScreenName.NewGame.route) {
             NewGameScreen(vm)
+        }
+
+        composable(route = ScreenName.GameSetup.route) {
+            GameSetupScreen(vm)
+        }
+
+        composable(route = ScreenName.Waiting.route) {
+            //WaitingScreen(vm, vm.cityName.value!!, "Attendi")
+            WaitingScreen(vm, vm.gameInfos.value!!.cityName!!, "Attendi")
         }
 
         composable(route = ScreenName.Dashboard.route) {

@@ -30,9 +30,9 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
 @Composable
 fun WaitingScreen(
     vm: GameViewModel,
-    modifier: Modifier = Modifier,
     topText: String,
-    bottomText: String
+    bottomText: String,
+    modifier: Modifier = Modifier
 ) {
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
@@ -88,5 +88,5 @@ fun WaitingScreen(
 @Composable
 fun WaitingScreenPreview() {
     val vm = GameViewModel()
-    WaitingScreen(vm, Modifier, "TOP TEXT WAITING SCREEN", "BOTTOM TEXT WAITING SCREEN")
+    WaitingScreen(vm, "TOP TEXT WAITING SCREEN", "BOTTOM TEXT WAITING SCREEN")
 }
