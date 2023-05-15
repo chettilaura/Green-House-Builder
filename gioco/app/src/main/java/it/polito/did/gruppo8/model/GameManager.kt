@@ -1,12 +1,8 @@
 package it.polito.did.gruppo8.model
 
 import android.util.Log
-import androidx.compose.ui.text.toUpperCase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import it.polito.did.gruppo8.Navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -16,9 +12,10 @@ import java.time.LocalDateTime
 import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.model.baseClasses.*
 import it.polito.did.gruppo8.util.myLibs.MyRandom
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import kotlin.random.Random
+import kotlinx.coroutines.withContext
 
 class GameManager(private val scope: CoroutineScope/*, navController: NavController*/) {
 
@@ -41,10 +38,10 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     }
     val gameInfos: LiveData<GameInfos> = _mutableGameInfos
 
-    private val _mutablePlayers = MutableLiveData<Map<String, Player>>().also{
-        it.value = emptyMap()
+    private val _mutablePlayers = MutableLiveData<MutableMap<String, Player>>().also{
+        it.value = mutableMapOf()
     }
-    val players: LiveData<Map<String, Player>> = _mutablePlayers
+    val players: LiveData<MutableMap<String, Player>> = _mutablePlayers
 
     private val _dbManager: DatabaseManager = DatabaseManager()
 
@@ -108,7 +105,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                     "date" to LocalDateTime.now().toString(),
                     "hostId" to _dbManager.getCurrentUserID(),
                     "screen" to ScreenName.Waiting.route,
-                    "gameInfos" to gameInfos.value
+                    "gameInfos" to gameInfos.value,
                 )
             )
             Log.d("GameManager", "Match creation succeeded")
@@ -131,6 +128,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             Log.d("GameManager","joinGame: playerId is $playerId")
 
             scope.launch {
+                //Check if matchId is correct
                 val check = async { _dbManager.isDataPresent(matchId) }.await()
                 if(!check) {
                     //TODO: riportare ad una schermata di errore per dire che la partita non esiste.
@@ -138,19 +136,22 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 }
                 Log.d("GameManager","joinGame: matchId is $matchId")
 
+                //Write player data on the database
                 val playerObj = Player(playerId, nickname)
                 _dbManager.writeData("$matchId/players/$playerId", playerObj)
                 Log.d("GameManager","joinGame: player data written")
 
+                //First read of GameInfos
                 async {
                     _mutableGameInfos.value =
                         _dbManager.readData("$matchId/gameInfos", GameInfos::class.java)
                 }.await()
 
+                //TODO: spostare in un metodo privato watchGameInfos()
                 _dbManager.addListener("$matchId/gameInfos", "watchGameInfos",
                     onDataChange = {
-                        val currentGameInfos = it.value
-                        if(currentGameInfos!=null && currentGameInfos is GameInfos)
+                        val currentGameInfos = it.getValue(GameInfos::class.java)
+                        if(currentGameInfos!=null)
                             _mutableGameInfos.value = currentGameInfos
                     },
                     onCancelled = {
@@ -178,7 +179,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             _dbManager.readData("quiz/totNum", Int::class.java)
         }
         val quizId = MyRandom.int(0 until totNum!!)
-        Log.d("TestQuiz", "Tot Quiz: $totNum, Range: ${0 until totNum!!}, Id: $quizId")
+        Log.d("TestQuiz", "Tot Quiz: $totNum, Range: ${0 until totNum}, Id: $quizId")
         return runBlocking {
             _dbManager.readData("quiz/$quizId", Quiz::class.java)
         }
@@ -193,33 +194,23 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing match Id")
 
-        /*
-        val playersListener = object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val currentPlayers = snapshot.value ?: return
-
-                if(currentPlayers !is Map<*, *>)
-                    throw RuntimeException("Error occurred reading Players data structure in Database")
-
-                _mutablePlayers.value = currentPlayers as Map<String, Player>
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                switchScreen(ScreenName.Error)
-            }
-        }
-
-        _dbManager.addListener("$id/players", playersListener)
-
-         */
         _dbManager.addListener("$id/players", "watchPlayers",
-            onDataChange = {
-                val currentPlayers = it.value
+            onDataChange = { snapshot ->
+                val currentPlayers = snapshot.getValue() as Map<*, *>?
                 if(currentPlayers!=null){
-                    if(currentPlayers !is Map<*, *>)
-                        throw RuntimeException("Error occurred reading Players data structure in Database")
+                    Log.d("WatchPlayers","Update: Found type ${currentPlayers.javaClass.kotlin} -> $currentPlayers")
 
-                    _mutablePlayers.value = currentPlayers as Map<String, Player>
+                    //Properly converting snapshot into a MutableMap<String,Player>
+                    val tempMap = mutableMapOf<String, Player>()
+                    for (childSnapshot in snapshot.children) {
+                        val playerId = childSnapshot.key
+                        val player = childSnapshot.getValue(Player::class.java)
+                        if(playerId!=null && player!=null)
+                            tempMap[playerId] = player
+                    }
+                    _mutablePlayers.value = tempMap
+
+                    Log.d("WatchPlayers", "Data updated: ${_mutablePlayers.value!!.entries}")
                 }
             },
             onCancelled = {
@@ -233,23 +224,8 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     //funzione che osserva il child "screen" della struttura firebase della partita
     //in base al valore di "screen" fa apparire la relativa schermata
     private fun watchScreen() {
-
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing match Id")
 
-        /*
-        val screenListener = object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                switchScreen(ScreenName.routeToScreenName(snapshot.value?.toString()?: ""))
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                switchScreen(ScreenName.Error)
-            }
-        }
-
-        _dbManager.addListener("$id/screen", screenListener)
-
-         */
         _dbManager.addListener("$id/screen", "watchScreen",
             onDataChange = {
                 _mutableCurrentScreenName.value = ScreenName.routeToScreenName(it.value?.toString()?: "")

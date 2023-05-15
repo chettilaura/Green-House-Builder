@@ -1,26 +1,22 @@
 package it.polito.did.gruppo8.screens.NewScreens
 
-import androidx.compose.foundation.BorderStroke
+import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -35,8 +31,6 @@ import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
-import it.polito.did.gruppo8.screens.caveatRegular
-import it.polito.did.gruppo8.screens.caveatSemiBold
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 import it.polito.did.gruppo8.util.myComposable.*
 
@@ -45,6 +39,7 @@ import it.polito.did.gruppo8.util.myComposable.*
 fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
 {
     var nPlayers by remember { mutableStateOf(TextFieldValue("")) }
+    val players by vm.players.observeAsState()
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
@@ -73,25 +68,19 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
             Spacer(modifier = Modifier.size(10.dp))
 
             /*
-            TODO: I campi di testo Players e GameID non sono text field interagibili, servono solo a mostrare
-             dei valori che vengono letti dal database, non decisi dall'utente.
-             GameID viene generato come string randomica e deve essere mostrata a schermo nel campo di testo.
-             I Players dovrebbero essere una lista di nickname che si va a popolare di volta in volta quando varia
-             il database ogni volta che un player joina la partita.
-             -Mattia
-             */
-            //MyFormLine("players", "players")
-
-            /*
             TODO: playerNames deve essere una lista di tipo LiveData, che contiene le stringhe dei
              dei giocatori. Ancora da implementare l'aspetto grafico del composable che mostra
              a schermo la lista.
              Si potrebbe definire nel ViewModel nel modo seguente:
              val playerNames: LiveData <List<String>> = playerDataObserver.getPlayerNames()
              -Edo
-
-             PlayerList(names = viewModel.players.value.map { it.name })
+             La funzionalià è stata implementata trattando il LiveData players del ViewModel come uno
+             State ottenuto dalla dichiarazione a riga 42. Si può accedere a tutta la collection di
+             Players e leggerne il nome come fatto nel composable.
+             -Mattia
              */
+            PlayersList(players?.values!!.toList())
+
 
 
             Spacer(modifier = Modifier.size(10.dp))
@@ -126,10 +115,10 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
 
 //COMPOSABLES FUNCTIONS
 @Composable
-fun PlayersList(names: List<String>) {
+fun PlayersList(players: List<Player>) {
     LazyColumn {
-        items(names) { name ->
-            Text(name)
+        items(players) { player ->
+            Text(player.nickname)
         }
     }
 }
