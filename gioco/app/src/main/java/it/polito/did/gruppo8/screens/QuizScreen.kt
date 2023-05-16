@@ -20,6 +20,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.util.myComposable.MoneyCard
 import it.polito.did.gruppo8.util.myComposable.MyButton
@@ -30,7 +31,7 @@ import it.polito.did.gruppo8.util.myComposable.TimerCard
 //è presente anche indicazione del tempo rimanente per rispondere
 
 @Composable
-fun QuizScreen(modifier: Modifier = Modifier) {
+fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
     //variabili per modificare colore di sfondo dei button per le risposte quando ne viene selezionata una
     //sono passate al composable QuizCard, insieme alla funzione updateSelection che dovrebbe modificare
     //il flag di selezione
@@ -253,5 +254,5 @@ fun QuizCard(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun QuizScreenPreview() {
-    QuizScreen()
+    QuizScreen(GameViewModel())
 }

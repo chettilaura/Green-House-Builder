@@ -43,6 +43,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.Navigator
 import it.polito.did.gruppo8.ScreenName
@@ -51,7 +52,7 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun WaitingQuizScreen(modifier: Modifier = Modifier) {
+fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
     Box(modifier = Modifier.fillMaxSize(1f)){
         Image(
@@ -228,7 +229,7 @@ fun QuizTopBar(title: String, colorId: Color) {
 fun PreviewWaitingQuizScreen(modifier: Modifier = Modifier) {
     //val vm = GameViewModel()
     GameSkeletonTheme {
-        WaitingQuizScreen()
+        WaitingQuizScreen(GameViewModel())
     }
 }
 

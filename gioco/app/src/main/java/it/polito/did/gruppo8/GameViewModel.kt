@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 //import androidx.navigation.compose.NavHost
 //import androidx.navigation.compose.rememberNavController
 import it.polito.did.gruppo8.model.GameManager
+import it.polito.did.gruppo8.model.baseClasses.Quiz
 
 //gameViewModel è l'intermediatore tra le view (gli screens) & il database (gameManager)
 
@@ -19,14 +20,13 @@ class GameViewModel: ViewModel() {
     private val gameManager = GameManager(viewModelScope)
 
     val currentScreenName = gameManager.currentScreenName
-
-    /*
-    val cityName = gameManager.cityName
-    val lobbyId = gameManager.lobbyId
-     */
     val gameInfos = gameManager.gameInfos
     val players = gameManager.players
 
+    val randomQuiz: Quiz
+        get(){
+            return gameManager.getRandomQuiz()?:Quiz()
+        }
 
 
     // MainMenuScreen
@@ -40,4 +40,6 @@ class GameViewModel: ViewModel() {
 
     // JoinGameScreen
     fun onCreateHouseButtonPressed(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
+
+    // QuizScreen
 }

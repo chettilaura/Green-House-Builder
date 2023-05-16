@@ -12,8 +12,10 @@ sealed class ScreenName (val route: String) {
     object GameSetup : ScreenName("game_setup_screen")
     object JoinGame : ScreenName("join_game_screen")
     object Waiting : ScreenName("waiting_screen")
-    object Error : ScreenName("error_screen")
     object Dashboard : ScreenName("dashboard_screen")
+    object Quiz : ScreenName("quiz_screen")
+    object WaitingQuiz : ScreenName("waiting_quiz_screen")
+    object Error : ScreenName("error_screen")
 
     companion object{
         /**
@@ -33,6 +35,8 @@ sealed class ScreenName (val route: String) {
                 "join_game_screen" -> JoinGame
                 "waiting_screen" -> Waiting
                 "dashboard_screen" -> Dashboard
+                "waiting_quiz_screen" -> WaitingQuiz
+                "quiz_screen" -> Quiz
                 else -> Error
             }
         }

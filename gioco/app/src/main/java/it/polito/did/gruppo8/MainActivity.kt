@@ -35,23 +35,23 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val LocalFont = staticCompositionLocalOf<FontFamily?> { null }
-            setContent {
+        //val LocalFont = staticCompositionLocalOf<FontFamily?> { null }
+        setContent {
 
-                //"fun GameSkeletonTheme" definita in "Theme.kt"
-                GameSkeletonTheme {
-                    // A surface container using the 'background' color from the theme
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colors.background
-                    ) {
-                        //MainScreen()
+            //"fun GameSkeletonTheme" definita in "Theme.kt"
+            GameSkeletonTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    //MainScreen()
 
-                        val navController = rememberNavController()
-                        Navigation(navController)
-                    }
+                    val navController = rememberNavController()
+                    Navigation(navController)
                 }
             }
+        }
 
     }
 }
