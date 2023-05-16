@@ -1,5 +1,4 @@
 package it.polito.did.gruppo8.screens.NewScreens
-
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
@@ -38,10 +37,12 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.Navigator
@@ -63,7 +64,7 @@ fun WaitingQuizScreen(modifier: Modifier = Modifier) {
         Column() {
 
             QuizTopBar(
-                title = "It's 'player n. x' turn",
+                title = "It's 'player x' turn",
                 colorId = colorResource(id = R.color.cal_poly_green)
             )
             //TODO: passare il numero / nickname del giocatore alla QuizTopBar, modificata perchè non presente bottone di back ma comunque
@@ -84,57 +85,193 @@ fun WaitingQuizScreen(modifier: Modifier = Modifier) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // TODO: mettere animazione loading
+                    LoadingAnimation()
+                    Spacer(modifier = Modifier.size(40.dp))
 
-                    Card(){
+                        Box(
+                            modifier = Modifier
+                                .size(400.dp, 400.dp)
+                                .clip(RoundedCornerShape(30.dp))
+                                .background(Color(0xFF599B68))
+                        ) {
 
-                        Column() {
-                            Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "if it's you...")
-                            }
-
-                            Box(modifier = Modifier) {
-                                Image(painter = painterResource(id = R.drawable.empty_button)
-                                    ,contentDescription = "infoField" )
-                                Column(modifier = Modifier.padding(10.dp).fillMaxWidth(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Text(text = "right answer")
-                                    Text(text = "wrong answer")
-                                    Text(text = "no answer")
+                            Column() {
+                                Spacer(modifier = Modifier.size(10.dp))
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "if it's you...",
+                                        fontFamily = caveatBold,
+                                        color = Color.White,
+                                        style = MaterialTheme.typography.h4
+                                    )
                                 }
-                            }
 
-                            Spacer(modifier = Modifier.size(32.dp))
+                                Box(modifier = Modifier) {
 
-                            Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically) {
-                                Text(text = "if it's not you...")
-                            }
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(10.dp)
+                                            .fillMaxWidth(),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Row(modifier = Modifier
+                                            .fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceEvenly,
+                                            verticalAlignment = Alignment.CenterVertically) {
+                                            Text(
+                                                text = "right answer",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h5
+                                            )
+                                            Spacer(modifier = Modifier.size(40.dp))
 
-                            Box(modifier = Modifier) {
-                                Image(painter = painterResource(id = R.drawable.empty_button)
-                                    ,contentDescription = "infoField" )
-                                Column(modifier = Modifier.padding(10.dp).fillMaxWidth(),
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Text(text = "right answer")
-                                    Text(text = "wrong answer")
-                                    Text(text = "no answer")
+                                            // TODO:inserire valore delle monete
+
+                                            Image(
+                                                painter = painterResource(id = R.drawable.coin),
+                                                contentDescription = "houseIcon" )
+                                        }
+
+                                        Row(modifier = Modifier
+                                            .fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceEvenly,
+                                            verticalAlignment = Alignment.CenterVertically) {
+                                            Text(
+                                                text = "wrong answer",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h5
+                                            )
+                                            Spacer(modifier = Modifier.size(40.dp))
+
+                                            // TODO:inserire valore delle monete
+
+                                            Image(
+                                                painter = painterResource(id = R.drawable.coin),
+                                                contentDescription = "coinIcon" )
+                                        }
+
+                                        Row(modifier = Modifier
+                                            .fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceEvenly,
+                                            verticalAlignment = Alignment.CenterVertically) {
+                                            Text(
+                                                text = "no answer",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h5
+                                            )
+                                            Spacer(modifier = Modifier.size(40.dp))
+
+                                            // TODO:inserire valore delle monete
+
+                                            Image(
+                                                painter = painterResource(id = R.drawable.coin),
+                                                contentDescription = "coinIcon" )
+                                        }
+
+                                    }
                                 }
-                            }
 
+                                Spacer(modifier = Modifier.size(10.dp))
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "if it's not you...",
+                                        fontFamily = caveatBold,
+                                        color = Color.White,
+                                        style = MaterialTheme.typography.h4
+                                    )
+                                }
+
+                                Box(modifier = Modifier) {
+
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(10.dp)
+                                            .fillMaxWidth(),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Row(modifier = Modifier
+                                            .fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceEvenly,
+                                            verticalAlignment = Alignment.CenterVertically) {
+                                            Text(
+                                                text = "right answer",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h5
+                                            )
+                                            Spacer(modifier = Modifier.size(40.dp))
+
+                                            // TODO:inserire valore delle monete
+
+                                            Image(
+                                                modifier = Modifier.size(50.dp,50.dp),
+                                                painter = painterResource(id = R.drawable.house),
+                                                contentDescription = "houseIcon")
+                                        }
+
+                                        Row(modifier = Modifier
+                                            .fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceEvenly,
+                                            verticalAlignment = Alignment.CenterVertically) {
+                                            Text(
+                                                text = "wrong answer",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h5
+                                            )
+                                            Spacer(modifier = Modifier.size(40.dp))
+
+                                            // TODO:inserire valore delle monete
+
+                                            Image(
+                                                modifier = Modifier.size(50.dp,50.dp),
+                                                painter = painterResource(id = R.drawable.noshop),
+                                                contentDescription = "houseIcon")
+                                        }
+
+                                        Row(modifier = Modifier
+                                            .fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceEvenly,
+                                            verticalAlignment = Alignment.CenterVertically) {
+                                            Text(
+                                                text = "no answer",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h5
+                                            )
+                                            Spacer(modifier = Modifier.size(40.dp))
+
+                                            // TODO:inserire valore delle monete
+
+                                            Image(
+                                                modifier = Modifier.size(50.dp,50.dp),
+                                                painter = painterResource(id = R.drawable.noshop),
+                                                contentDescription = "houseIcon")
+                                        }
+
+                                    }
+                                }
+
+                            }
                         }
 
 
-                    }
                 }
 
 
@@ -144,66 +281,8 @@ fun WaitingQuizScreen(modifier: Modifier = Modifier) {
     }
 
 
-/* LOADING ---------------------------------------------------- */
 
-// Valutare se ha senso generalizzare e spostare questo composable nel package util.myComposable
-// -Mattia
-//@Composable
-//fun LoadingAnimation(
-//    modifier: Modifier = Modifier,
-//    circleSize: Dp = 25.dp,
-//    circleColor: Color = Color(0xFF599C68),
-//    spaceBetween: Dp = 10.dp,
-//    travelDistance: Dp = 20.dp
-//) {
-//    val circles = listOf(
-//        remember { Animatable(initialValue = 0f) },
-//        remember { Animatable(initialValue = 0f) },
-//        remember { Animatable(initialValue = 0f) }
-//    )
-//
-//    circles.forEachIndexed { index, animatable ->
-//        LaunchedEffect(key1 = animatable) {
-//            delay(index * 100L)
-//            animatable.animateTo(
-//                targetValue = 1f,
-//                animationSpec = infiniteRepeatable(
-//                    animation = keyframes {
-//                        durationMillis = 1200
-//                        0.0f at 0 with LinearOutSlowInEasing
-//                        1.0f at 300 with LinearOutSlowInEasing
-//                        0.0f at 600 with LinearOutSlowInEasing
-//                        0.0f at 1200 with LinearOutSlowInEasing
-//                    },
-//                    repeatMode = RepeatMode.Restart
-//                )
-//            )
-//        }
-//    }
-//
-//    val circleValues = circles.map { it.value }
-//    val distance = with(LocalDensity.current) { travelDistance.toPx() }
-//
-//    Row(
-//        modifier = modifier,
-//        horizontalArrangement = Arrangement.spacedBy(spaceBetween)
-//    ) {
-//        circleValues.forEach { value ->
-//            Box(
-//                modifier = Modifier
-//                    .size(circleSize)
-//                    .graphicsLayer {
-//                        translationY = -value * distance
-//                    }
-//                    .background(
-//                        color = circleColor,
-//                        shape = CircleShape
-//                    )
-//            )
-//        }
-//    }
-//
-//}
+// COMPOSABLES
 
 @Composable
 fun QuizTopBar(title: String, colorId: Color) {
