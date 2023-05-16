@@ -23,9 +23,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import coil.compose.AsyncImagePainter
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.screens.caveatSemiBold
+import it.polito.did.gruppo8.util.myComposable.LoadingAnimation
 
 @Composable
 fun WaitingScreen(

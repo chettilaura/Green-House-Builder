@@ -1,6 +1,7 @@
 package it.polito.did.gruppo8.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -116,26 +117,13 @@ fun popUpTutorial() {
         modifier = Modifier
             .size(400.dp, 400.dp)
             .clip(shape)
+            .background(Color(0xFF55825F))
     ) {
-        Image(
-            painter = painterResource(R.drawable.bg),
-            contentDescription = "Immagine di sfondo",
-            modifier = Modifier.fillMaxHeight(),
-            contentScale = ContentScale.FillHeight
-        )
-        Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(R.drawable.tut_background),
-                contentDescription = "tutorial background",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
-            )
-
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
                             "GUIDE",
@@ -146,10 +134,7 @@ fun popUpTutorial() {
                     }
                     Instructions()
                 }
-
             }
-        }
-
     }
 }
 
@@ -160,26 +145,13 @@ fun settingsPopUp() {
         modifier = Modifier
             .size(400.dp, 400.dp)
             .clip(shape)
+            .background(Color(0xFF55825F))
     ) {
-        Image(
-            painter = painterResource(R.drawable.bg),
-            contentDescription = "Immagine di sfondo",
-            modifier = Modifier.fillMaxHeight(),
-            contentScale = ContentScale.FillHeight
-        )
-        Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(R.drawable.tut_background),
-                contentDescription = "tutorial background",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
-            )
-
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
                             "SETTINGS",
@@ -215,14 +187,10 @@ fun settingsPopUp() {
                                 color = Color.Black,
                                 style = MaterialTheme.typography.h4)
                             SwitchDemo()
-
                         }
                     }
                 }
-
             }
-        }
-
     }
 }
 

@@ -147,7 +147,7 @@ fun SetUpPopUp() {
                 contentScale = ContentScale.FillBounds
             )
                 Column(
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(8.dp).fillMaxSize(),
                     verticalArrangement = Arrangement.SpaceAround,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
