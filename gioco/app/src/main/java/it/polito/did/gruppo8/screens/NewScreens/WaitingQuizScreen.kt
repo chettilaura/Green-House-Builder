@@ -1,4 +1,5 @@
 package it.polito.did.gruppo8.screens.NewScreens
+import android.util.Log
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
@@ -42,6 +43,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -54,6 +56,14 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
+    val players by vm.players.observeAsState()
+    val gameInfos by vm.gameInfos.observeAsState()
+
+    Log.d("WaitingQuizScreen", "CurrentPlayerID: ${gameInfos!!.currentPlayerId}")
+    Log.d("WaitingQuizScreen", "CurrentPlayer: ${players!![gameInfos!!.currentPlayerId]}")
+
+    //Genera il prossimo quiz
+    vm.prepareNextQuiz()
 
     Box(modifier = Modifier.fillMaxSize(1f)){
         Image(
@@ -64,12 +74,15 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
         )
         Column() {
 
+            // Seleziona il nickname del player corrente (scrive "Your" se è uguale al proprio)
+            val nickname = if(gameInfos!!.currentPlayerId != players!![vm.myPlayerId]?.id)
+                players!![gameInfos!!.currentPlayerId]?.nickname?:""
+            else
+                "Your"
             QuizTopBar(
-                title = "It's 'player x' turn",
+                title = "It's $nickname turn",
                 colorId = colorResource(id = R.color.cal_poly_green)
             )
-            //TODO: passare il numero / nickname del giocatore alla QuizTopBar, modificata perchè non presente bottone di back ma comunque
-            // possibile metterla in util.MyComposable
 
             Column (
                 modifier = Modifier
@@ -240,10 +253,14 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
+                                            /*
                                             Image(
                                                 modifier = Modifier.size(50.dp,50.dp),
+                                                //TODO: Manca resource noshop nella cartella -Mattia
                                                 painter = painterResource(id = R.drawable.noshop),
                                                 contentDescription = "houseIcon")
+
+                                             */
                                         }
 
                                         Row(modifier = Modifier
@@ -260,10 +277,14 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
+                                            /*
                                             Image(
                                                 modifier = Modifier.size(50.dp,50.dp),
+                                                //TODO: Manca resource noshop nella cartella -Mattia
                                                 painter = painterResource(id = R.drawable.noshop),
                                                 contentDescription = "houseIcon")
+
+                                             */
                                         }
 
                                     }

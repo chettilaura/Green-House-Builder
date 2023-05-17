@@ -21,13 +21,11 @@ class GameViewModel: ViewModel() {
 
     val currentScreenName = gameManager.currentScreenName
     val gameInfos = gameManager.gameInfos
+
     val players = gameManager.players
+    val myPlayerId = gameManager.myPlayerId
 
-    val randomQuiz: Quiz
-        get(){
-            return gameManager.getRandomQuiz()?:Quiz()
-        }
-
+    var currentQuiz: Quiz = Quiz()
 
     // MainMenuScreen
     fun onNewGameButtonPressed() = gameManager.switchScreen(ScreenName.NewGame)
@@ -36,10 +34,17 @@ class GameViewModel: ViewModel() {
     // NewGameScreen
     fun onCreateCityButtonPressed(cityName: String) = gameManager.createNewGame(cityName)
     //fun onGameSetupButtonPressed() = null
-    fun onStartButtonPressed() = gameManager.startGame()
+    fun onStartButtonPressed(){
+        gameManager.startGame()
+    }
 
     // JoinGameScreen
     fun onCreateHouseButtonPressed(lobbyId:String, nickname:String) = gameManager.joinGame(lobbyId, nickname)
 
+    // WaitingQuizScreen
+    fun prepareNextQuiz(){
+        currentQuiz = gameManager.getRandomQuiz()
+    }
     // QuizScreen
+    fun onSubmitAnswerButtonPressed() = null
 }

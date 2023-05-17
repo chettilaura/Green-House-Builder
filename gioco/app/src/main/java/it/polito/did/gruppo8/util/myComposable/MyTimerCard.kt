@@ -46,7 +46,7 @@ fun rememberCountdownTimerState(
 }
 
 @Composable
-fun TimerCard(time: Long) {
+fun MyTimerCard(time: Long) {
     //valore del tempo rimanente
     val timeLeftMs by rememberCountdownTimerState (time) //tempo in ms
     val showTime = timeLeftMs / 1000 //tempo in secondi

@@ -1,14 +1,14 @@
 package it.polito.did.gruppo8.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -22,10 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Quiz
 import it.polito.did.gruppo8.util.myComposable.MoneyCard
 import it.polito.did.gruppo8.util.myComposable.MyButton
 import it.polito.did.gruppo8.util.myComposable.RoundCard
-import it.polito.did.gruppo8.util.myComposable.TimerCard
+import it.polito.did.gruppo8.util.myComposable.MyTimerCard
 
 //contiene quiz: un box contiene la domanda, 6 pulsanti con le risposte da scegliere, pulsante per saltare il quiz
 //è presente anche indicazione del tempo rimanente per rispondere
@@ -37,6 +38,14 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
     //il flag di selezione
     var selected by remember { mutableStateOf(false) }
     var selectionColor = if(selected) R.color.emerald else R.color.asparagus
+
+    val players by vm.players.observeAsState()
+    val gameInfos by vm.gameInfos.observeAsState()
+
+    val quiz = vm.currentQuiz
+    Log.d("QuizScreen", "Question: ${quiz.question}")
+    Log.d("QuizScreen", "Answers: ${quiz.answers}")
+
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -61,27 +70,16 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                /*TurnCard(colorTurn = "RED", colorResId = R.color.old_rose
-                    *//*TODO: passare parametro della squadra con turno attivo
-                    *  il colore è in formato Int e il nome è contenuto nel file colors.xml dentro res,
-                    *  il nome deve essere corrispondente al colore *//*)
-
-                Spacer(modifier = Modifier.weight(1f))*/
-
-                RoundCard("1/8"/*TODO: passare parametro del numero di turno*/)
+                RoundCard("${gameInfos!!.turnCounter}/${gameInfos!!.totalTurns}")
                 Spacer(modifier = Modifier.weight(1f))
-                TimerCard(30_000/*TODO: passare il tempo del timer in ms*/)
+                MyTimerCard(gameInfos!!.quizTime.toLong()*1000)
                 Spacer(modifier = Modifier.weight(1f))
-                MoneyCard(534 /*TODO: passare valore dei soldi*/)
+                MoneyCard(players!![vm.myPlayerId]!!.wallet.coins)
             }
             Spacer(modifier = Modifier.weight(1f))
             QuizCard(
-                "THIS IS THE QUIZ THAT IS PICKED FROM THE DATABASE",
-                listOf(
-                    "THIS IS ANSWER NUMBER 1",
-                    "THIS IS ANSWER NUMBER 2",
-                    "THIS IS ANSWER NUMBER 3",
-                    "THIS IS ANSWER NUMBER 4"),
+                quiz.question,
+                quiz.answers,
                 selected,
                 selectionColor
             ) {

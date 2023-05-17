@@ -28,7 +28,7 @@ import it.polito.did.gruppo8.util.myComposable.MoneyCard
 import it.polito.did.gruppo8.util.myComposable.MyButton
 import it.polito.did.gruppo8.util.myComposable.ParameterBars
 import it.polito.did.gruppo8.util.myComposable.RoundCard
-import it.polito.did.gruppo8.util.myComposable.TimerCard
+import it.polito.did.gruppo8.util.myComposable.MyTimerCard
 
 //Contiene vista generale della propria casa. Contiene: box con info sui parametri (barre),
 //box con casetta, timer, soldi e info sul round di gioco
@@ -100,7 +100,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 RoundCard(numeroTurno.value)
                 Spacer(modifier = Modifier.weight(1f))
 
-                TimerCard(30_000)
+                MyTimerCard(30_000)
                 Spacer(modifier = Modifier.weight(1f))
 
                 MoneyCard(money.value)

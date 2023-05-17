@@ -41,6 +41,11 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         it.value = mutableMapOf()
     }
     val players: LiveData<MutableMap<String, Player>> = _mutablePlayers
+    val myPlayerId: String
+        get() {
+            return _dbManager.getCurrentUserID()
+                ?: throw RuntimeException("User not authenticated to the database")
+        }
 
     private val _dbManager: DatabaseManager = DatabaseManager()
 
@@ -103,7 +108,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             _dbManager.writeData(gameSessionId,
                 mapOf(
                     "date" to LocalDateTime.now().toString(),
-                    "hostId" to _dbManager.getCurrentUserID(),
+                    "hostId" to myPlayerId,
                     "screen" to ScreenName.Waiting.route,
                     "gameInfos" to gameInfos.value,
                 )
@@ -141,6 +146,8 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     }
 
     private fun nextTurn(){
+        val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
+
         // Update turn counter
         val cachedInfos = _mutableGameInfos.value!!
         cachedInfos.turnCounter++
@@ -151,7 +158,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         }
         Log.d("GameManager", "Preparing ${cachedInfos.turnCounter} turn...")
 
-        //Update next player id
+        // Update next player id
         _currentPlayerIndex = (_currentPlayerIndex+1)%players.value!!.entries.size
         Log.d("GameManager", "NextTurn: player number = ${players.value!!.entries.size}")
         Log.d("GameManager", "NextTurn: player index = $_currentPlayerIndex")
@@ -160,39 +167,40 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         cachedInfos.currentPlayerId = newCurrentPlayer.key
         _mutableGameInfos.value = cachedInfos
 
+        // Update db
+        _dbManager.writeData("$id/gameInfos", gameInfos.value)
+        Log.d("GameManager", "Turn of ${players.value!![gameInfos.value!!.currentPlayerId]!!.nickname}")
     }
 
     //endregion
 
     //region Methods for Client/Player
 
-    fun joinGame(matchId:String, nickname:String) {
+    fun joinGame(lobbyId:String, nickname:String) {
 
         try {
-            if (matchId.isEmpty()) return
+            if (lobbyId.isEmpty()) return
 
-            val playerId = _dbManager.getCurrentUserID()
-                ?: throw RuntimeException("User not authenticated to the database")
-            Log.d("GameManager","joinGame: playerId is $playerId")
+            Log.d("GameManager","joinGame: playerId is $myPlayerId")
 
             scope.launch {
                 //Check if matchId is correct
-                val check = async { _dbManager.isDataPresent(matchId) }.await()
+                val check = async { _dbManager.isDataPresent(lobbyId) }.await()
                 if(!check) {
                     //TODO: riportare ad una schermata di errore per dire che la partita non esiste.
                     throw RuntimeException("Invalid gameId")
                 }
-                Log.d("GameManager","joinGame: matchId is $matchId")
+                Log.d("GameManager","joinGame: matchId is $lobbyId")
 
                 //Write player data on the database
-                val playerObj = Player(playerId, nickname)
-                _dbManager.writeData("$matchId/players/$playerId", playerObj)
+                val playerObj = Player(myPlayerId, nickname)
+                _dbManager.writeData("$lobbyId/players/$myPlayerId", playerObj)
                 Log.d("GameManager","joinGame: player data written")
 
                 //First read of GameInfos
                 async {
                     _mutableGameInfos.value =
-                        _dbManager.readData("$matchId/gameInfos", GameInfos::class.java)
+                        _dbManager.readData("$lobbyId/gameInfos", GameInfos::class.java)
                 }.await()
 
                 observeGameInfos()
@@ -208,14 +216,14 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
     //region Public shared Methods
 
-    fun getRandomQuiz() : Quiz? {
+    fun getRandomQuiz() : Quiz {
         val totNum = runBlocking {
             _dbManager.readData("quiz/totNum", Int::class.java)
         }
         val quizId = MyRandom.int(0 until totNum!!)
         Log.d("TestQuiz", "Tot Quiz: $totNum, Range: ${0 until totNum}, Id: $quizId")
         return runBlocking {
-            _dbManager.readData("quiz/$quizId", Quiz::class.java)
+            _dbManager.readData("quiz/$quizId", Quiz::class.java) ?: throw RuntimeException("Can't read Quiz from database")
         }
     }
 
@@ -230,7 +238,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             onDataChange = { snapshot ->
                 val currentPlayers = snapshot.getValue() as Map<*, *>?
                 if(currentPlayers!=null){
-                    Log.d("WatchPlayers","Update: Found type ${currentPlayers.javaClass.kotlin} -> $currentPlayers")
+                    //Log.d("WatchPlayers","Update: Found type ${currentPlayers.javaClass.kotlin} -> $currentPlayers")
 
                     //Properly converting snapshot into a MutableMap<String,Player>
                     val tempMap = mutableMapOf<String, Player>()
@@ -242,7 +250,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                     }
                     _mutablePlayers.value = tempMap
 
-                    Log.d("WatchPlayers", "Data updated: ${_mutablePlayers.value!!.entries}")
+                    Log.d("ObservePlayers", "Data updated: ${_mutablePlayers.value!!.entries}")
                 }
             },
             onCancelled = {
@@ -261,6 +269,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         _dbManager.addListener("$id/screen", "watchScreen",
             onDataChange = {
                 _mutableCurrentScreenName.value = ScreenName.routeToScreenName(it.value?.toString()?: "")
+                Log.d("ObserveScreen","Data updated: ${currentScreenName.value}")
                 switchScreen(_mutableCurrentScreenName.value ?: ScreenName.Error)
             },
             onCancelled = {
@@ -275,8 +284,10 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         _dbManager.addListener("$id/gameInfos", "watchGameInfos",
             onDataChange = {
                 val currentGameInfos = it.getValue(GameInfos::class.java)
-                if(currentGameInfos!=null)
+                if(currentGameInfos!=null){
                     _mutableGameInfos.value = currentGameInfos
+                    Log.d("ObserveGameInfos","Data updated: ${gameInfos.value.toString()}")
+                }
             },
             onCancelled = {
                 switchScreen(ScreenName.Error)
