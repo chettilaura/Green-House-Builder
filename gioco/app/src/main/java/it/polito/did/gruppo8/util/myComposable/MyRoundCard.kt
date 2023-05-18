@@ -3,6 +3,8 @@ package it.polito.did.gruppo8.util.myComposable
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -19,7 +21,7 @@ import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.screens.caveatRegular
 
 @Composable
-fun RoundCard(roundNum : String) {
+fun RoundCard(roundNum : String, turnNum: String) {
     Card(modifier = Modifier
         .width(120.dp)
         .height(80.dp)
@@ -34,8 +36,18 @@ fun RoundCard(roundNum : String) {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "ROUND", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)
-            Text(text = roundNum, fontFamily = caveatBold, style = MaterialTheme.typography.h6)
+            /*TODO: sistemare in modo da avere tutto*/
+            Row(){
+                Text(text = "ROUND: ", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(text = roundNum, fontFamily = caveatBold, style = MaterialTheme.typography.h6)
+            }
+            Row() {
+                Text(text = "TURN: ", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(text = turnNum, fontFamily = caveatBold, style = MaterialTheme.typography.h6)
+            }
+
         }
     }
 }

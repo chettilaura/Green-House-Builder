@@ -81,7 +81,7 @@ fun NewGameScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.size(32.dp))
             Spacer(modifier = Modifier.size(15.dp))
 
-            MyButton(title = "CREATE CITY", description = "Create City", {vm.onCreateCityButtonPressed(cityName)})
+            MyButton(title = "CREATE CITY", description = "Create City", 100, {vm.onCreateCityButtonPressed(cityName)})
 
             Spacer(modifier = Modifier.size(50.dp))
 

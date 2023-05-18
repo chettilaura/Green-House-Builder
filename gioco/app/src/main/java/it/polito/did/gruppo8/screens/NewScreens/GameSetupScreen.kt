@@ -93,7 +93,7 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
 
 //TUTORIAL POP UP
             var setGamePopUpControl by remember { mutableStateOf(false) }
-            MyButton(title = "GAME SETUP", description = "Setup", {setGamePopUpControl = true})
+            MyButton(title = "GAME SETUP", description = "Setup", 100,  {setGamePopUpControl = true})
 
             Spacer(modifier = Modifier.size(5.dp))
 
@@ -107,7 +107,7 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
             }
 
             //StartGameButton(title = "START", description = "start game button", onStartButtonPressed)
-            MyButton(title = "START", description = "start game button", {vm.onStartButtonPressed()})
+            MyButton(title = "START", description = "start game button", 100, {vm.onStartButtonPressed()})
         }
 
     }

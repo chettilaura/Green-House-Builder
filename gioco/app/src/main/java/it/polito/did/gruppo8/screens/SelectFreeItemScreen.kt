@@ -163,7 +163,7 @@ fun FreeItemScreen(modifier: Modifier = Modifier){
                 }
             }
             Spacer(modifier = Modifier.weight(0.02f))
-            MyButton(title = "START", description = "confirm choice and start button") {
+            MyButton(title = "START", description = "confirm choice and start button", 100 ) {
             }
         }
     }

@@ -55,7 +55,7 @@ fun JoinGameScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
             .fillMaxHeight()
             .padding(8.dp),
         verticalArrangement = Arrangement.Bottom) {
-        MyButton("CREATE HOUSE", "Create house button", {vm.onCreateHouseButtonPressed(gameID,playerName)})
+        MyButton("CREATE HOUSE", "Create house button",100,  {vm.onCreateHouseButtonPressed(gameID,playerName)})
     }
 
         Spacer(modifier = Modifier.size(8.dp))

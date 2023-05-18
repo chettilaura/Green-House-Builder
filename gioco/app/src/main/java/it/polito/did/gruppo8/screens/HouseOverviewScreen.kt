@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -23,6 +25,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.util.myComposable.MoneyCard
 import it.polito.did.gruppo8.util.myComposable.MyButton
@@ -75,7 +78,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
     Box(modifier = Modifier.fillMaxSize(1f)){
         Image(
             painter = painterResource(R.drawable.bg_green),
-            contentDescription = "Immagine di sfondo verde",
+            contentDescription = "Immagine di sfondo",
             modifier = Modifier.fillMaxHeight(),
             contentScale = ContentScale.FillHeight
         )
@@ -97,7 +100,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                RoundCard(numeroTurno.value)
+                RoundCard(numeroTurno.value, "2")
                 Spacer(modifier = Modifier.weight(1f))
 
                 MyTimerCard(30_000)
@@ -105,49 +108,65 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
 
                 MoneyCard(money.value)
             }
+            /*Spacer(modifier = Modifier
+                .weight(0.05f))*/
+            HouseViewBox(/*TODO: passare lista degli oggetti da mostrare nella casa*/)
+            /*Spacer(modifier = Modifier
+                .weight(0.05f))*/
+
+            MyButton(title = "VIEW ITEM LIST", description = "View item list button", 50) {
+                /*TODO: passare funzione di navigazione*/
+            }
             Spacer(modifier = Modifier
                 .weight(0.05f))
 
-            HouseViewBox(/*TODO: passare parametri degli elementi da mostrare della casa*/)
+            MyButton(title = "SHOP", description = "Shop button", 70) {
+                /*TODO: passare funzione di navigazione*/
+            }
             Spacer(modifier = Modifier
                 .weight(0.05f))
 
-            Column(modifier = Modifier
-                .fillMaxWidth(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                MyButton(title = "VIEW ITEM LIST", description = "View item list button") {
-                    /*TODO: passare funzione di navigazione*/
-                }
-                Spacer(modifier = Modifier
-                    .weight(0.05f))
-
-                MyButton(title = "SHOP", description = "Shop button") {
-                    /*TODO: passare funzione di navigazione*/
-                }
-                Spacer(modifier = Modifier
-                    .weight(0.05f))
-
-                MyButton(title = "LEADERBOARD", description = "Leaderboard button") {
-                    /*TODO: passare funzione di navigazione*/
-                }
+            MyButton(title = "LEADERBOARD", description = "Leaderboard button", 50) {
+                /*TODO: passare funzione di navigazione*/
             }
         }
     }
 }
 
 @Composable
-fun HouseViewBox() {
+fun HouseViewBox(/*TODO: passare lista di degli oggetti acquistati, ad esempio ownedItems: List<Item>*/) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.45f)
+            .fillMaxHeight(0.7f)
     ) {
-        Image(painter = painterResource(R.drawable.house),
+        //immagine base della casa vuota
+        Image(painter = painterResource(R.drawable.house_int),
             contentDescription = "house",
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth(),
             contentScale = ContentScale.FillBounds
         )
+
+        //foreach per scorrere lista di oggetti e caricare le relative immagini, DA TESTARE
+        /*ownedItems.forEachIndexed { index, item ->
+            Image(painter = rememberImagePainter(data = item.itemURL),
+                contentDescription = item.description,
+                modifier = Modifier.fillMaxWidth(),
+                contentScale = ContentScale.FillBounds
+            )
+        }*/
+
+        //IMMAGINI DI PROVA
+        /*Image(painter = painterResource(R.drawable.shower_int),
+            contentDescription = "house",
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.FillBounds
+        )
+        Image(painter = painterResource(R.drawable.wind_turbine_int),
+            contentDescription = "house",
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.FillBounds
+        )*/
     }
 }
 
