@@ -70,9 +70,8 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-<<<<<<< Updated upstream
-                RoundCard("${gameInfos!!.turnCounter}/${gameInfos!!.totalTurns}")
-=======
+
+                RoundCard("${gameInfos!!.turnCounter}/${gameInfos!!.totalTurns}", "2")
                 /*TurnCard(colorTurn = "RED", colorResId = R.color.old_rose
                     *//*TODO: passare parametro della squadra con turno attivo
                     *  il colore è in formato Int e il nome è contenuto nel file colors.xml dentro res,
@@ -80,8 +79,6 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                 Spacer(modifier = Modifier.weight(1f))*/
 
-                RoundCard("1/8"/*TODO: passare parametro del numero di turno*/, "2")
->>>>>>> Stashed changes
                 Spacer(modifier = Modifier.weight(1f))
                 MyTimerCard(gameInfos!!.quizTime.toLong()*1000)
                 Spacer(modifier = Modifier.weight(1f))
