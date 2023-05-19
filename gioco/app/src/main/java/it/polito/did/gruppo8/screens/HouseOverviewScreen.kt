@@ -89,8 +89,8 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ParameterBars(0.7f, 0.4f, 0.5f, 0.15f)
-            Spacer(modifier = Modifier
-                .weight(1f))
+            /*Spacer(modifier = Modifier
+                .weight(1f))*/
 
             Row(modifier = Modifier
                 .fillMaxWidth()
@@ -110,10 +110,10 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             /*Spacer(modifier = Modifier
                 .weight(0.05f))*/
             HouseViewBox(/*TODO: passare lista degli oggetti da mostrare nella casa*/)
-            /*Spacer(modifier = Modifier
-                .weight(0.05f))*/
+            Spacer(modifier = Modifier
+                .weight(1f))
 
-            MyButton(title = "VIEW ITEM LIST", description = "View item list button", 50) {
+            MyButton(title = "VIEW ITEM LIST", description = "View item list button", 70) {
                 /*TODO: passare funzione di navigazione*/
             }
             Spacer(modifier = Modifier
@@ -137,7 +137,7 @@ fun HouseViewBox(/*TODO: passare lista di degli oggetti acquistati, ad esempio o
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.7f)
+            .fillMaxHeight(0.6f)
     ) {
         //immagine base della casa vuota
         Image(painter = painterResource(R.drawable.house_int),
@@ -156,7 +156,7 @@ fun HouseViewBox(/*TODO: passare lista di degli oggetti acquistati, ad esempio o
         }*/
 
         //IMMAGINI DI PROVA
-        /*Image(painter = painterResource(R.drawable.shower_int),
+        Image(painter = painterResource(R.drawable.shower_int),
             contentDescription = "house",
             modifier = Modifier.fillMaxWidth(),
             contentScale = ContentScale.FillBounds
@@ -165,7 +165,7 @@ fun HouseViewBox(/*TODO: passare lista di degli oggetti acquistati, ad esempio o
             contentDescription = "house",
             modifier = Modifier.fillMaxWidth(),
             contentScale = ContentScale.FillBounds
-        )*/
+        )
     }
 }
 

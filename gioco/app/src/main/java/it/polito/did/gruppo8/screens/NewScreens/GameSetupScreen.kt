@@ -79,7 +79,10 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
              Players e leggerne il nome come fatto nel composable.
              -Mattia
              */
-            PlayersList(players?.values!!.toList())
+            /*PlayersList(players?.values!!.toList())*/
+            /*TODO: controllare se in questo modo funziona*/
+            MyLazyColumnListCard(header = "PLAYERS", playersList = players?.values!!.toList())
+
 
 
 
@@ -147,7 +150,9 @@ fun SetUpPopUp() {
                 contentScale = ContentScale.FillBounds
             )
                 Column(
-                    modifier = Modifier.padding(8.dp).fillMaxSize(),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxSize(),
                     verticalArrangement = Arrangement.SpaceAround,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

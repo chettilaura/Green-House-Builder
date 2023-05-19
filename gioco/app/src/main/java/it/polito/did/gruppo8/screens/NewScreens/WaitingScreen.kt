@@ -66,10 +66,10 @@ fun WaitingScreen(
                     textAlign = TextAlign.Center)
             }
 
-            Spacer(modifier = Modifier.weight(0.6f))
+            Spacer(modifier = Modifier.weight(1f))
 
             LoadingAnimation()
-            Spacer(modifier = Modifier.weight(0.6f))
+            Spacer(modifier = Modifier.weight(1f))
 
             Text(
                 text = bottomText,
@@ -79,7 +79,7 @@ fun WaitingScreen(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.weight(0.6f))
+            Spacer(modifier = Modifier.weight(1f))
 
 
         }
