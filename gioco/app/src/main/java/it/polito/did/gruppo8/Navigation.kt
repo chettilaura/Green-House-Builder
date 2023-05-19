@@ -56,12 +56,15 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(route = ScreenName.Waiting.route) {
-            //WaitingScreen(vm, vm.cityName.value!!, "Attendi")
             WaitingScreen(vm, vm.gameInfos.value!!.cityName!!, "Attendi")
         }
 
         composable(route = ScreenName.Dashboard.route) {
             DashboardScreen()
+        }
+
+        composable(route = ScreenName.FreeItem.route) {
+            FreeItemScreen()
         }
 
         composable(route = ScreenName.WaitingQuiz.route) {
@@ -78,6 +81,14 @@ fun Navigation(navController: NavHostController) {
 
         composable(route = ScreenName.WrongAnswer.route) {
             WrongAnswerScreen(vm)
+        }
+
+        composable(route = ScreenName.NoAnswer.route) {
+            NoAnswerScreen(vm)
+        }
+
+        composable(route = ScreenName.HouseOverview.route) {
+            HouseOverviewScreen()
         }
 
         composable(route = ScreenName.Error.route) {

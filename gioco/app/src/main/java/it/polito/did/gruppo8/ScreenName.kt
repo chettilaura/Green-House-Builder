@@ -13,10 +13,13 @@ sealed class ScreenName (val route: String) {
     object JoinGame : ScreenName("join_game_screen")
     object Waiting : ScreenName("waiting_screen")
     object Dashboard : ScreenName("dashboard_screen")
+    object FreeItem : ScreenName("free_item_screen")
     object Quiz : ScreenName("quiz_screen")
     object WaitingQuiz : ScreenName("waiting_quiz_screen")
     object CorrectAnswer : ScreenName("correct_answer_screen")
     object WrongAnswer : ScreenName("wrong_answer_screen")
+    object NoAnswer : ScreenName("no_answer_screen")
+    object HouseOverview : ScreenName("house_overview_screen")
 
     object Error : ScreenName("error_screen")
 

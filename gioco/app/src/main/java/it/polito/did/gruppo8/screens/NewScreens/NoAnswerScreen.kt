@@ -33,11 +33,12 @@ import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
+import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.screens.caveatBold
 
 
 @Composable
-fun NoAnswerScreen(modifier: Modifier = Modifier) {
+fun NoAnswerScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
         .components {
@@ -126,7 +127,7 @@ fun TextShadowNoAnswer() {
 fun NoAnswerPreview(modifier: Modifier = Modifier) {
     //val vm = GameViewModel()
     GameSkeletonTheme {
-        NoAnswerScreen()
+        NoAnswerScreen(GameViewModel())
     }
 }
 

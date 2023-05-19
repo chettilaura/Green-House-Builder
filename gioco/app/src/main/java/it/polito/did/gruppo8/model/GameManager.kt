@@ -18,24 +18,15 @@ import kotlinx.coroutines.runBlocking
 class GameManager(private val scope: CoroutineScope/*, navController: NavController*/) {
 
     //region Fields
-
     private val _mutableCurrentScreenName = MutableLiveData<ScreenName>().also {
         it.value = ScreenName.Splash
     }
     val currentScreenName: LiveData<ScreenName> = _mutableCurrentScreenName
 
-    /*
-    private val _mutableLobbyId = MutableLiveData<String>()
-    val lobbyId: LiveData<String> = _mutableLobbyId
-
-    private val _mutableCityName = MutableLiveData<String>()
-    val cityName: LiveData<String> = _mutableCityName
-     */
     private val _mutableGameInfos = MutableLiveData<GameInfos>().also {
         it.value = GameInfos()
     }
     val gameInfos: LiveData<GameInfos> = _mutableGameInfos
-    private var _currentPlayerIndex: Int = -1
 
     private val _mutablePlayers = MutableLiveData<MutableMap<String, Player>>().also{
         it.value = mutableMapOf()
@@ -132,37 +123,32 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         //Host switches to the Dashboard
         switchScreen(ScreenName.Dashboard)
 
+        //TODO: Passare prima per FreeItemScreen
+
         //Next turn
         nextTurn()
-
-        //Coroutine to switch from WaitingQuiz to Quiz screen
-        scope.launch {
-            _dbManager.writeData("$id/screen", ScreenName.WaitingQuiz.route)
-            delay(5000)
-            _dbManager.writeData("$id/screen", ScreenName.Quiz.route)
-        }
-
-        //TODO: Test it
     }
 
     private fun nextTurn(){
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
 
-        // Update turn counter
+        // Update turn and round counter
         val cachedInfos = _mutableGameInfos.value!!
         cachedInfos.turnCounter++
-        if(cachedInfos.turnCounter==cachedInfos.totalTurns){
-            _mutableGameInfos.value = cachedInfos
-            Log.d("GameManager", "END GAME")
-            //TODO: End Game
+        if(cachedInfos.turnCounter==players.value!!.entries.size){
+            cachedInfos.turnCounter = 0
+            cachedInfos.roundCounter++
+            if(cachedInfos.roundCounter == cachedInfos.totalRounds){
+                Log.d("GameManager", "END GAME")
+                //TODO: End Game
+            }
         }
+
         Log.d("GameManager", "Preparing ${cachedInfos.turnCounter} turn...")
 
         // Update next player id
-        _currentPlayerIndex = (_currentPlayerIndex+1)%players.value!!.entries.size
-        Log.d("GameManager", "NextTurn: player number = ${players.value!!.entries.size}")
-        Log.d("GameManager", "NextTurn: player index = $_currentPlayerIndex")
-        val newCurrentPlayer = players.value!!.entries.elementAtOrNull(_currentPlayerIndex)
+        //_currentPlayerIndex = (_currentPlayerIndex+1)%players.value!!.entries.size
+        val newCurrentPlayer = players.value!!.entries.elementAtOrNull(cachedInfos.turnCounter)
             ?: throw RuntimeException("Errore nell'aggiornamento del prossimo player")
         cachedInfos.currentPlayerId = newCurrentPlayer.key
         _mutableGameInfos.value = cachedInfos
@@ -170,6 +156,13 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         // Update db
         _dbManager.writeData("$id/gameInfos", gameInfos.value)
         Log.d("GameManager", "Turn of ${players.value!![gameInfos.value!!.currentPlayerId]!!.nickname}")
+
+        //Coroutine to pass to the next quiz
+        scope.launch {
+            _dbManager.writeData("$id/screen", ScreenName.WaitingQuiz.route)
+            delay(5000)
+            _dbManager.writeData("$id/screen", ScreenName.Quiz.route)
+        }
     }
 
     //endregion
@@ -215,25 +208,26 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     fun verifyQuiz(quiz: Quiz, answer: Int){
         val isPlayerTurn = myPlayerId==gameInfos.value!!.currentPlayerId
         val result = quiz.verifyAnswer(answer)
+        Log.d("VerifyQuiz", "Question: ${quiz.question}\n" +
+                "Answer: $answer, Correct: ${quiz.correct}" +
+                "Result: $result")
 
         //Risposta non data
         if(answer==-1){
-            if(isPlayerTurn){
-                // Skippa il turno
-            }
-            else{
-                // Non perde monete
-            }
+            Log.d("VerifyQuiz", "Answer not given")
+            switchScreen(ScreenName.NoAnswer)
         }
         else {
             // Turno del giocatore corrente
             if (isPlayerTurn) {
                 if (result) {
                     // Aggiungi denaro e vai al turno
+                    Log.d("VerifyQuiz", "Answer correct!")
                     _mutablePlayers.value!![myPlayerId]!!.wallet.addCoins(50)
                     switchScreen(ScreenName.CorrectAnswer)
                 } else {
                     // Skippa il turno
+                    Log.d("VerifyQuiz", "Answer wrong!")
                     switchScreen(ScreenName.WrongAnswer)
                 }
             }
@@ -241,10 +235,12 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             else {
                 if (result) {
                     // Aggiungi denaro
+                    Log.d("VerifyQuiz", "Answer correct!")
                     _mutablePlayers.value!![myPlayerId]!!.wallet.addCoins(50)
                     switchScreen(ScreenName.CorrectAnswer)
                 } else {
                     // Sottrai denaro
+                    Log.d("VerifyQuiz","Answer wrong!")
                     _mutablePlayers.value!![myPlayerId]!!.wallet.removeCoins(50)
                     switchScreen(ScreenName.WrongAnswer)
                 }
@@ -252,12 +248,21 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         }
 
         scope.launch {
-            delay(5000)
-            if(result && isPlayerTurn){
-                //TODO: Switch to overview screen
+            delay(3500)
+            if(result && isPlayerTurn) {
+                // Switch to overview screen and play the turn
+                Log.d("VerifyQuiz", "Player is gonna play its turn")
+                switchScreen(ScreenName.HouseOverview)
             }
-            else{
-                //TODO: next turn
+            else if(!result && isPlayerTurn) {
+                // Skip directly to next turn
+                Log.d("VerifyQuiz", "Player is gonna skip its turn")
+                nextTurn()
+            }
+            else {
+                // Wait until player ends its turn
+                Log.d("VerifyQuiz", "Going to wait for end of turn")
+                switchScreen(ScreenName.Waiting)
             }
         }
     }
@@ -270,7 +275,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             _dbManager.readData("quiz/totNum", Int::class.java)
         }
         val quizId = MyRandom.int(0 until totNum!!)
-        Log.d("TestQuiz", "Tot Quiz: $totNum, Range: ${0 until totNum}, Id: $quizId")
+        Log.d("GameManager", "Tot Quiz: $totNum, Picked Quiz: $quizId")
         return runBlocking {
             _dbManager.readData("quiz/$quizId", Quiz::class.java) ?: throw RuntimeException("Can't read Quiz from database")
         }

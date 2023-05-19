@@ -118,7 +118,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Text(
-                                        text = "if it's you...",
+                                        text = "If it's you...",
                                         fontFamily = caveatBold,
                                         color = Color.White,
                                         style = MaterialTheme.typography.h4
@@ -139,7 +139,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "right answer",
+                                                text = "Right answer",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -158,7 +158,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "wrong answer",
+                                                text = "Wrong answer",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -177,7 +177,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "no answer",
+                                                text = "No answer",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -203,7 +203,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Text(
-                                        text = "if it's not you...",
+                                        text = "If it's not you...",
                                         fontFamily = caveatBold,
                                         color = Color.White,
                                         style = MaterialTheme.typography.h4
@@ -224,7 +224,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "right answer",
+                                                text = "Right answer",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -244,7 +244,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "wrong answer",
+                                                text = "Wrong answer",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -253,14 +253,11 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
-                                            /*
                                             Image(
                                                 modifier = Modifier.size(50.dp,50.dp),
-                                                //TODO: Manca resource noshop nella cartella -Mattia
                                                 painter = painterResource(id = R.drawable.noshop),
                                                 contentDescription = "houseIcon")
 
-                                             */
                                         }
 
                                         Row(modifier = Modifier
@@ -268,7 +265,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "no answer",
+                                                text = "No answer",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -277,14 +274,12 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
-                                            /*
                                             Image(
                                                 modifier = Modifier.size(50.dp,50.dp),
                                                 //TODO: Manca resource noshop nella cartella -Mattia
                                                 painter = painterResource(id = R.drawable.noshop),
                                                 contentDescription = "houseIcon")
 
-                                             */
                                         }
 
                                     }

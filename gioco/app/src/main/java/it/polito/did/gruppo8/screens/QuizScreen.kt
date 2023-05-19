@@ -66,7 +66,8 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                RoundCard("${gameInfos!!.turnCounter}/${gameInfos!!.totalTurns}")
+                RoundCard("${gameInfos!!.roundCounter+1}/${gameInfos!!.totalRounds}",
+                    "${gameInfos!!.turnCounter+1}/${players!!.entries.size}")
                 Spacer(modifier = Modifier.weight(1f))
                 MyTimerCard(gameInfos!!.quizTime) {
                     vm.onSubmitAnswerButtonPressed(
@@ -105,7 +106,8 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.weight(1f))
             MyButton(
                 title = "SUBMIT ANSWER",
-                description = "SUBMIT ANSWER BUTTON") {
+                description = "SUBMIT ANSWER BUTTON",
+                buttonHeight = 100) {
                 vm.onSubmitAnswerButtonPressed(
                     quiz,
                     selectedAnswer

@@ -62,7 +62,6 @@ val caveatBold = FontFamily(
 )*/
 
 @Composable
-
 fun HouseOverviewScreen(modifier: Modifier = Modifier)
 {
     val colorTurn = rememberSaveable {
