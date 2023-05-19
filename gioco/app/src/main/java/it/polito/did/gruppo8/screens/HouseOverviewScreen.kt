@@ -103,7 +103,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 RoundCard(numeroTurno.value, "2")
                 Spacer(modifier = Modifier.weight(1f))
 
-                MyTimerCard(30_000)
+                MyTimerCard(30_000, {})
                 Spacer(modifier = Modifier.weight(1f))
 
                 MoneyCard(money.value)

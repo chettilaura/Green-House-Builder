@@ -1,5 +1,6 @@
 package it.polito.did.gruppo8
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 //import androidx.navigation.NavController
@@ -46,5 +47,5 @@ class GameViewModel: ViewModel() {
         currentQuiz = gameManager.getRandomQuiz()
     }
     // QuizScreen
-    fun onSubmitAnswerButtonPressed() = null
+    fun onSubmitAnswerButtonPressed(quiz: Quiz, answerIndex: Int) = gameManager.verifyQuiz(quiz,answerIndex) //TODO: passare parametri al metodo onSubmitAnswer
 }

@@ -33,7 +33,8 @@ import kotlinx.coroutines.isActive
         /*TODO: impostare inizio del timer e cambio di schermata allo scadere del timer*/
 fun rememberCountdownTimerState(
     initialMillis: Long,
-    step: Long = 1000
+    endCallback: () -> Unit,
+    step: Long = 1000,
 ): MutableState<Long> {
     val timeLeft = remember { mutableStateOf(initialMillis) }
     LaunchedEffect(initialMillis, step) {
@@ -41,14 +42,15 @@ fun rememberCountdownTimerState(
             timeLeft.value = (timeLeft.value - step).coerceAtLeast(0)
             delay(step)
         }
+        endCallback.invoke()
     }
     return timeLeft
 }
 
 @Composable
-fun MyTimerCard(time: Long) {
+fun MyTimerCard(seconds: Int, onFinishEvent: ()->Unit) {
     //valore del tempo rimanente
-    val timeLeftMs by rememberCountdownTimerState (time) //tempo in ms
+    val timeLeftMs by rememberCountdownTimerState ((seconds*1000).toLong(), onFinishEvent) //tempo in ms
     val showTime = timeLeftMs / 1000 //tempo in secondi
 
     Card(modifier = Modifier

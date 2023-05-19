@@ -64,7 +64,7 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun WrongAnswerScreen(modifier: Modifier = Modifier) {
+fun WrongAnswerScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
         .components {
@@ -118,12 +118,32 @@ fun WrongAnswerScreen(modifier: Modifier = Modifier) {
 
                     Spacer(modifier = Modifier.size(32.dp))
 
+                    //TODO: Sarebbe carino se al posto di COINS ci fosse l'immagine della moneta
+
+                    // Se è il turno del giocatore corrente
+                    if(vm.myPlayerId==vm.gameInfos.value!!.currentPlayerId){
+                        Text(text = "DON'T GIVE UP!\nWAIT FOR THE NEXT TURN",
+                            fontFamily = caveatBold,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.h4
+                        )
+                    }
+                    // Altrimenti
+                    else{
+                        Text(text = "YOU LOST 25 COINS!\nDON'T GIVE UP," +
+                                "WAIT FOR THE NEXT TURN",
+                            fontFamily = caveatBold,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.h4
+                        )
+                    }
+                    /*
                     Text(text = "DON'T GIVE UP, \nWAIT FOR THE NEXT TURN",
                         fontFamily = caveatBold,
                         color = Color.Black,
                         style = MaterialTheme.typography.h4
-
                     )
+                     */
                 }
 
 
@@ -154,7 +174,7 @@ fun TextShadowWrong() {
 fun WrongAnswerPreview(modifier: Modifier = Modifier) {
     //val vm = GameViewModel()
     GameSkeletonTheme {
-        WrongAnswerScreen()
+        WrongAnswerScreen(GameViewModel())
     }
 }
 

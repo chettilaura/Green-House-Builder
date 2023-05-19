@@ -292,11 +292,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                             }
                         }
-
-
                 }
-
-
             }
         }
       }

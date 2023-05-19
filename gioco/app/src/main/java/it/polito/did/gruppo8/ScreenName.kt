@@ -15,6 +15,9 @@ sealed class ScreenName (val route: String) {
     object Dashboard : ScreenName("dashboard_screen")
     object Quiz : ScreenName("quiz_screen")
     object WaitingQuiz : ScreenName("waiting_quiz_screen")
+    object CorrectAnswer : ScreenName("correct_answer_screen")
+    object WrongAnswer : ScreenName("wrong_answer_screen")
+
     object Error : ScreenName("error_screen")
 
     companion object{
