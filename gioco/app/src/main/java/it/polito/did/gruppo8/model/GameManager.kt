@@ -212,6 +212,55 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         }
     }
 
+    fun verifyQuiz(quiz: Quiz, answer: Int){
+        val isPlayerTurn = myPlayerId==gameInfos.value!!.currentPlayerId
+        val result = quiz.verifyAnswer(answer)
+
+        //Risposta non data
+        if(answer==-1){
+            if(isPlayerTurn){
+                // Skippa il turno
+            }
+            else{
+                // Non perde monete
+            }
+        }
+        else {
+            // Turno del giocatore corrente
+            if (isPlayerTurn) {
+                if (result) {
+                    // Aggiungi denaro e vai al turno
+                    _mutablePlayers.value!![myPlayerId]!!.wallet.addCoins(50)
+                    switchScreen(ScreenName.CorrectAnswer)
+                } else {
+                    // Skippa il turno
+                    switchScreen(ScreenName.WrongAnswer)
+                }
+            }
+            // Non è il turno del giocatore corrente
+            else {
+                if (result) {
+                    // Aggiungi denaro
+                    _mutablePlayers.value!![myPlayerId]!!.wallet.addCoins(50)
+                    switchScreen(ScreenName.CorrectAnswer)
+                } else {
+                    // Sottrai denaro
+                    _mutablePlayers.value!![myPlayerId]!!.wallet.removeCoins(50)
+                    switchScreen(ScreenName.WrongAnswer)
+                }
+            }
+        }
+
+        scope.launch {
+            delay(5000)
+            if(result && isPlayerTurn){
+                //TODO: Switch to overview screen
+            }
+            else{
+                //TODO: next turn
+            }
+        }
+    }
     //endregion
 
     //region Public shared Methods

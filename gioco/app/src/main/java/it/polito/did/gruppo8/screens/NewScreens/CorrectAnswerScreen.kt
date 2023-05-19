@@ -64,7 +64,7 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun CorrectAnswerScreen(modifier: Modifier = Modifier) {
+fun CorrectAnswerScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
     val imageLoader = ImageLoader.Builder(LocalContext.current)
         .components {
@@ -115,11 +115,32 @@ fun CorrectAnswerScreen(modifier: Modifier = Modifier) {
 //                        )
                     }
                     Spacer(modifier = Modifier.size(32.dp))
+
+                    //TODO: Sarebbe carino se al posto di COINS ci fosse l'immagine della moneta
+
+                    // Se è il turno del giocatore corrente
+                    if(vm.myPlayerId==vm.gameInfos.value!!.currentPlayerId){
+                        Text(text = "YOU EARNED 50 COINS AND\n YOU CAN PLAY YOUR TURN!",
+                            fontFamily = caveatBold,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.h4
+                        )
+                    }
+                    // Altrimenti
+                    else{
+                        Text(text = "YOU EARNED 50 COINS!",
+                            fontFamily = caveatBold,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.h4
+                        )
+                    }
+                    /*
                     Text(text = "YOU CAN BUY AN UPGRADE\n FROM THE SHOP",
                         fontFamily = caveatBold,
                         color = Color.Black,
                         style = MaterialTheme.typography.h4
                              )
+                     */
                 }
 
 
@@ -154,7 +175,7 @@ fun TextShadow() {
 fun CorrectAnswerPreview(modifier: Modifier = Modifier) {
     //val vm = GameViewModel()
     GameSkeletonTheme {
-        CorrectAnswerScreen()
+        CorrectAnswerScreen(GameViewModel())
     }
 }
 
