@@ -33,19 +33,15 @@ import it.polito.did.gruppo8.util.myComposable.MyTimerCard
 
 @Composable
 fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
-    //variabili per modificare colore di sfondo dei button per le risposte quando ne viene selezionata una
-    //sono passate al composable QuizCard, insieme alla funzione updateSelection che dovrebbe modificare
-    //il flag di selezione
-    var selected by remember { mutableStateOf(false) }
-    var selectionColor = if(selected) R.color.emerald else R.color.asparagus
-
     val players by vm.players.observeAsState()
     val gameInfos by vm.gameInfos.observeAsState()
 
     val quiz = vm.currentQuiz
+    var selectedAnswer by remember {
+        mutableStateOf(-1)
+    }
     Log.d("QuizScreen", "Question: ${quiz.question}")
     Log.d("QuizScreen", "Answers: ${quiz.answers}")
-
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -70,61 +66,62 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-
-                RoundCard("${gameInfos!!.turnCounter}/${gameInfos!!.totalTurns}", "2")
-                /*TurnCard(colorTurn = "RED", colorResId = R.color.old_rose
-                    *//*TODO: passare parametro della squadra con turno attivo
-                    *  il colore è in formato Int e il nome è contenuto nel file colors.xml dentro res,
-                    *  il nome deve essere corrispondente al colore *//*)
-
-                Spacer(modifier = Modifier.weight(1f))*/
-
+                RoundCard("${gameInfos!!.turnCounter}/${gameInfos!!.totalTurns}")
                 Spacer(modifier = Modifier.weight(1f))
-                MyTimerCard(gameInfos!!.quizTime.toLong()*1000)
+                MyTimerCard(gameInfos!!.quizTime) {
+                    vm.onSubmitAnswerButtonPressed(
+                        quiz,
+                        selectedAnswer
+                    )
+                }
                 Spacer(modifier = Modifier.weight(1f))
                 MoneyCard(players!![vm.myPlayerId]!!.wallet.coins)
             }
             Spacer(modifier = Modifier.weight(1f))
-            QuizCard(
-                quiz.question,
-                quiz.answers,
-                selected,
-                selectionColor
-            ) {
-                updateSelection -> selected = updateSelection
+
+            QuizCard(quiz) {
+                for(answer in quiz.answers) {
+                    val index = quiz.answers.indexOf(answer)
+                    Button(onClick = {
+                        selectedAnswer = if(selectedAnswer==index) -1 else index
+                        Log.d("QuizScreen", "Selected answer: $selectedAnswer")
+                    },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults
+                            .buttonColors(backgroundColor =
+                            colorResource(if(selectedAnswer==index) R.color.emerald else R.color.asparagus)),
+                        shape = RoundedCornerShape(15.dp),
+                        border = BorderStroke(2.dp, Color.Black)
+                    ) {
+                        Text(text = answer,
+                            fontFamily = caveatBold,
+                            color = Color.White,
+                            style = MaterialTheme.typography.body2)
+                    }
+                    Spacer(modifier = Modifier.size(8.dp))
+                }
             }
+
             Spacer(modifier = Modifier.weight(1f))
             MyButton(
                 title = "SUBMIT ANSWER",
-                description = "SUBMIT ANSWER BUTTON",
-                100,
-                {})
-            /*Button(onClick = { *//*TODO*//* },
-                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.emerald)),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(2.dp)) {
-                Text(text = "SUBMIT ANSWER", fontFamily = caveatBold, color = Color.White, style = MaterialTheme.typography.h6)
-            }*/
+                description = "SUBMIT ANSWER BUTTON") {
+                vm.onSubmitAnswerButtonPressed(
+                    quiz,
+                    selectedAnswer
+                )
+            }
         }
     }
 }
-/*}*/
 
 @Composable
 //Bisogna passare alla funzione testo della domanda, testi delle risposte per popolare gli elementi
 //Occorre anche passare risposta corretta al pulsante giusto
 fun QuizCard(
-    question: String,
-    answers: List<String>,
-   /* colorResId: Int,*/
-    selected: Boolean,
-    selectionColor: Int,
-    onUpdateMyVar: (Boolean) -> Unit
+    quiz: Quiz,
+    answerButtons: @Composable() ()->Unit
 ) {
-    /*val color = colorResource(id = colorResId)*/
-    /*val buttonColor = colorResource(id = selectionColor)*/
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -134,127 +131,43 @@ fun QuizCard(
         elevation = 5.dp,
         border = BorderStroke(2.dp, Color.Black)
     ) {
-            Column(
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Card(   //TESTO DELLA DOMANDA
                 modifier = Modifier
                     .fillMaxWidth()
+                    .wrapContentHeight()
+                    .fillMaxSize(0.4f)
                     .padding(8.dp),
-                verticalArrangement = Arrangement.Top,
+                backgroundColor = colorResource(id = R.color.asparagus),
+                elevation = 5.dp,
+                border = BorderStroke(2.dp, Color.DarkGray),
+                shape = RoundedCornerShape(15.dp)
+            ) {
+                Text(text = quiz.question,
+                    Modifier.padding(8.dp),
+                    fontFamily = caveatBold,
+                    color = Color.White,
+                    style = MaterialTheme.typography.body1)
+            }
+            /*Spacer(modifier = Modifier.size(8.dp))*/
+
+            Column(     //BUTTON DELLE RISPOSTE
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                Card(   //TESTO DELLA DOMANDA
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .fillMaxSize(0.4f)
-                        .padding(8.dp),
-                    backgroundColor = colorResource(id = R.color.asparagus),
-                    elevation = 5.dp,
-                    border = BorderStroke(2.dp, Color.DarkGray),
-                    shape = RoundedCornerShape(15.dp)
-                ) {
-                    Text(text = question,
-                        Modifier.padding(8.dp),
-                        fontFamily = caveatBold,
-                        color = Color.White,
-                        style = MaterialTheme.typography.body1)
-                }
-                /*Spacer(modifier = Modifier.size(8.dp))*/
-
-                Column(     //BUTTON DELLE RISPOSTE
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                        //BUTTON 1
-                        Button(onClick = {
-                            onUpdateMyVar(!selected)
-                                         /*TODO*/ },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                            colors = ButtonDefaults
-                                .buttonColors(backgroundColor = colorResource(id = selectionColor)),
-                            shape = RoundedCornerShape(15.dp),
-                            border = BorderStroke(2.dp, Color.Black)
-                        ) {
-                            Text(text = answers[0],
-                                fontFamily = caveatBold,
-                                color = Color.White,
-                                style = MaterialTheme.typography.body2)
-                        }
-                        Spacer(modifier = Modifier.size(8.dp))
-                        //BUTTON 2
-                        Button(onClick = {
-                            onUpdateMyVar(!selected)
-                            /*TODO*/ },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f),
-                                    colors = ButtonDefaults
-                                    .buttonColors(backgroundColor = colorResource(id = selectionColor)),
-                            shape = RoundedCornerShape(15.dp),
-                            border = BorderStroke(2.dp, Color.Black)
-                        ) {
-                            Text(text = answers[1],
-                                fontFamily = caveatBold,
-                                color = Color.White,
-                                style = MaterialTheme.typography.body2)
-                        }
-                    //}
-                    Spacer(modifier = Modifier.size(8.dp))
-                        //BUTTON 3
-                        Button(onClick = {
-                            onUpdateMyVar(!selected)
-                            /*TODO*/ },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f),
-                            colors = ButtonDefaults
-                                .buttonColors(backgroundColor = colorResource(id = selectionColor)),
-                            shape = RoundedCornerShape(15.dp),
-                            border = BorderStroke(2.dp, Color.Black)
-                        ) {
-                            Text(text = answers[2],
-                                fontFamily = caveatBold,
-                                color = Color.White,
-                                style = MaterialTheme.typography.body2)
-                        }
-                        Spacer(modifier = Modifier.size(8.dp))
-                        //BUTTON 4
-                        Button(onClick = {
-                            onUpdateMyVar(!selected)
-                            /*TODO*/ },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f),
-                            colors = ButtonDefaults
-                                .buttonColors(backgroundColor = colorResource(id = selectionColor)),
-                            shape = RoundedCornerShape(15.dp),
-                            border = BorderStroke(2.dp, Color.Black)
-                        ) {
-                            Text(text = answers[3],
-                                fontFamily = caveatBold,
-                                color = Color.White,
-                                style = MaterialTheme.typography.body2)
-                        }
-                }
-                /*Spacer(modifier = Modifier.size(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    Button(onClick = { *//*TODO*//* }) {
-                        Text(text = "Risposta 5")
-                    }
-                    Spacer(modifier = Modifier.size(16.dp))
-                    Button(onClick = { *//*TODO*//* }) {
-                        Text(text = "Risposta 6")
-                    }
-                }*/
+                answerButtons.invoke()
             }
+        }
     }
 }
 
