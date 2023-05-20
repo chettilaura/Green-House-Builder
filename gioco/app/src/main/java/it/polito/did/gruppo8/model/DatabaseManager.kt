@@ -80,6 +80,23 @@ class DatabaseManager() {
         }
     }
 
+    /**
+     * Retrieves the DataSnapshot from the database at specific path.
+     *
+     * @param path the path to read in the database.
+     *
+     * @return DataSnapshot at the specific path.
+     */
+    suspend fun getDataSnapshot(path: String): DataSnapshot {
+        return _firebase.getReference(path).get()
+            .addOnSuccessListener {
+                Log.d("DatabaseManager", "Retrieved Snapshot ${it} from path $path")
+            }
+            .addOnFailureListener {
+                Log.d("DatabaseManager", "ERROR: Could not read from path $path")
+            }
+            .await()
+    }
 
     /**
      * Reads a specific data once from the database.
@@ -100,8 +117,6 @@ class DatabaseManager() {
                 }
                 .await().getValue(valueType)
     }
-
-    //TODO: Still test all listeners methods -Mattia
 
     /**
      * Subscribes a ValueEventListener to the data located in a specific path of the database.
