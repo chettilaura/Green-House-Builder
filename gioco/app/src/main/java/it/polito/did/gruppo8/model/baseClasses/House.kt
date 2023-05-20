@@ -5,15 +5,15 @@ import android.util.Log
 
 class House {
     val stats: Statistics = Statistics()
-    var items : MutableMap<Int, Item> = mutableMapOf()
+    var items : ArrayList<Item> = arrayListOf()
 
     fun addItem(item: Item){
-        if(items.contains(item.id)){
+        if(items.contains(item)){
             Log.d("House", "Adding an already existing item to the house")
             return
         }
         // Add item
-        items[item.id] = item
+        items.add(item.id, item)
 
         // Update Modifiers
         stats.update(item.greenModifier, item.comfyModifier, item.lowcostModifier)

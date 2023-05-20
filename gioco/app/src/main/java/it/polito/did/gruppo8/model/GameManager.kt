@@ -141,42 +141,6 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         nextTurn()
     }
 
-    private fun nextTurn(){
-        val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
-
-        // Update turn and round counter
-        val cachedInfos = _mutableGameInfos.value!!
-        cachedInfos.turnCounter++
-        if(cachedInfos.turnCounter==players.value!!.entries.size){
-            cachedInfos.turnCounter = 0
-            cachedInfos.roundCounter++
-            if(cachedInfos.roundCounter == cachedInfos.totalRounds){
-                Log.d("GameManager", "END GAME")
-                //TODO: End Game
-            }
-        }
-
-        Log.d("GameManager", "Preparing ${cachedInfos.turnCounter} turn...")
-
-        // Update next player id
-        //_currentPlayerIndex = (_currentPlayerIndex+1)%players.value!!.entries.size
-        val newCurrentPlayer = players.value!!.entries.elementAtOrNull(cachedInfos.turnCounter)
-            ?: throw RuntimeException("Errore nell'aggiornamento del prossimo player")
-        cachedInfos.currentPlayerId = newCurrentPlayer.key
-        _mutableGameInfos.value = cachedInfos
-
-        // Update db
-        _dbManager.writeData("$id/gameInfos", gameInfos.value)
-        Log.d("GameManager", "Turn of ${players.value!![gameInfos.value!!.currentPlayerId]!!.nickname}")
-
-        //Coroutine to pass to the next quiz
-        scope.launch {
-            _dbManager.writeData("$id/screen", ScreenName.WaitingQuiz.route)
-            delay(5000)
-            _dbManager.writeData("$id/screen", ScreenName.Quiz.route)
-        }
-    }
-
     //endregion
 
     //region Methods for Client/Player
@@ -278,6 +242,27 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             }
         }
     }
+
+    fun buyItemFromShop(itemId: Int, free:Boolean = false)
+    {
+        val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
+        val me = players.value!![myPlayerId] ?: throw NullPointerException("Can't find player data")
+        val newItem = shop.value!![itemId] ?: throw NullPointerException("Can't find item requested in the shop")
+
+        // Add item
+        me.house.addItem(newItem)
+
+        // Remove Coins
+        if(!free)
+            me.wallet.removeCoins(newItem.price)
+
+        // Remove Item from the player shop
+        _mutableShop.value!!.remove(newItem)
+
+        // Update player and database
+        _mutablePlayers.value!![myPlayerId] = me
+        _dbManager.writeData("$id/players/$myPlayerId", players.value!![myPlayerId])
+    }
     //endregion
 
     //region Public shared Methods
@@ -374,6 +359,42 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 Log.d("GameManager", "Added item ${shop.value!![item.id]} to shop")
                 Log.d("GameManager", "Test Item: Name=${item.name}, GreenModifier=(${item.greenModifier}, ${item.greenModifier.value})")
             }
+        }
+    }
+
+    private fun nextTurn(){
+        val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
+
+        // Update turn and round counter
+        val cachedInfos = _mutableGameInfos.value!!
+        cachedInfos.turnCounter++
+        if(cachedInfos.turnCounter==players.value!!.entries.size){
+            cachedInfos.turnCounter = 0
+            cachedInfos.roundCounter++
+            if(cachedInfos.roundCounter == cachedInfos.totalRounds){
+                Log.d("GameManager", "END GAME")
+                //TODO: End Game
+            }
+        }
+
+        Log.d("GameManager", "Preparing ${cachedInfos.turnCounter} turn...")
+
+        // Update next player id
+        //_currentPlayerIndex = (_currentPlayerIndex+1)%players.value!!.entries.size
+        val newCurrentPlayer = players.value!!.entries.elementAtOrNull(cachedInfos.turnCounter)
+            ?: throw RuntimeException("Errore nell'aggiornamento del prossimo player")
+        cachedInfos.currentPlayerId = newCurrentPlayer.key
+        _mutableGameInfos.value = cachedInfos
+
+        // Update db
+        _dbManager.writeData("$id/gameInfos", gameInfos.value)
+        Log.d("GameManager", "Turn of ${players.value!![gameInfos.value!!.currentPlayerId]!!.nickname}")
+
+        //Coroutine to pass to the next quiz
+        scope.launch {
+            _dbManager.writeData("$id/screen", ScreenName.WaitingQuiz.route)
+            delay(5000)
+            _dbManager.writeData("$id/screen", ScreenName.Quiz.route)
         }
     }
     //endregion
