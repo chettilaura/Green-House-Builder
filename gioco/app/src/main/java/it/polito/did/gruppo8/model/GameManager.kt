@@ -3,6 +3,8 @@ package it.polito.did.gruppo8.model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.ktx.getValue
 import it.polito.did.gruppo8.Navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -38,6 +40,11 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 ?: throw RuntimeException("User not authenticated to the database")
         }
 
+    private val _mutableShop = MutableLiveData<ArrayList<Item>>().also{
+        it.value = arrayListOf()
+    }
+    val shop: LiveData<ArrayList<Item>> = _mutableShop
+
     private val _dbManager: DatabaseManager = DatabaseManager()
 
     //endregion
@@ -48,9 +55,14 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         scope.launch {
             try {
                 _dbManager.authenticate()
+
+                val shopSnapshot = async { _dbManager.getDataSnapshot("shop") }.await()
+                retrieveShop(shopSnapshot)
+
                 delay(500)
                 switchScreen(ScreenName.MainMenu)
             } catch (e: Exception) {
+                Log.d("Error", e.message.toString())
                 switchScreen(ScreenName.Error)
             }
         }
@@ -290,7 +302,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
         _dbManager.addListener("$id/players", "watchPlayers",
             onDataChange = { snapshot ->
-                val currentPlayers = snapshot.getValue() as Map<*, *>?
+                val currentPlayers = snapshot.value as Map<*, *>?
                 if(currentPlayers!=null){
                     //Log.d("WatchPlayers","Update: Found type ${currentPlayers.javaClass.kotlin} -> $currentPlayers")
 
@@ -349,5 +361,20 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         )
     }
 
+    private fun retrieveShop(snapshot: DataSnapshot){
+        val shopArray = snapshot.value as ArrayList<*>?
+            ?: throw NullPointerException("Can't retrieve Shop from Database")
+
+        Log.d("GameManager", "Array test: ${shopArray[0]}")
+
+        for(child in snapshot.children){
+            val item = child.getValue(Item::class.java)
+            if(item!=null){
+                _mutableShop.value!!.add(item.id, item)
+                Log.d("GameManager", "Added item ${shop.value!![item.id]} to shop")
+                Log.d("GameManager", "Test Item: Name=${item.name}, GreenModifier=(${item.greenModifier}, ${item.greenModifier.value})")
+            }
+        }
+    }
     //endregion
 }

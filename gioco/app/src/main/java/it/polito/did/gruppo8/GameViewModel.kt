@@ -26,6 +26,8 @@ class GameViewModel: ViewModel() {
     val players = gameManager.players
     val myPlayerId = gameManager.myPlayerId
 
+    val shop = gameManager.shop
+
     var currentQuiz: Quiz = Quiz()
 
     // MainMenuScreen
@@ -46,6 +48,7 @@ class GameViewModel: ViewModel() {
     fun prepareNextQuiz(){
         currentQuiz = gameManager.getRandomQuiz()
     }
+
     // QuizScreen
-    fun onSubmitAnswerButtonPressed(quiz: Quiz, answerIndex: Int) = gameManager.verifyQuiz(quiz,answerIndex) //TODO: passare parametri al metodo onSubmitAnswer
+    fun onSubmitAnswerButtonPressed(quiz: Quiz, answerIndex: Int) = gameManager.verifyQuiz(quiz,answerIndex)
 }
