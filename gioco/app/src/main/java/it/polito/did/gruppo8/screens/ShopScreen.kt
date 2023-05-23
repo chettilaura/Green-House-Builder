@@ -1,65 +1,64 @@
 package it.polito.did.gruppo8.screens
 
-import android.graphics.drawable.shapes.Shape
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import it.polito.did.gruppo8.util.myComposable.MyItemCard
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import it.polito.did.gruppo8.GameViewModel
+import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Item
+import it.polito.did.gruppo8.util.myComposable.MyButton
+import it.polito.did.gruppo8.util.myComposable.MyTopBar
 
 //contiene il negozio: quattro possibili card da scegliere con oggetti casuali
 //deve essere presente anche indicazione sul turno, sul tempo rimanente per scegliere cosa fare, soldi rimanenti
 
 
+
 @Composable
-fun ShopScreen(modifier: Modifier = Modifier) {}
-    /*GenericScreen(title = "Negozio", modifier){
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+fun ShopScreen(modifier: Modifier = Modifier) {
+
+    Box(modifier = Modifier.fillMaxSize(1f)) {
+        Image(
+            painter = painterResource(R.drawable.bg),
+            contentDescription = "Immagine di sfondo",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.FillHeight
+        )
+        Column(
+            modifier = Modifier.fillMaxSize(1f),
         ) {
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.Center
-                ) {
-                    ItemCard(title = "oggetto 1")
-                    Spacer(modifier = Modifier.size(8.dp))
-                    ItemCard(title = "oggetto 2")
-                    }
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    ItemCard(title = "oggetto 3")
-                    Spacer(modifier = Modifier.size(8.dp))
-                    ItemCard(title = "oggetto 4")
-                }
+            MyTopBar(title = "THE SHOP", colorId = colorResource(id = R.color.cal_poly_green))
+            Spacer(Modifier.height(8.dp))
+
+            Row(modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)) {
+                //TODO: passare lista di oggetti da mostrare nel negozio
+               /* MyItemCardsList(itemList = )*/
             }
+            Spacer(Modifier.height(8.dp))
         }
     }
+}
 
-//TODO
-
-
-
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ShopScreenPreview() {
     ShopScreen()
-}*/
+}

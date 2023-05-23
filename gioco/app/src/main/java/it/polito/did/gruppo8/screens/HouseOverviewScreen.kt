@@ -125,7 +125,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             Spacer(modifier = Modifier
                 .weight(0.05f))
 
-            MyButton(title = "LEADERBOARD", description = "Leaderboard button", 50) {
+            MyButton(title = "END TURN", description = "End turn button", 50) {
                 /*TODO: passare funzione di navigazione*/
             }
         }

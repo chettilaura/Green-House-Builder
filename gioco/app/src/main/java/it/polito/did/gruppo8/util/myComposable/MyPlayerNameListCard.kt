@@ -41,7 +41,7 @@ import it.polito.did.gruppo8.screens.caveatBold
 
 
 @Composable
-fun MyLazyColumnListCard(header: String, playersList: List<Player>) {
+fun MyPlayerNameListCard(header: String, playersList: List<Player>) {
 
     Card(modifier = Modifier
         .fillMaxWidth()

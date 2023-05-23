@@ -29,8 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
-import it.polito.did.gruppo8.util.myComposable.ItemCard
+import it.polito.did.gruppo8.model.baseClasses.Item
+import it.polito.did.gruppo8.util.myComposable.MyItemCard
 import it.polito.did.gruppo8.util.myComposable.MyButton
+import it.polito.did.gruppo8.util.myComposable.MyItemCardsList
 import it.polito.did.gruppo8.util.myComposable.ParameterBars
 
 //contiene quattro scelte nascoste casuali che vengono assegnate al giocatore a inizio partita
@@ -89,7 +91,11 @@ fun FreeItemScreen(modifier: Modifier = Modifier){
 
                     Box(modifier = Modifier.fillMaxSize()
                     ){
-                        Column (
+                        //MyItemCardsList(/*itemList =TODO: togliere commento a riga e passare lista di 4 oggetti*/)
+
+
+                        //METODO MANUALE brutto DA USARE COME PIANO b se riga sopra non funziona
+                        /*Column (
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(2.dp),
@@ -103,30 +109,30 @@ fun FreeItemScreen(modifier: Modifier = Modifier){
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                ItemCard(title = "ELECTRIC WATER HEATHER",
+                                MyItemCard(title = "ELECTRIC WATER HEATHER",
                                     itemImage = painterResource(id = R.drawable.electric_water_heater),
                                     price = "500",
                                     paramInfluenceImageList = listOf(
                                         painterResource(id = R.drawable.sofa),
-                                        painterResource(id = R.drawable.up),
+                                        painterResource(id = R.drawable.double_up),
                                         painterResource(id = R.drawable.leaf),
-                                        painterResource(id = R.drawable.down)
+                                        painterResource(id = R.drawable.double_down)
                                     )
                                 )
                                 Spacer(modifier = Modifier.weight(0.1f))
 
-                                ItemCard(title = "ELECTRIC WATER HEATHER",
+                                MyItemCard(title = "ELECTRIC WATER HEATHER",
                                     itemImage = painterResource(id = R.drawable.electric_water_heater),
                                     price = "500",
                                     paramInfluenceImageList = listOf(
                                         painterResource(id = R.drawable.sofa),
-                                        painterResource(id = R.drawable.up),
+                                        painterResource(id = R.drawable.double_up),
                                         painterResource(id = R.drawable.leaf),
-                                        painterResource(id = R.drawable.down)
+                                        painterResource(id = R.drawable.double_down)
                                     )
                                 )
                             }
-                            /*Spacer(modifier = Modifier.weight(0.2f))*/
+                            *//*Spacer(modifier = Modifier.weight(0.2f))*//*
                             Row(modifier = Modifier
                                 .fillMaxWidth()
                                 .fillMaxHeight(1f)
@@ -134,30 +140,30 @@ fun FreeItemScreen(modifier: Modifier = Modifier){
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                ItemCard(title = "ELECTRIC WATER HEATHER",
+                                MyItemCard(title = "ELECTRIC WATER HEATHER",
                                     itemImage = painterResource(id = R.drawable.electric_water_heater),
                                     price = "500",
                                     paramInfluenceImageList = listOf(
                                         painterResource(id = R.drawable.sofa),
-                                        painterResource(id = R.drawable.up),
+                                        painterResource(id = R.drawable.double_up),
                                         painterResource(id = R.drawable.leaf),
-                                        painterResource(id = R.drawable.down)
+                                        painterResource(id = R.drawable.double_down)
                                     )
                                 )
                                 Spacer(modifier = Modifier.weight(0.1f))
 
-                                ItemCard(title = "ELECTRIC WATER HEATHER",
+                                MyItemCard(title = "ELECTRIC WATER HEATHER",
                                     itemImage = painterResource(id = R.drawable.electric_water_heater),
                                     price = "500",
                                     paramInfluenceImageList = listOf(
                                         painterResource(id = R.drawable.sofa),
-                                        painterResource(id = R.drawable.up),
+                                        painterResource(id = R.drawable.double_up),
                                         painterResource(id = R.drawable.leaf),
-                                        painterResource(id = R.drawable.down)
+                                        painterResource(id = R.drawable.double_down)
                                     )
                                 )
                             }
-                        }
+                        }*/
                     }
                 }
             }

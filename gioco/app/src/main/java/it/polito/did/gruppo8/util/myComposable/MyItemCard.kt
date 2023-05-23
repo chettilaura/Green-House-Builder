@@ -21,30 +21,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.ContentScale.Companion.FillBounds
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Item
+import it.polito.did.gruppo8.model.baseClasses.StatModifier
 import it.polito.did.gruppo8.screens.caveatSemiBold
 
 /***
  * Generalized card with name of the item, item image, price, influence on parameters
  *
+ * @param item item to show in the card
  *
  * @param title text showing name of the item
  * @param itemImage painter containing the image of the item
  * @param price text showing the price of the item
  * @param paramInfluenceImageList list of painter containing showing item influence on parameters
  *
+ * NOTA: SI PUò RISCRIVERE UTILIZZANDO L'OGGETTO ITEM PASSATO ALLA FUNZIONE, INVECE CHE I PARAMETRI
+ * INDICATI
  *
  */
 
 //Occorre passargli valore dell'oggetto preso dal database, descrizione e immagine
 @Composable
-fun ItemCard(title:String,
-             itemImage: Painter,
-             price: String,
-             paramInfluenceImageList: List<Painter>) {
+fun MyItemCard(item: Item,
+               /*title:String,
+               itemImage: Painter,
+               price: String,
+               paramInfluenceImageList: List<Painter>*/) {
     Card(
         modifier = Modifier
             .width(175.dp)
@@ -60,16 +68,15 @@ fun ItemCard(title:String,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = title,
+            Text(text = item.name,
                 color = Color.Black,
                 fontFamily = caveatSemiBold,
                 style = MaterialTheme.typography.body1)
             Spacer(modifier = Modifier.height(8.dp))
 
-            Image(painter = itemImage,
-                contentDescription = title,
-                modifier = Modifier,
-                contentScale = ContentScale.FillBounds
+            AsyncImage(
+                model = item.iconURL,
+                contentDescription = item.name,
             )
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -82,10 +89,10 @@ fun ItemCard(title:String,
                 Image(painter = painterResource(id = R.drawable.coin),
                     contentDescription = "price",
                     modifier = Modifier,
-                    contentScale = ContentScale.FillBounds
+                    contentScale = FillBounds
                 )
                 Spacer(modifier = Modifier.width(2.dp))
-                Text(text = price,
+                Text(text = item.price.toString(),
                     color = Color.Black,
                     fontFamily = caveatSemiBold,
                     style = MaterialTheme.typography.body1)
@@ -97,17 +104,45 @@ fun ItemCard(title:String,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Image(painter = paramInfluenceImageList[1],
-                        contentDescription = "arrow up",
-                        modifier = Modifier,
-                        contentScale = ContentScale.FillBounds
-                    )
+                    //modificatore parametro comfy
+                    if(item.comfyModifier == StatModifier.BestImpact){
+                        Image(painter = painterResource(id = R.drawable.double_up),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    } else if (item.comfyModifier == StatModifier.GoodImpact){
+                        Image(painter = painterResource(id = R.drawable.up),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    } else if (item.comfyModifier == StatModifier.NeutralImpact){
+                        Image(painter = painterResource(id = R.drawable.equal),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    } else if (item.comfyModifier == StatModifier.BadImpact){
+                        Image(painter = painterResource(id = R.drawable.down),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    } else if (item.comfyModifier == StatModifier.WorstImpact){
+                        Image(painter = painterResource(id = R.drawable.double_down),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    }
+
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    Image(painter = paramInfluenceImageList[0],
+                    Image(painter = painterResource(id = R.drawable.sofa),
                         contentDescription = "sofa",
                         modifier = Modifier,
-                        contentScale = ContentScale.FillBounds
+                        contentScale = FillBounds
                     )
                 }
                 Spacer(modifier= Modifier.weight(0.3f))
@@ -116,17 +151,45 @@ fun ItemCard(title:String,
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Image(painter = paramInfluenceImageList[3],
-                        contentDescription = "arrow down",
-                        modifier = Modifier,
-                        contentScale = ContentScale.FillBounds
-                    )
+
+                    //parametro ecologia
+                    if(item.greenModifier == StatModifier.BestImpact){
+                        Image(painter = painterResource(id = R.drawable.double_up),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    } else if (item.greenModifier == StatModifier.GoodImpact){
+                        Image(painter = painterResource(id = R.drawable.up),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    } else if (item.greenModifier == StatModifier.NeutralImpact){
+                        Image(painter = painterResource(id = R.drawable.equal),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    } else if (item.greenModifier == StatModifier.BadImpact){
+                        Image(painter = painterResource(id = R.drawable.down),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    } else if (item.greenModifier == StatModifier.WorstImpact){
+                        Image(painter = painterResource(id = R.drawable.double_down),
+                            contentDescription = "double arrow up",
+                            modifier = Modifier,
+                            contentScale = FillBounds
+                        )
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    Image(painter = paramInfluenceImageList[2],
+                    Image(painter = painterResource(id = R.drawable.leaf),
                         contentDescription = "leaf",
                         modifier = Modifier,
-                        contentScale = ContentScale.FillBounds
+                        contentScale = FillBounds
                     )
                 }
             }

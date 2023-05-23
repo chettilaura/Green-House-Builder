@@ -1,6 +1,5 @@
 package it.polito.did.gruppo8.screens.NewScreens
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -81,7 +80,7 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
              */
             /*PlayersList(players?.values!!.toList())*/
             /*TODO: controllare se in questo modo funziona*/
-            MyLazyColumnListCard(header = "PLAYERS", playersList = players?.values!!.toList())
+            MyPlayerNameListCard(header = "PLAYERS", playersList = players?.values!!.toList())
 
 
 
