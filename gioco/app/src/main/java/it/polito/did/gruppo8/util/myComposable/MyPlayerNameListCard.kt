@@ -34,12 +34,7 @@ import it.polito.did.gruppo8.screens.caveatBold
  *
  * @param header text showing the name of object contained in the list
  * @param list list of strings to show in the scrollable cards
- *
- *
  */
-
-
-
 @Composable
 fun MyPlayerNameListCard(header: String, playersList: List<Player>) {
 
@@ -84,7 +79,7 @@ fun MyPlayerNameListCard(header: String, playersList: List<Player>) {
                         ) {
                             Text(
                                 modifier = Modifier.animateContentSize(),
-                                text = "$player.nickname",
+                                text = player.nickname,
                                 fontFamily = caveatBold,
                                 color = Color.White,
                                 style = MaterialTheme.typography.h5,

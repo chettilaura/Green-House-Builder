@@ -15,6 +15,9 @@ class Timer(
     var isRunning: Boolean = false
         private set
 
+    var onFinishEvent: () -> Unit = {}
+    var onTickEvent: () -> Unit = {}
+
     /**
      * Sets countdown time in seconds if timer is not already running.
      *
@@ -30,6 +33,24 @@ class Timer(
 
     /**
      * Starts the countdown if timer is not already running.
+     */
+    fun start() {
+        if(isRunning){
+            Log.d("Timer", "Timer already started. Stop it before restarting.")
+            return
+        }
+
+        _timer = object : CountDownTimer(seconds.toLong()*1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) = onTickEvent()
+            override fun onFinish() = onFinishEvent()
+        }
+        _timer.start()
+
+        isRunning = true
+    }
+
+    /**
+     * Starts the countdown if timer is not already running, subscribing events onTick and onFinish.
      *
      * @param onTickEvent Callback to perform every timer's tick.
      * @param onFinishEvent Callback to perform when the countdown ends.
@@ -40,15 +61,15 @@ class Timer(
             return
         }
 
+        this.onTickEvent = onTickEvent
+        this.onFinishEvent = onFinishEvent
+
         _timer = object : CountDownTimer(seconds.toLong()*1000, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                _currentTimeMillis = millisUntilFinished
-                onTickEvent()
-            }
-            override fun onFinish() {
-                onFinishEvent()
-            }
+            override fun onTick(millisUntilFinished: Long) = onTickEvent()
+            override fun onFinish() = onFinishEvent()
         }
+        _timer.start()
+
         isRunning = true
     }
 

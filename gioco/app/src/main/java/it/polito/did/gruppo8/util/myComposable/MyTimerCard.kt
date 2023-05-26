@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Timer
 import it.polito.did.gruppo8.screens.caveatBold
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -52,6 +53,11 @@ fun MyTimerCard(seconds: Int, onFinishEvent: ()->Unit) {
     //valore del tempo rimanente
     val timeLeftMs by rememberCountdownTimerState ((seconds*1000).toLong(), onFinishEvent) //tempo in ms
     val showTime = timeLeftMs / 1000 //tempo in secondi
+    /*
+    val timeLeft by remember {
+        mutableStateOf(timer.secondsRemaining)
+    }
+     */
 
     Card(modifier = Modifier
         .width(100.dp)
@@ -73,7 +79,7 @@ fun MyTimerCard(seconds: Int, onFinishEvent: ()->Unit) {
                 contentScale = ContentScale.FillHeight
             )
             /*Text(text = "TIMER", fontFamily = caveatRegular, style = MaterialTheme.typography.body1)*/
-            Text(text = "$showTime" + " sec", fontFamily = caveatBold, style = MaterialTheme.typography.h6)
+            Text(text = "$showTime sec", fontFamily = caveatBold, style = MaterialTheme.typography.h6)
         }
     }
 }

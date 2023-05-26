@@ -45,6 +45,13 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     }
     val shop: LiveData<ArrayList<Item>> = _mutableShop
 
+    /*
+    private val _mutableTimer = MutableLiveData<Timer>().also{
+        it.value = Timer(0)
+    }
+    val timer: LiveData<Timer> = _mutableTimer
+     */
+
     private val _dbManager: DatabaseManager = DatabaseManager()
 
     //endregion
@@ -135,7 +142,8 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         //Host switches to the Dashboard
         switchScreen(ScreenName.Dashboard)
 
-        //TODO: Passare prima per FreeItemScreen
+        //TODO: Valutare se passare prima per FreeItemScreen (problema di sincronizzazione)
+        //_dbManager.writeData("$id/screen", ScreenName.FreeItem.route)
 
         //Next turn
         nextTurn()
@@ -262,6 +270,13 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         // Update player and database
         _mutablePlayers.value!![myPlayerId] = me
         _dbManager.writeData("$id/players/$myPlayerId", players.value!![myPlayerId])
+    }
+
+    fun rankPlayers(){
+        // Sort players based on weighted average of its stats
+        _mutablePlayers.value = _mutablePlayers.value!!.toList().sortedBy { (_, player) ->
+            player.house.stats.weightedAverage()
+        }.toMap().toMutableMap()
     }
     //endregion
 
@@ -390,7 +405,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         _dbManager.writeData("$id/gameInfos", gameInfos.value)
         Log.d("GameManager", "Turn of ${players.value!![gameInfos.value!!.currentPlayerId]!!.nickname}")
 
-        //Coroutine to pass to the next quiz
+        // Coroutine to pass to the next quiz
         scope.launch {
             _dbManager.writeData("$id/screen", ScreenName.WaitingQuiz.route)
             delay(5000)
