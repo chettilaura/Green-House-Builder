@@ -195,7 +195,7 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float, fraction: Fl
     }
 }
 
-/*
+
 @Preview (showBackground = true, showSystemUi = true)
 @Composable
 fun MyParameterBarCardPreview() {
@@ -208,4 +208,4 @@ fun MyParameterBarCardPreview() {
         ParameterBars(co2Impact = 0.3f, comfort = 0.5f, economy = 0.7f, fraction = 1f)
         Spacer(modifier = Modifier.height(10.dp))
     }
-}*/
+}
