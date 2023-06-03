@@ -38,6 +38,7 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 fun MyButton(title: String,
              description: String,
              buttonHeight: Int,
+             /*enabled: Boolean = true,*/
              onClickEvent: () -> Unit)
 {
     Box(modifier = Modifier
@@ -51,7 +52,9 @@ fun MyButton(title: String,
             modifier = Modifier
                 .fillMaxWidth()
                 //.clickable { onJoinGame(gameID, playerName) }
-                .clickable(onClick = onClickEvent)
+                .clickable(
+                    /*enabled = enabled,*/
+                    onClick = onClickEvent)
         )
         Column(
             modifier = Modifier

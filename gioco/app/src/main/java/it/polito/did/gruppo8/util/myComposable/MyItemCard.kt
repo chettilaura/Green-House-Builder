@@ -1,5 +1,6 @@
 package it.polito.did.gruppo8.util.myComposable
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -12,15 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.ContentScale.Companion.FillBounds
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -35,31 +36,34 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
  * Generalized card with name of the item, item image, price, influence on parameters
  *
  * @param item item to show in the card
- *
- * @param title text showing name of the item
- * @param itemImage painter containing the image of the item
- * @param price text showing the price of the item
- * @param paramInfluenceImageList list of painter containing showing item influence on parameters
- *
- * NOTA: SI PUò RISCRIVERE UTILIZZANDO L'OGGETTO ITEM PASSATO ALLA FUNZIONE, INVECE CHE I PARAMETRI
- * INDICATI
+ * @param onClickEvent the function that activates when the card is pressed
+ * @param enabled by default on false, set the button clickability
  *
  */
 
 //Occorre passargli valore dell'oggetto preso dal database, descrizione e immagine
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MyItemCard(item: Item,
-               /*title:String,
-               itemImage: Painter,
-               price: String,
-               paramInfluenceImageList: List<Painter>*/) {
-    Card(
+fun MyItemCard(
+    item: Item,
+    enabled: Boolean = false,
+    onClickEvent: () -> Unit
+    /*title:String,
+    itemImage: Painter,
+    price: String,
+    paramInfluenceImageList: List<Painter>*/
+) {
+
+    Button(
+        onClick = onClickEvent,
+        enabled = enabled,
         modifier = Modifier
             .width(175.dp)
             .fillMaxHeight(),
-        backgroundColor = colorResource(id = R.color.white),
+        colors = ButtonDefaults
+            .buttonColors(backgroundColor = colorResource(id = R.color.white),
+            ),
         shape = RoundedCornerShape(20.dp),
-        elevation = 5.dp,
         border = BorderStroke(2.dp, Color.DarkGray)
     ){
         Column(

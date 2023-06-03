@@ -5,13 +5,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -29,10 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
-import it.polito.did.gruppo8.model.baseClasses.Item
-import it.polito.did.gruppo8.util.myComposable.MyItemCard
 import it.polito.did.gruppo8.util.myComposable.MyButton
-import it.polito.did.gruppo8.util.myComposable.MyItemCardsList
+import it.polito.did.gruppo8.util.myComposable.MyItemListCard
 import it.polito.did.gruppo8.util.myComposable.ParameterBars
 
 //contiene quattro scelte nascoste casuali che vengono assegnate al giocatore a inizio partita
@@ -42,12 +41,15 @@ import it.polito.did.gruppo8.util.myComposable.ParameterBars
 
 @Composable
 fun FreeItemScreen(modifier: Modifier = Modifier){
-    /*val vm: GameViewModel = viewModel()*/
-    /*val players = vm.players.observeAsState()*/
+
+    //lista di 4 oggetti per test dell'interfaccia
+    val itemList = generateItemList(4)
 
     //variabile per attivare la presenza delle barre dei parametri quando viene selezionato un oggetto
     //dalla lista
     var parameterBarVisibility by remember { mutableStateOf(true) }
+
+    var openDialog by remember { mutableStateOf(false)  }
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
@@ -71,7 +73,7 @@ fun FreeItemScreen(modifier: Modifier = Modifier){
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                backgroundColor = colorResource(id = R.color.emerald),
+                backgroundColor = colorResource(id = R.color.cal_poly_green),
                 shape = RoundedCornerShape(20.dp),
                 elevation = 5.dp,
                 border = BorderStroke(2.dp, Color.Black)
@@ -91,79 +93,39 @@ fun FreeItemScreen(modifier: Modifier = Modifier){
 
                     Box(modifier = Modifier.fillMaxSize()
                     ){
-                        //MyItemCardsList(/*itemList =TODO: togliere commento a riga e passare lista di 4 oggetti*/)
-
-
-                        //METODO MANUALE brutto DA USARE COME PIANO b se riga sopra non funziona
-                        /*Column (
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(2.dp),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                                ){
-                            Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(0.5f)
-                                .padding(4.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                MyItemCard(title = "ELECTRIC WATER HEATHER",
-                                    itemImage = painterResource(id = R.drawable.electric_water_heater),
-                                    price = "500",
-                                    paramInfluenceImageList = listOf(
-                                        painterResource(id = R.drawable.sofa),
-                                        painterResource(id = R.drawable.double_up),
-                                        painterResource(id = R.drawable.leaf),
-                                        painterResource(id = R.drawable.double_down)
-                                    )
-                                )
-                                Spacer(modifier = Modifier.weight(0.1f))
-
-                                MyItemCard(title = "ELECTRIC WATER HEATHER",
-                                    itemImage = painterResource(id = R.drawable.electric_water_heater),
-                                    price = "500",
-                                    paramInfluenceImageList = listOf(
-                                        painterResource(id = R.drawable.sofa),
-                                        painterResource(id = R.drawable.double_up),
-                                        painterResource(id = R.drawable.leaf),
-                                        painterResource(id = R.drawable.double_down)
-                                    )
-                                )
-                            }
-                            *//*Spacer(modifier = Modifier.weight(0.2f))*//*
-                            Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(1f)
-                                .padding(4.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                MyItemCard(title = "ELECTRIC WATER HEATHER",
-                                    itemImage = painterResource(id = R.drawable.electric_water_heater),
-                                    price = "500",
-                                    paramInfluenceImageList = listOf(
-                                        painterResource(id = R.drawable.sofa),
-                                        painterResource(id = R.drawable.double_up),
-                                        painterResource(id = R.drawable.leaf),
-                                        painterResource(id = R.drawable.double_down)
-                                    )
-                                )
-                                Spacer(modifier = Modifier.weight(0.1f))
-
-                                MyItemCard(title = "ELECTRIC WATER HEATHER",
-                                    itemImage = painterResource(id = R.drawable.electric_water_heater),
-                                    price = "500",
-                                    paramInfluenceImageList = listOf(
-                                        painterResource(id = R.drawable.sofa),
-                                        painterResource(id = R.drawable.double_up),
-                                        painterResource(id = R.drawable.leaf),
-                                        painterResource(id = R.drawable.double_down)
-                                    )
-                                )
-                            }
-                        }*/
+                        MyItemListCard(itemList = itemList, true){openDialog = true}
+                        if (openDialog){
+                            AlertDialog(
+                                onDismissRequest = {
+                                    // Dismiss the dialog when the user clicks outside the dialog or on the back
+                                    // button. If you want to disable that functionality, simply use an empty
+                                    // onCloseRequest.
+                                    openDialog = false
+                                },
+                                title = {
+                                    Text(text = "Dialog Title")
+                                },
+                                text = {
+                                    Text("Here is a text ")
+                                },
+                                confirmButton = {
+                                    Button(
+                                        onClick = {
+                                            openDialog = false
+                                        }) {
+                                        Text("This is the Confirm Button")
+                                    }
+                                },
+                                dismissButton = {
+                                    Button(
+                                        onClick = {
+                                            openDialog = false
+                                        }) {
+                                        Text("This is the dismiss Button")
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
             }

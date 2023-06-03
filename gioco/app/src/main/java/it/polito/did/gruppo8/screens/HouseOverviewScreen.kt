@@ -1,5 +1,7 @@
 package it.polito.did.gruppo8.screens
 
+import MyAlertDialog
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,12 +11,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -25,13 +28,14 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Item
 import it.polito.did.gruppo8.util.myComposable.MoneyCard
 import it.polito.did.gruppo8.util.myComposable.MyButton
+import it.polito.did.gruppo8.util.myComposable.MyItemListCard
+import it.polito.did.gruppo8.util.myComposable.MyTimerCard
 import it.polito.did.gruppo8.util.myComposable.ParameterBars
 import it.polito.did.gruppo8.util.myComposable.RoundCard
-import it.polito.did.gruppo8.util.myComposable.MyTimerCard
 
 //Contiene vista generale della propria casa. Contiene: box con info sui parametri (barre),
 //box con casetta, timer, soldi e info sul round di gioco
@@ -43,8 +47,6 @@ import it.polito.did.gruppo8.util.myComposable.MyTimerCard
 //      pulsante di back/possibilità di swipare a destra per tornare alla vista precedente
 //NOTA: lo sfondo è dello stesso colore del quartiere assegnato al giocatore
 
-/*val MyFontFamily = FontFamily(Font(R.font.caveat_regular))*/
-/*val LocalFont = staticCompositionLocalOf<FontFamily?> { null }*/
 val caveatRegular = FontFamily(
     Font(R.font.caveat_regular, FontWeight.Normal, FontStyle.Normal)
 )
@@ -57,9 +59,6 @@ val caveatSemiBold = FontFamily(
 val caveatBold = FontFamily(
     Font(R.font.caveat_bold, FontWeight.Bold, FontStyle.Normal)
 )
-/*val sunnyWeather = FontFamily(
-    Font(R.font.sunnyweather, FontWeight.Normal, FontStyle.Normal)
-)*/
 
 @Composable
 fun HouseOverviewScreen(modifier: Modifier = Modifier)
@@ -73,6 +72,21 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
     val money = rememberSaveable{
         mutableStateOf (534)
     }
+    //lista di 20 oggetti per test dell'interfaccia
+    val itemList = generateItemList(20)
+
+    //controllo per visualizzare casa o lista di oggetti acquistati
+    var houseVisibility by remember { mutableStateOf(true) }
+
+    //controllo per visualizzare shop
+    var shopVisibility by remember { mutableStateOf(false) }
+    //controllo abilitazione button dello shop
+    var disableButton by remember { mutableStateOf(true) }
+
+    var selectedItem by remember { mutableStateOf(Item()) }
+
+    //variabile per controllo del popup
+    var openDialog by remember { mutableStateOf(false)  }
 
     Box(modifier = Modifier.fillMaxSize(1f)){
         Image(
@@ -89,8 +103,6 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             ParameterBars(0.7f, 0.4f, 0.5f, 0.15f)
-            /*Spacer(modifier = Modifier
-                .weight(1f))*/
 
             Row(modifier = Modifier
                 .fillMaxWidth()
@@ -102,31 +114,77 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 RoundCard(numeroTurno.value, "2")
                 Spacer(modifier = Modifier.weight(1f))
 
-                MyTimerCard(30_000, {})
+                MyTimerCard(30, {})
                 Spacer(modifier = Modifier.weight(1f))
 
                 MoneyCard(money.value)
             }
-            /*Spacer(modifier = Modifier
-                .weight(0.05f))*/
-            HouseViewBox(/*TODO: passare lista degli oggetti da mostrare nella casa*/)
-            Spacer(modifier = Modifier
-                .weight(1f))
 
-            MyButton(title = "VIEW ITEM LIST", description = "View item list button", 70) {
-                /*TODO: passare funzione di navigazione*/
+            if (houseVisibility){
+                HouseViewBox(/*TODO: passare lista degli oggetti da mostrare nella casa*/)
+            } else{
+                if(shopVisibility){
+                    Box(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        //lista di oggetti nello shop
+                        MyItemListCard(itemList = itemList,
+                            enabledCardClick = true,
+                            onClickEvent = {
+                                selectedItem = it
+                                openDialog = !openDialog
+                            })
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        //lista di oggetti acquistati
+                        MyItemListCard(itemList = itemList, false) {}
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier
+                .weight(0.1f))
+
+            //button per mostrare oggetti acquistati
+            MyButton(title = if(houseVisibility) "ITEM LIST VIEW" else "HOUSE VIEW", description = "View item list button", 70) {
+                houseVisibility = !houseVisibility
+                shopVisibility = false
             }
             Spacer(modifier = Modifier
                 .weight(0.05f))
 
-            MyButton(title = "SHOP", description = "Shop button", 70) {
-                /*TODO: passare funzione di navigazione*/
+            if(disableButton){
+                //button per mostrare negozio
+                MyButton(title = if (shopVisibility) "BACK" else "SHOP",
+                    description = "Shop button", 70) {
+                    houseVisibility = false
+                    shopVisibility = !shopVisibility
+                }
+                Spacer(modifier = Modifier
+                    .weight(0.05f))
             }
-            Spacer(modifier = Modifier
-                .weight(0.05f))
 
+            //button per terminare il turno
             MyButton(title = "END TURN", description = "End turn button", 50) {
-                /*TODO: passare funzione di navigazione*/
+                /*TODO: passare funzione per terminare il turno*/
+            }
+
+            //alert per conferma di acquisto
+            if(openDialog){
+                MyAlertDialog(
+                    item = selectedItem,
+                    dismissAlert = {openDialog = !openDialog},
+                    buyItem = {
+                        openDialog = !openDialog //disabilita Alert
+                        disableButton = false //disabilita button dello shop
+                        houseVisibility = true //abilita vista casa
+                        shopVisibility = false // disabilita vista shop
+                        Log.d("PROVA", "PROVA LOG")
+                    /*TODO: passare funzione per aggiungere oggetto salvato in selectedItem a lista acquistati*/
+                    })
             }
         }
     }
@@ -146,8 +204,8 @@ fun HouseViewBox(/*TODO: passare lista di degli oggetti acquistati, ad esempio o
             contentScale = ContentScale.FillBounds
         )
 
-        //foreach per scorrere lista di oggetti e caricare le relative immagini, DA TESTARE
-        /*ownedItems.forEachIndexed { index, item ->
+        /*TODO: foreach per scorrere lista di oggetti e caricare le relative immagini, DA TESTARE
+        ownedItems.forEachIndexed { index, item ->
             Image(painter = rememberImagePainter(data = item.itemURL),
                 contentDescription = item.description,
                 modifier = Modifier.fillMaxWidth(),
