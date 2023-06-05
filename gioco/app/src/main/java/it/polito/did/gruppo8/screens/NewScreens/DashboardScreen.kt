@@ -22,14 +22,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
-import it.polito.did.gruppo8.ScreenName
+import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
-import it.polito.did.gruppo8.util.myComposable.PlayerList
+import it.polito.did.gruppo8.util.myComposable.MyPlayerData
 
 //SCHERMATA CHE VEDE SOLO L'HOST
 
 @Composable
-fun DashBoard(modifier: Modifier = Modifier) {
+fun DashboardScreen(modifier: Modifier = Modifier) {
+
+    val players = listOf<Player>()
+    //val players by vm.players!!.observaAsState()
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
@@ -46,10 +49,8 @@ fun DashBoard(modifier: Modifier = Modifier) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally){
-                PlayerList() //passare i giocatori e relativi parametri a funzione originale
-
+                MyPlayerData(players) //passare i giocatori e relativi parametri a funzione originale
             }
-
         }
     }
 }
@@ -75,5 +76,5 @@ fun DashBoardTopBar(title: String, colorId: Color) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DashboardScreenPreview(modifier: Modifier = Modifier) {
-    DashBoard()
+    DashboardScreen()
 }

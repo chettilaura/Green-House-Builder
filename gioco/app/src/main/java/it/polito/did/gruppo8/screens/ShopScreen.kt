@@ -50,7 +50,7 @@ fun showAlert(show: Boolean): Boolean{
 fun ShopScreen(modifier: Modifier = Modifier) {
 
     //lista di 4 oggetti per test dell'interfaccia
-    val itemList = generateItemList(20)
+    val itemList = listOf<Item>()
 
     //salva
     var selectedItem by remember { mutableStateOf(Item()) }

@@ -67,7 +67,7 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
                 RoundCard("${gameInfos!!.roundCounter+1}/${gameInfos!!.totalRounds}",
-                    "${gameInfos!!.turnCounter+1}/${players!!.entries.size}")
+                    "${gameInfos!!.turnCounter+1}/${gameInfos!!.totalTurns}")
                 Spacer(modifier = Modifier.weight(1f))
                 MyTimerCard(gameInfos!!.quizTime) {
                     vm.onSubmitAnswerButtonPressed(

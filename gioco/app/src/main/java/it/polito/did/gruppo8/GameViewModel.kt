@@ -1,9 +1,11 @@
 package it.polito.did.gruppo8
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.polito.did.gruppo8.model.GameManager
+import it.polito.did.gruppo8.model.baseClasses.Item
 import it.polito.did.gruppo8.model.baseClasses.Quiz
 
 class GameViewModel: ViewModel() {
@@ -15,7 +17,7 @@ class GameViewModel: ViewModel() {
     val players = gameManager.players
     val myPlayerId = gameManager.myPlayerId
 
-    val shop = gameManager.shop
+    val shop: LiveData<MutableMap<Int, Item>> = gameManager.shop
 
     var currentQuiz: Quiz = Quiz()
 
@@ -40,4 +42,8 @@ class GameViewModel: ViewModel() {
 
     // QuizScreen
     fun onSubmitAnswerButtonPressed(quiz: Quiz, answerIndex: Int) = gameManager.verifyQuiz(quiz,answerIndex)
+
+    // HouseOverviewScreen
+    fun onBuyButtonPressed(itemId: Int, free: Boolean = false) = gameManager.buyItemFromShop(itemId, free)
+    fun onEndTurnButtonPressed() = gameManager.endTurn()
 }

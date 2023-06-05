@@ -6,7 +6,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
 @Composable
-fun DashboardScreen(modifier: Modifier = Modifier) {
+fun MalnatiDashboardScreen(modifier: Modifier = Modifier) {
     GenericScreen(title = "Dashboard", modifier) {
 
     }
@@ -16,6 +16,6 @@ fun DashboardScreen(modifier: Modifier = Modifier) {
 @Composable
 fun PreviewDashboardScreen() {
     GameSkeletonTheme {
-        DashboardScreen()
+        MalnatiDashboardScreen()
     }
 }

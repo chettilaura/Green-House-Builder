@@ -40,10 +40,10 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 ?: throw RuntimeException("User not authenticated to the database")
         }
 
-    private val _mutableShop = MutableLiveData<ArrayList<Item>>().also{
-        it.value = arrayListOf()
+    private val _mutableShop = MutableLiveData<MutableMap<Int, Item>>().also{
+        it.value = mutableMapOf()
     }
-    val shop: LiveData<ArrayList<Item>> = _mutableShop
+    val shop: LiveData<MutableMap<Int, Item>> = _mutableShop
 
     /*
     private val _mutableTimer = MutableLiveData<Timer>().also{
@@ -135,6 +135,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
     fun startGame() {
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
+        _mutableGameInfos.value!!.totalTurns = _mutablePlayers.value!!.entries.size
 
         //Update Game settings
         _dbManager.writeData("$id/gameInfos", gameInfos.value)
@@ -149,6 +150,12 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         nextTurn()
     }
 
+    fun rankPlayers(){
+        // Sort players based on weighted average of its stats
+        _mutablePlayers.value = _mutablePlayers.value!!.toList().sortedBy { (_, player) ->
+            player.house.stats.weightedAverage()
+        }.toMap().toMutableMap()
+    }
     //endregion
 
     //region Methods for Client/Player
@@ -265,19 +272,17 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             me.wallet.removeCoins(newItem.price)
 
         // Remove Item from the player shop
-        _mutableShop.value!!.remove(newItem)
+        _mutableShop.value!!.remove(newItem.id)
 
         // Update player and database
         _mutablePlayers.value!![myPlayerId] = me
         _dbManager.writeData("$id/players/$myPlayerId", players.value!![myPlayerId])
     }
 
-    fun rankPlayers(){
-        // Sort players based on weighted average of its stats
-        _mutablePlayers.value = _mutablePlayers.value!!.toList().sortedBy { (_, player) ->
-            player.house.stats.weightedAverage()
-        }.toMap().toMutableMap()
+    fun endTurn(){
+        nextTurn()
     }
+
     //endregion
 
     //region Public shared Methods
@@ -370,7 +375,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         for(child in snapshot.children){
             val item = child.getValue(Item::class.java)
             if(item!=null){
-                _mutableShop.value!!.add(item.id, item)
+                _mutableShop.value!![item.id] = item
                 Log.d("GameManager", "Added item ${shop.value!![item.id]} to shop")
                 Log.d("GameManager", "Test Item: Name=${item.name}, GreenModifier=(${item.greenModifier}, ${item.greenModifier.value})")
             }

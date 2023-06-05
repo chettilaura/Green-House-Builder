@@ -13,7 +13,7 @@ class House {
             return
         }
         // Add item
-        items.add(item.id, item)
+        items.add(item)
 
         // Update Modifiers
         stats.update(item.greenModifier, item.comfyModifier, item.lowcostModifier)

@@ -30,6 +30,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Item
+import it.polito.did.gruppo8.model.baseClasses.Statistics
 import it.polito.did.gruppo8.util.myComposable.MyButton
 import it.polito.did.gruppo8.util.myComposable.MyItemListCard
 import it.polito.did.gruppo8.util.myComposable.ParameterBars
@@ -43,7 +45,7 @@ import it.polito.did.gruppo8.util.myComposable.ParameterBars
 fun FreeItemScreen(modifier: Modifier = Modifier){
 
     //lista di 4 oggetti per test dell'interfaccia
-    val itemList = generateItemList(4)
+    val itemList = listOf<Item>()
 
     //variabile per attivare la presenza delle barre dei parametri quando viene selezionato un oggetto
     //dalla lista
@@ -66,7 +68,7 @@ fun FreeItemScreen(modifier: Modifier = Modifier){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             //Inserire anche top bar?
-            ParameterBars(0.2f, 0.1f, 0.05f, 0.15f)
+            ParameterBars(Statistics(), 0.15f)
             Spacer(modifier = Modifier.weight(0.02f))
 
             Card(
@@ -130,8 +132,7 @@ fun FreeItemScreen(modifier: Modifier = Modifier){
                 }
             }
             Spacer(modifier = Modifier.weight(0.02f))
-            MyButton(title = "START", description = "confirm choice and start button", 100 ) {
-            }
+            MyButton(title = "START", description = "confirm choice and start button", 100){}
         }
     }
 }

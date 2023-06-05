@@ -26,6 +26,7 @@ import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
+
 /***
  * Generalized Button component.
  *
@@ -38,8 +39,9 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 fun MyButton(title: String,
              description: String,
              buttonHeight: Int,
-             /*enabled: Boolean = true,*/
-             onClickEvent: () -> Unit)
+             enabled: Boolean = true,
+             onClickEvent: () -> Unit
+)
 {
     Box(modifier = Modifier
         .height(buttonHeight.dp)
@@ -53,7 +55,7 @@ fun MyButton(title: String,
                 .fillMaxWidth()
                 //.clickable { onJoinGame(gameID, playerName) }
                 .clickable(
-                    /*enabled = enabled,*/
+                    enabled = enabled,
                     onClick = onClickEvent)
         )
         Column(

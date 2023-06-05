@@ -23,7 +23,7 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
 import it.polito.did.gruppo8.util.myComposable.MyButton
 
 @Composable
-fun MyAlertDialog(item: Item, dismissAlert: () -> Unit, buyItem: () -> Unit) {
+fun MyAlertDialog(item: Item, dismissAlert: () -> Unit, canBuy: Boolean=true, buyItem: () -> Unit) {
     AlertDialog(
         onDismissRequest = dismissAlert,
             // Dismiss the dialog when the user clicks outside the dialog or on the back
@@ -65,7 +65,7 @@ fun MyAlertDialog(item: Item, dismissAlert: () -> Unit, buyItem: () -> Unit) {
             }
         },
         confirmButton = {
-            MyButton(title = "BUY", description = "Buy button", buttonHeight = 50,  onClickEvent = buyItem)
+            MyButton(title = "BUY", description = "Buy button", buttonHeight = 50,  enabled = canBuy, onClickEvent = buyItem)
         },
         dismissButton = {
             MyButton(title = "CANCEL", description = "Dismiss button", buttonHeight = 50, onClickEvent = dismissAlert)

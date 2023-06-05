@@ -58,8 +58,8 @@ fun MainMenuScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.size(30.dp))
             AppName()
 
-            MyButton("NEW GAME", "Create house button", 100, {vm.onNewGameButtonPressed()})
-            MyButton("JOIN GAME", "Create house button", 100, { vm.onJoinGameButtonPressed() })
+            MyButton("NEW GAME", "Create house button", 100){vm.onNewGameButtonPressed()}
+            MyButton("JOIN GAME", "Create house button", 100) { vm.onJoinGameButtonPressed() }
 
 
             Spacer(modifier = Modifier.size(30.dp))
@@ -67,7 +67,7 @@ fun MainMenuScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
 //TUTORIAL POP UP
 
             var tutorialPopUpControl by remember { mutableStateOf(false) }
-            MyButton(title = "TUTORIAL", description = "Tutorial", 100, {tutorialPopUpControl = true})
+            MyButton(title = "TUTORIAL", description = "Tutorial", 100) {tutorialPopUpControl = true}
 
 
             Spacer(modifier = Modifier.size(5.dp))
@@ -85,7 +85,7 @@ fun MainMenuScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
 //SETTINGS POP UP
 
             var settingsPopUpControl by remember { mutableStateOf(false) }
-            MyButton(title = "SETTINGS", description = "Settings", 100, {settingsPopUpControl = true})
+            MyButton(title = "SETTINGS", description = "Settings", 100) {settingsPopUpControl = true}
 
 
             Spacer(modifier = Modifier.size(5.dp))

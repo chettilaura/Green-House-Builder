@@ -20,6 +20,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Statistics
 import it.polito.did.gruppo8.screens.caveatSemiBold
 
 
@@ -46,7 +48,7 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
  */
 
 @Composable
-fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float, fraction: Float) {
+fun ParameterBars(stats: Statistics, fraction: Float) {
    /* val co2Impact = rememberSaveable {
         mutableStateOf (0.7f)
     }
@@ -101,7 +103,7 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float, fraction: Fl
                         .weight(0.2f)
                 )
                 LinearProgressIndicator(
-                    progress = co2Impact,
+                    progress = stats.green.toFloat()/Statistics.MAX_GREEN,
                     color = colorResource(id = R.color.kelly_green),
                     backgroundColor = Color.LightGray,
                     modifier = Modifier
@@ -141,7 +143,7 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float, fraction: Fl
                         .weight(0.2f)
                 )
                 LinearProgressIndicator(
-                    progress = comfort,
+                    progress = stats.comfy.toFloat()/Statistics.MAX_COMFY,
                     color = colorResource(id = R.color.glaucous),
                     backgroundColor = Color.LightGray,
                     modifier = Modifier
@@ -182,7 +184,7 @@ fun ParameterBars(co2Impact: Float, comfort: Float, economy: Float, fraction: Fl
                         .weight(0.2f)
                 )
                 LinearProgressIndicator(
-                    progress = economy,
+                    progress = stats.lowcost.toFloat()/Statistics.MAX_LOWCOST,
                     color = colorResource(id = R.color.xanthous),
                     backgroundColor = Color.LightGray,
                     modifier = Modifier
@@ -202,10 +204,11 @@ fun MyParameterBarCardPreview() {
     Column(modifier = Modifier
         .fillMaxSize()
     ) {
+        val stats = Statistics()
         Spacer(modifier = Modifier.height(10.dp))
-        ParameterBars(co2Impact = 0.3f, comfort = 0.5f, economy = 0.7f, fraction = 0.15f)
+        ParameterBars(stats, fraction = 0.15f)
         Spacer(modifier = Modifier.height(10.dp))
-        ParameterBars(co2Impact = 0.3f, comfort = 0.5f, economy = 0.7f, fraction = 1f)
+        ParameterBars(stats, fraction = 1f)
         Spacer(modifier = Modifier.height(10.dp))
     }
 }

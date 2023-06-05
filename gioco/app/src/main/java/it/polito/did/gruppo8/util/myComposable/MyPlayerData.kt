@@ -1,12 +1,7 @@
 package it.polito.did.gruppo8.util.myComposable
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -16,16 +11,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Player
+import it.polito.did.gruppo8.model.baseClasses.Statistics
 import it.polito.did.gruppo8.screens.caveatBold
-import it.polito.did.gruppo8.ui.theme.AppGreen
 import it.polito.did.gruppo8.ui.theme.DarkGreen
 
 
@@ -33,7 +24,7 @@ import it.polito.did.gruppo8.ui.theme.DarkGreen
 //legata a dashboard dell'host e a game over
 
 @Composable
-fun PlayerList() {
+fun MyPlayerData(players: List<Player>) {
 
 //    Box(modifier = Modifier.fillMaxSize(1f)) {
 //        Image(
@@ -68,6 +59,19 @@ fun PlayerList() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
+                    players.forEach { player ->
+                        Text(
+                            text = player.nickname,
+                            fontFamily = caveatBold,
+                            color = DarkGreen,
+                            style = MaterialTheme.typography.h3,
+                            textAlign = TextAlign.Center
+                        )
+                        ParameterBars(player.house.stats, 0.1f)
+                    }
+
+                    /*
                     Text(
                         text = "Player1",
                         fontFamily = caveatBold,
@@ -75,7 +79,7 @@ fun PlayerList() {
                         style = MaterialTheme.typography.h3,
                         textAlign = TextAlign.Center
                     )
-                    ParameterBars(0.1f, 0.1f, 0.1f, 0.1f)
+                    ParameterBars(Statistics(), 0.1f)
                     Text(
                         text = "Player2",
                         fontFamily = caveatBold,
@@ -83,7 +87,7 @@ fun PlayerList() {
                         style = MaterialTheme.typography.h3,
                         textAlign = TextAlign.Center
                     )
-                    ParameterBars(0.1f, 0.1f, 0.1f, 0.1f)
+                    ParameterBars(Statistics(), 0.1f)
                     Text(
                         text = "Player3",
                         fontFamily = caveatBold,
@@ -91,7 +95,7 @@ fun PlayerList() {
                         style = MaterialTheme.typography.h3,
                         textAlign = TextAlign.Center
                     )
-                    ParameterBars(0.1f, 0.1f, 0.1f, 0.1f)
+                    ParameterBars(Statistics(), 0.1f)
                     Text(
                         text = "Player4",
                         fontFamily = caveatBold,
@@ -99,7 +103,7 @@ fun PlayerList() {
                         style = MaterialTheme.typography.h3,
                         textAlign = TextAlign.Center
                     )
-                    ParameterBars(0.1f, 0.1f, 0.1f, 0.1f)
+                    ParameterBars(Statistics(), 0.1f)
                     Text(
                         text = "Player5",
                         fontFamily = caveatBold,
@@ -107,7 +111,7 @@ fun PlayerList() {
                         style = MaterialTheme.typography.h3,
                         textAlign = TextAlign.Center
                     )
-                    ParameterBars(0.1f, 0.1f, 0.1f, 0.1f)
+                    ParameterBars(Statistics(), 0.1f)
                     Text(
                         text = "Player6",
                         fontFamily = caveatBold,
@@ -115,7 +119,7 @@ fun PlayerList() {
                         style = MaterialTheme.typography.h3,
                         textAlign = TextAlign.Center
                     )
-                    ParameterBars(0.1f, 0.1f, 0.1f, 0.1f)
+                    ParameterBars(Statistics(), 0.1f)
                     Text(
                         text = "Player7",
                         fontFamily = caveatBold,
@@ -123,7 +127,7 @@ fun PlayerList() {
                         style = MaterialTheme.typography.h3,
                         textAlign = TextAlign.Center
                     )
-                    ParameterBars(0.1f, 0.1f, 0.1f, 0.1f)
+                    ParameterBars(Statistics(), 0.1f)
                     Text(
                         text = "Player8",
                         fontFamily = caveatBold,
@@ -131,7 +135,7 @@ fun PlayerList() {
                         style = MaterialTheme.typography.h3,
                         textAlign = TextAlign.Center
                     )
-                    ParameterBars(0.1f, 0.1f, 0.1f, 0.1f)
+                    ParameterBars(Statistics(), 0.1f)
                     Text(
                         text = "Player9",
                         fontFamily = caveatBold,
@@ -139,14 +143,15 @@ fun PlayerList() {
                         style = MaterialTheme.typography.h3,
                         textAlign = TextAlign.Center
                     )
-                    ParameterBars(0.1f, 0.1f, 0.1f, 0.1f)
+                    ParameterBars(Statistics(), 0.1f)
                     Spacer(modifier = Modifier.size(25.dp))
+                     */
                 }
             MyButton(
-                title = "EXIT",
+                title = "END GAME",
                 description = "FINE DEL GIOCO",
                 buttonHeight = 100,
-                {/*vm.onExitGameButtonPressed()*/ })
+                ){/*vm.onExitGameButtonPressed()*/ }
 
                 //cliccando il button la partita termina
             }
@@ -156,5 +161,5 @@ fun PlayerList() {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun previewPlayerList(){
-    PlayerList()
+    MyPlayerData(listOf())
 }

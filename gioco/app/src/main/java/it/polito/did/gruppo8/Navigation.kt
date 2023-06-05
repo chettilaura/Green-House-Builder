@@ -88,7 +88,7 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(route = ScreenName.HouseOverview.route) {
-            HouseOverviewScreen()
+            HouseOverviewScreen(vm)
         }
 
         composable(route = ScreenName.Error.route) {

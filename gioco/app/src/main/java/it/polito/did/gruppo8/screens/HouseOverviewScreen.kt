@@ -2,6 +2,7 @@ package it.polito.did.gruppo8.screens
 
 import MyAlertDialog
 import android.util.Log
+import androidx.compose.runtime.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,9 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Item
 import it.polito.did.gruppo8.util.myComposable.MoneyCard
@@ -61,19 +64,25 @@ val caveatBold = FontFamily(
 )
 
 @Composable
-fun HouseOverviewScreen(modifier: Modifier = Modifier)
+fun HouseOverviewScreen(vm: GameViewModel, modifier: Modifier = Modifier)
 {
+    /*
     val colorTurn = rememberSaveable {
         mutableStateOf ("RED")
     }
-    val numeroTurno = rememberSaveable{
+    val numeroTurno = rememberSaveable {
         mutableStateOf("1/8")
     }
     val money = rememberSaveable{
         mutableStateOf (534)
     }
+     */
+    val gameInfos by vm.gameInfos.observeAsState()
+    val players by vm.players.observeAsState()
+
     //lista di 20 oggetti per test dell'interfaccia
-    val itemList = generateItemList(20)
+    //val itemList = generateItemList(20)
+    val shop by vm.shop.observeAsState()
 
     //controllo per visualizzare casa o lista di oggetti acquistati
     var houseVisibility by remember { mutableStateOf(true) }
@@ -102,7 +111,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ParameterBars(0.7f, 0.4f, 0.5f, 0.15f)
+            ParameterBars(players!![vm.myPlayerId]!!.house.stats,0.15f)
 
             Row(modifier = Modifier
                 .fillMaxWidth()
@@ -111,24 +120,29 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ){
-                RoundCard(numeroTurno.value, "2")
+                //RoundCard(numeroTurno.value, "2")
+                RoundCard("${gameInfos!!.roundCounter+1}/${gameInfos!!.totalRounds}",
+                    "${gameInfos!!.turnCounter+1}/${gameInfos!!.totalTurns}")
                 Spacer(modifier = Modifier.weight(1f))
 
-                MyTimerCard(30, {})
+                MyTimerCard(gameInfos!!.turnTime){
+                    //TODO: End Turn
+                    vm.onEndTurnButtonPressed()
+                }
                 Spacer(modifier = Modifier.weight(1f))
 
-                MoneyCard(money.value)
+                MoneyCard(players!![vm.myPlayerId]!!.wallet.coins)
             }
 
             if (houseVisibility){
-                HouseViewBox(/*TODO: passare lista degli oggetti da mostrare nella casa*/)
+                HouseViewBox(players!![vm.myPlayerId]!!.house.items)
             } else{
                 if(shopVisibility){
                     Box(
                         modifier = Modifier.weight(1f)
                     ) {
                         //lista di oggetti nello shop
-                        MyItemListCard(itemList = itemList,
+                        MyItemListCard(itemList = shop!!.values.toList(),
                             enabledCardClick = true,
                             onClickEvent = {
                                 selectedItem = it
@@ -140,7 +154,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                         modifier = Modifier.weight(1f)
                     ) {
                         //lista di oggetti acquistati
-                        MyItemListCard(itemList = itemList, false) {}
+                        MyItemListCard(itemList = players!![vm.myPlayerId]!!.house.items, false) {}
                     }
                 }
             }
@@ -170,6 +184,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
             //button per terminare il turno
             MyButton(title = "END TURN", description = "End turn button", 50) {
                 /*TODO: passare funzione per terminare il turno*/
+                vm.onEndTurnButtonPressed()
             }
 
             //alert per conferma di acquisto
@@ -177,6 +192,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                 MyAlertDialog(
                     item = selectedItem,
                     dismissAlert = {openDialog = !openDialog},
+                    canBuy = selectedItem.price <= players!![vm.myPlayerId]!!.wallet.coins,
                     buyItem = {
                         openDialog = !openDialog //disabilita Alert
                         disableButton = false //disabilita button dello shop
@@ -184,6 +200,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
                         shopVisibility = false // disabilita vista shop
                         Log.d("PROVA", "PROVA LOG")
                     /*TODO: passare funzione per aggiungere oggetto salvato in selectedItem a lista acquistati*/
+                        vm.onBuyButtonPressed(selectedItem.id)
                     })
             }
         }
@@ -191,7 +208,7 @@ fun HouseOverviewScreen(modifier: Modifier = Modifier)
 }
 
 @Composable
-fun HouseViewBox(/*TODO: passare lista di degli oggetti acquistati, ad esempio ownedItems: List<Item>*/) {
+fun HouseViewBox(ownedItems: ArrayList<Item>) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -204,16 +221,16 @@ fun HouseViewBox(/*TODO: passare lista di degli oggetti acquistati, ad esempio o
             contentScale = ContentScale.FillBounds
         )
 
-        /*TODO: foreach per scorrere lista di oggetti e caricare le relative immagini, DA TESTARE
-        ownedItems.forEachIndexed { index, item ->
-            Image(painter = rememberImagePainter(data = item.itemURL),
-                contentDescription = item.description,
+        ownedItems.forEachIndexed { _, item ->
+            Image(painter = rememberImagePainter(data = item.houseSpriteURL),
+                contentDescription = "sprite_description",
                 modifier = Modifier.fillMaxWidth(),
                 contentScale = ContentScale.FillBounds
             )
-        }*/
+        }
 
         //IMMAGINI DI PROVA
+        /*
         Image(painter = painterResource(R.drawable.shower_int),
             contentDescription = "house",
             modifier = Modifier.fillMaxWidth(),
@@ -224,11 +241,12 @@ fun HouseViewBox(/*TODO: passare lista di degli oggetti acquistati, ad esempio o
             modifier = Modifier.fillMaxWidth(),
             contentScale = ContentScale.FillBounds
         )
+         */
     }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HouseOverviewScreenPreview() {
-    HouseOverviewScreen()
+    HouseOverviewScreen(GameViewModel())
 }

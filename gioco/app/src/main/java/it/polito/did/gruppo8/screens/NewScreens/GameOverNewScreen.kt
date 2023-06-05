@@ -22,14 +22,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
-import it.polito.did.gruppo8.util.myComposable.PlayerList
+import it.polito.did.gruppo8.util.myComposable.MyPlayerData
 
 //SCHERMAT VISIBILE AL TERMINE DELLA PARTITA
 
 @Composable
 fun GameOverScreen(modifier: Modifier = Modifier) {
 
+    val players = listOf<Player>()
+    //val players by vm.players!!.observaAsState()
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
             painter = painterResource(R.drawable.bg),
@@ -45,7 +48,7 @@ fun GameOverScreen(modifier: Modifier = Modifier) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally){
-                PlayerList() //da passare i giocatori e relativi parametri a funzione originale
+                MyPlayerData(players) //da passare i giocatori e relativi parametri a funzione originale
 
             }
 
