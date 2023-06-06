@@ -74,7 +74,7 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
 
             /*PlayersList(players?.values!!.toList())*/
             /*TODO: controllare se in questo modo funziona*/
-            MyPlayerNameListCard(header = "PLAYERS", playersList = players?.values!!.toList())
+            MyPlayerNameListCard(header = "PLAYERS\n${players?.values!!.size}", playersList = players?.values!!.toList())
 
             Spacer(modifier = Modifier.size(10.dp))
 

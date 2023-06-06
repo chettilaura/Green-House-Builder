@@ -59,7 +59,6 @@ fun MyPlayerData(players: List<Player>) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
                     players.forEach { player ->
                         Text(
                             text = player.nickname,

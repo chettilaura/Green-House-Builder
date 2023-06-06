@@ -10,5 +10,6 @@ class Wallet {
 
     fun removeCoins(amount: Int){
         coins -= amount
+        if (coins<0) coins = 0
     }
 }

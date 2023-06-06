@@ -24,8 +24,13 @@ class Statistics {
                lowcostModifier: StatModifier
     ){
         green += greenModifier.value
+        if(green<0) green = 0
+
         comfy += comfyModifier.value
+        if(comfy<0) comfy = 0
+
         lowcost += lowcostModifier.value
+        if(lowcost<0) lowcost = 0
     }
 
     fun weightedAverage(): Float{

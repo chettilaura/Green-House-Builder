@@ -257,7 +257,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 } else {
                     // Sottrai denaro
                     Log.d("VerifyQuiz","Answer wrong!")
-                    _mutablePlayers.value!![myPlayerId]!!.wallet.removeCoins(50)
+                    _mutablePlayers.value!![myPlayerId]!!.wallet.removeCoins(25)
                     switchScreen(ScreenName.WrongAnswer)
                 }
             }
