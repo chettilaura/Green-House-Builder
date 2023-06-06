@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.GameInfos
 import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
@@ -40,6 +41,10 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
 {
     var nPlayers by remember { mutableStateOf(TextFieldValue("")) }
     val players by vm.players.observeAsState()
+
+    var totalRounds by remember { mutableStateOf(vm.gameInfos.value!!.totalRounds) }
+    var turnTime by remember { mutableStateOf(vm.gameInfos.value!!.turnTime) }
+    var quizTime by remember { mutableStateOf(vm.gameInfos.value!!.quizTime) }
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
@@ -67,24 +72,9 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
 
             Spacer(modifier = Modifier.size(10.dp))
 
-            /*
-            TODO: playerNames deve essere una lista di tipo LiveData, che contiene le stringhe dei
-             dei giocatori. Ancora da implementare l'aspetto grafico del composable che mostra
-             a schermo la lista.
-             Si potrebbe definire nel ViewModel nel modo seguente:
-             val playerNames: LiveData <List<String>> = playerDataObserver.getPlayerNames()
-             -Edo
-             La funzionalià è stata implementata trattando il LiveData players del ViewModel come uno
-             State ottenuto dalla dichiarazione a riga 42. Si può accedere a tutta la collection di
-             Players e leggerne il nome come fatto nel composable.
-             -Mattia
-             */
             /*PlayersList(players?.values!!.toList())*/
             /*TODO: controllare se in questo modo funziona*/
             MyPlayerNameListCard(header = "PLAYERS", playersList = players?.values!!.toList())
-
-
-
 
             Spacer(modifier = Modifier.size(10.dp))
 
@@ -105,12 +95,16 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
                 Popup(
                     alignment = Center,
                     onDismissRequest = { setGamePopUpControl = false }) {
-                    SetUpPopUp()
+                    SetUpPopUp(totalRounds, turnTime, quizTime){ newTotalRounds, newTurnTime, newQuizTime ->
+                        totalRounds = newTotalRounds
+                        turnTime = newTurnTime
+                        quizTime = newQuizTime
+                    }
                 }
             }
 
             //StartGameButton(title = "START", description = "start game button", onStartButtonPressed)
-            MyButton(title = "START", description = "start game button", 100) {vm.onStartButtonPressed()}
+            MyButton(title = "START", description = "start game button", 100) {vm.onStartButtonPressed(totalRounds, turnTime, quizTime)}
         }
 
     }
@@ -127,10 +121,16 @@ fun PlayersList(players: List<Player>) {
 }
 
 @Composable
-fun SetUpPopUp() {
+fun SetUpPopUp(totalRounds: Int,
+               turnTime: Int,
+               quizTime: Int,
+               updateGameInfos: (newTotalRounds:Int,newTurnTime:Int,newQuizTime:Int)->Unit) {
     val shape = RoundedCornerShape(30.dp)
     //TODO: manca implementare la logica delle impostazioni della partita nel backend
-    var tofill by remember { mutableStateOf("") }
+    var totalRounds_temp by remember { mutableStateOf(totalRounds.toString()) }
+    var turnTime_temp by remember { mutableStateOf(turnTime.toString()) }
+    var quizTime_temp by remember { mutableStateOf(quizTime.toString()) }
+
     Box(
         modifier = Modifier
             .size(400.dp, 400.dp)
@@ -149,18 +149,19 @@ fun SetUpPopUp() {
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceAround,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    //TODO: sono campi fantasma per ora, perchè manca la logica in backend
-                    MyFormLine(title ="Max Players" , label = "players", targetValue = tofill, {})
-                    MyFormLine(title ="Turns" , label = "players", targetValue = tofill, {})
-                    MyFormLine(title ="Time" , label = "players", targetValue = tofill, {})
-                }
+            Column(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceAround,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                //TODO: sono campi fantasma per ora, perchè manca la logica in backend
+                MyFormLine(title ="Total rounds" , label = "players", targetValue = totalRounds_temp){totalRounds_temp = it}
+                MyFormLine(title ="Quiz time" , label = "players", targetValue = quizTime_temp){quizTime_temp = it}
+                MyFormLine(title ="Turn time" , label = "players", targetValue = turnTime_temp){turnTime_temp = it}
+                updateGameInfos.invoke(totalRounds_temp.toInt(), turnTime_temp.toInt(), quizTime_temp.toInt())
+            }
         }
     }
 }

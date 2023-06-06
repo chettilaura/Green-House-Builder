@@ -13,6 +13,7 @@ import java.time.LocalDateTime
 
 import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.model.baseClasses.*
+import it.polito.did.gruppo8.screens.ErrorScreen
 import it.polito.did.gruppo8.util.myLibs.MyRandom
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -84,7 +85,6 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
      * @param screenName the ScreenName class corresponding to the desired screen.
      * @param updateDatabase a Boolean telling if the screen switch must be notified to the Database. Default value is false.
      */
-
     fun switchScreen(screenName: ScreenName, updateDatabase: Boolean = false){
         try {
             if(updateDatabase){
@@ -133,12 +133,32 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         }
     }
 
-    fun startGame() {
+    fun startGame(totalRounds: Int, turnTime: Int, quizTime: Int) {
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
+
+        if(players.value!!.entries.size == 0)
+            switchScreen(ScreenName.Error)
+
+        _mutableGameInfos.value!!.totalRounds = totalRounds
+        _mutableGameInfos.value!!.turnTime = turnTime
+        _mutableGameInfos.value!!.quizTime = quizTime
         _mutableGameInfos.value!!.totalTurns = _mutablePlayers.value!!.entries.size
+
+
 
         //Update Game settings
         _dbManager.writeData("$id/gameInfos", gameInfos.value)
+
+        //Subscribe to roundCounter to check if the game has reach the end
+        _dbManager.addListener("$id/gameInfos/roundCounter", "observeRounds",
+            onDataChange = {snapshot ->
+                val currentRoundCounter = snapshot.getValue(Int::class.java)
+                if(currentRoundCounter == gameInfos.value!!.totalRounds){
+                    endGame()
+                }
+            },
+            onCancelled = {switchScreen(ScreenName.Error, updateDatabase = true)}
+        )
 
         //Host switches to the Dashboard
         switchScreen(ScreenName.Dashboard)
@@ -155,6 +175,11 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         _mutablePlayers.value = _mutablePlayers.value!!.toList().sortedBy { (_, player) ->
             player.house.stats.weightedAverage()
         }.toMap().toMutableMap()
+    }
+
+    fun endGame(){
+        rankPlayers()
+        switchScreen(ScreenName.GameOver, updateDatabase = true)
     }
     //endregion
 
@@ -394,6 +419,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             if(cachedInfos.roundCounter == cachedInfos.totalRounds){
                 Log.d("GameManager", "END GAME")
                 //TODO: End Game
+                return
             }
         }
 

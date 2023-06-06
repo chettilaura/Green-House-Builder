@@ -28,8 +28,8 @@ class GameViewModel: ViewModel() {
     // NewGameScreen
     fun onCreateCityButtonPressed(cityName: String) = gameManager.createNewGame(cityName)
     //fun onGameSetupButtonPressed() = null
-    fun onStartButtonPressed(){
-        gameManager.startGame()
+    fun onStartButtonPressed(totalRounds: Int, turnTime: Int, quizTime: Int){
+        gameManager.startGame(totalRounds, turnTime, quizTime)
     }
 
     // JoinGameScreen

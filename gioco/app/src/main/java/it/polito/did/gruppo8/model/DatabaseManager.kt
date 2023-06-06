@@ -121,8 +121,10 @@ class DatabaseManager() {
     /**
      * Subscribes a ValueEventListener to the data located in a specific path of the database.
      *
-     * @param path the path of the target data
-     * @param listener a listener operation which implements ValueEventListener
+     * @param path the path of the target data.
+     * @param listenerId an identifier for the listener that is going to be subscribed.
+     * @param onDataChange the callback called every time the data at path changes.
+     * @param onCancelled the callback called if the data at path is deleted.
      */
     /*
     fun addListener(path: String, listener: ValueEventListener){

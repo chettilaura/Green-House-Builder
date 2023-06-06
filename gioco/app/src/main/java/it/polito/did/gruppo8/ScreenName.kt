@@ -20,7 +20,7 @@ sealed class ScreenName (val route: String) {
     object WrongAnswer : ScreenName("wrong_answer_screen")
     object NoAnswer : ScreenName("no_answer_screen")
     object HouseOverview : ScreenName("house_overview_screen")
-
+    object GameOver: ScreenName("game_over_screen")
     object Error : ScreenName("error_screen")
 
     companion object{
@@ -43,6 +43,11 @@ sealed class ScreenName (val route: String) {
                 "dashboard_screen" -> Dashboard
                 "waiting_quiz_screen" -> WaitingQuiz
                 "quiz_screen" -> Quiz
+                "correct_answer_screen" -> CorrectAnswer
+                "wrong_answer_screen" -> WrongAnswer
+                "no_answer_screen" -> NoAnswer
+                "house_overview_screen" -> HouseOverview
+                "game_over_screen" -> GameOver
                 else -> Error
             }
         }

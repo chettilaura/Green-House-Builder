@@ -62,7 +62,7 @@ val caveatSemiBold = FontFamily(
 val caveatBold = FontFamily(
     Font(R.font.caveat_bold, FontWeight.Bold, FontStyle.Normal)
 )
-
+/*
 fun generateItemList(size: Int): MutableList<Item> {
     val itemList = mutableListOf<Item>()
     for (i in 1..size) {
@@ -71,6 +71,7 @@ fun generateItemList(size: Int): MutableList<Item> {
     }
     return itemList
 }
+ */
 
 @Composable
 fun HouseOverviewScreen(vm: GameViewModel, modifier: Modifier = Modifier)

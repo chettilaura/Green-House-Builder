@@ -32,7 +32,7 @@ import it.polito.did.gruppo8.util.myComposable.MyPlayerData
 fun GameOverScreen(modifier: Modifier = Modifier) {
 
     val players = listOf<Player>()
-    //val players by vm.players!!.observaAsState()
+    //val players by vm.players!!.observeAsState()
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
             painter = painterResource(R.drawable.bg),

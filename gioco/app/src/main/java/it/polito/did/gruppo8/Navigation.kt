@@ -60,7 +60,7 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(route = ScreenName.Dashboard.route) {
-            DashboardScreen()
+            DashboardScreen(vm)
         }
 
         composable(route = ScreenName.FreeItem.route) {
@@ -89,6 +89,10 @@ fun Navigation(navController: NavHostController) {
 
         composable(route = ScreenName.HouseOverview.route) {
             HouseOverviewScreen(vm)
+        }
+
+        composable(route = ScreenName.GameOver.route) {
+            GameOverScreen()
         }
 
         composable(route = ScreenName.Error.route) {
