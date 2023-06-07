@@ -79,10 +79,10 @@ fun GameOverScreen(modifier: Modifier = Modifier) {
                         contentScale = ContentScale.Fit
                     )
 
-                //TODO: verificare che funzioni prendendo i primi 3 player dalla lista players
+                //TODO: verificare che funzioni prendendo i primi 3 player dalla lista players + aggiunta score dopo Text()
 
 //                Text(
-//                    text = players[1].nickname,
+//                    text = players[0].nickname,
 //                    fontFamily = caveatBold,
 //                    color = DarkGreen,
 //                    style = MaterialTheme.typography.h3,
@@ -113,12 +113,12 @@ fun GameOverScreen(modifier: Modifier = Modifier) {
 
                     Image(
                         painter = painterResource(R.drawable.coccarda2),
-                        contentDescription = "primo posto",
+                        contentDescription = "secondo posto",
                         //modifier = Modifier.size(50.dp),
                         contentScale = ContentScale.Fit
                     )
 
-                //TODO: verificare che funzioni prendendo i primi 3 player dalla lista players
+                //TODO: verificare che funzioni prendendo i primi 3 player dalla lista players + aggiunta score dopo Text()
 
 //                Text(
 //                    text = players[1].nickname,
@@ -154,12 +154,12 @@ fun GameOverScreen(modifier: Modifier = Modifier) {
 
                     Image(
                         painter = painterResource(R.drawable.coccarda3),
-                        contentDescription = "primo posto",
+                        contentDescription = "terzo posto",
                         //modifier = Modifier.size(50.dp),
                         contentScale = ContentScale.Fit
                     )
 
-                //TODO: verificare che funzioni prendendo i primi 3 player dalla lista players
+                //TODO: verificare che funzioni prendendo i primi 3 player dalla lista players + aggiunta score dopo Text()
 //
 //                Text(
 //                    text = players[2].nickname,
