@@ -47,17 +47,31 @@ fun MyButton(title: String,
         .height(buttonHeight.dp)
         .fillMaxWidth()
     ){
-        Image(
-            painter = painterResource(R.drawable.empty_button),
-            contentDescription = description,
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier
-                .fillMaxWidth()
-                //.clickable { onJoinGame(gameID, playerName) }
-                .clickable(
-                    enabled = enabled,
-                    onClick = onClickEvent)
-        )
+        if(enabled){
+            Image(
+                painter = painterResource(R.drawable.empty_button),
+                contentDescription = description,
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    //.clickable { onJoinGame(gameID, playerName) }
+                    .clickable(
+                        enabled = enabled,
+                        onClick = onClickEvent)
+            )
+        } else{
+            Image(
+                painter = painterResource(R.drawable.empty_button_disabled),
+                contentDescription = description,
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    //.clickable { onJoinGame(gameID, playerName) }
+                    .clickable(
+                        enabled = enabled,
+                        onClick = onClickEvent)
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -71,7 +85,7 @@ fun MyButton(title: String,
             ) {
                 Text(title,
                     fontFamily = caveatBold,
-                    color = Color.White,
+                    color = if(enabled) Color.White else Color.DarkGray,
                     style = MaterialTheme.typography.h4)
             }
             Spacer(modifier = Modifier.size(10.dp))
