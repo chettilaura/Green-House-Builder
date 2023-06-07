@@ -104,7 +104,12 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
             }
 
             //StartGameButton(title = "START", description = "start game button", onStartButtonPressed)
-            MyButton(title = "START", description = "start game button", 100) {vm.onStartButtonPressed(totalRounds, turnTime, quizTime)}
+            MyButton(title = "START",
+                description = "start game button",
+                100,
+                enabled = players!!.values.isNotEmpty()
+            )
+            {vm.onStartButtonPressed(totalRounds, turnTime, quizTime)}
         }
 
     }
