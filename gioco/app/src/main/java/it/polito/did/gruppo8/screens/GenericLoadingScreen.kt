@@ -21,6 +21,7 @@ import it.polito.did.gruppo8.GameViewModel
 //Caricamento del quiz: contiene animazione di caricamento e indicazione sul quartiere di cui è il turno attivo
     //Se non è turno del giocatore, contiene pulsante per skip del quiz e descrizione su cosa fare
 
+/*TODO: da eliminare*/
 @Composable
 fun GenericLoadingScreen(modifier: Modifier = Modifier)
 {

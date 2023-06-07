@@ -9,6 +9,7 @@ import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.screens.NewScreens.*
 
+/*TODO: da eliminare*/
 /*
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {

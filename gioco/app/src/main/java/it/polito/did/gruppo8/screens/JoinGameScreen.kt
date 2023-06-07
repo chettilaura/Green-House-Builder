@@ -23,6 +23,7 @@ import it.polito.did.gruppo8.GameViewModel
 
 //contiene form per inserire nome del giocatore, form per inserire ID della partita, pulsante per creare la casa
 
+/*TODO: da spostare in NewScreens*/
 @Composable
 fun JoinGameScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
 

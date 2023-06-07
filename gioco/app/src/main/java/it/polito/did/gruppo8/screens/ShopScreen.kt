@@ -42,6 +42,8 @@ import it.polito.did.gruppo8.util.myComposable.MyTopBar
 //contiene il negozio: quattro possibili card da scegliere con oggetti casuali
 //deve essere presente anche indicazione sul turno, sul tempo rimanente per scegliere cosa fare, soldi rimanenti
 
+/*TODO: da eliminare, schermata già implementata in HouseOverview*/
+
 fun showAlert(show: Boolean): Boolean{
     return !show
 }

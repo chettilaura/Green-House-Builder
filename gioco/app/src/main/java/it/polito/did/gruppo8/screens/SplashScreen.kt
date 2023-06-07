@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.screens.icons.Splash
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 import kotlinx.coroutines.CoroutineScope
-
+/*TODO: da cambiare immagine della splash*/
 @Composable
 fun SplashScreen(modifier: Modifier = Modifier) {
     Box(

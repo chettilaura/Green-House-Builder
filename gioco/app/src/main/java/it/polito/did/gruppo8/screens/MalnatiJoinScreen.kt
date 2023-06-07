@@ -13,6 +13,7 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 //contiene form per inserire nome del giocatore, form per inserire ID della partita, pulsante per creare la casa
 //eventualmente anche possibilità di leggere codice QR
 
+/*TODO: da eliminare*/
 @Composable
 fun MalnatiJoinScreen(
     onJoinGame: (String, String) -> Unit,

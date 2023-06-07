@@ -41,6 +41,8 @@ import it.polito.did.gruppo8.util.myComposable.ParameterBars
 //è presente anche didascalia che dice cosa fare al giocatore
 //NOTA: lo sfondo è dello stesso colore del quartiere assegnato
 
+
+/*TODO: da eliminare, non è implementata nel loop di gioco, */
 @Composable
 fun FreeItemScreen(modifier: Modifier = Modifier){
 

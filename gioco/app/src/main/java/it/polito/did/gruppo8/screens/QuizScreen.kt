@@ -30,7 +30,7 @@ import it.polito.did.gruppo8.util.myComposable.MyTimerCard
 
 //contiene quiz: un box contiene la domanda, 6 pulsanti con le risposte da scegliere, pulsante per saltare il quiz
 //è presente anche indicazione del tempo rimanente per rispondere
-
+/*TODO: da spostare in NewScreens*/
 @Composable
 fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
     val players by vm.players.observeAsState()
@@ -97,7 +97,7 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                         Text(text = answer,
                             fontFamily = caveatBold,
                             color = Color.White,
-                            style = MaterialTheme.typography.body2)
+                            style = MaterialTheme.typography.h5)
                     }
                     Spacer(modifier = Modifier.size(8.dp))
                 }
@@ -156,7 +156,7 @@ fun QuizCard(
                     Modifier.padding(8.dp),
                     fontFamily = caveatBold,
                     color = Color.White,
-                    style = MaterialTheme.typography.body1)
+                    style = MaterialTheme.typography.h4)
             }
             /*Spacer(modifier = Modifier.size(8.dp))*/
 

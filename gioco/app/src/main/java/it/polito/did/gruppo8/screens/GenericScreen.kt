@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 
+/*TODO: da eliminare*/
 @Composable
 fun GenericScreen( title: String, modifier: Modifier = Modifier, content: @Composable() () -> Unit = {} )
 {

@@ -2,7 +2,16 @@ package it.polito.did.gruppo8.screens.NewScreens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,17 +32,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
-import it.polito.did.gruppo8.model.baseClasses.GameInfos
 import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
-import it.polito.did.gruppo8.util.myComposable.*
+import it.polito.did.gruppo8.util.myComposable.InformationCard
+import it.polito.did.gruppo8.util.myComposable.MyButton
+import it.polito.did.gruppo8.util.myComposable.MyFormLine
+import it.polito.did.gruppo8.util.myComposable.MyPlayerNameListCard
+import it.polito.did.gruppo8.util.myComposable.MyTopBar
 
 
 @Composable
@@ -91,7 +102,6 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
             Spacer(modifier = Modifier.size(5.dp))
 
             if (setGamePopUpControl) {
-
                 Popup(
                     alignment = Center,
                     onDismissRequest = { setGamePopUpControl = false }) {
@@ -130,7 +140,7 @@ fun SetUpPopUp(totalRounds: Int,
                turnTime: Int,
                quizTime: Int,
                updateGameInfos: (newTotalRounds:Int,newTurnTime:Int,newQuizTime:Int)->Unit) {
-    val shape = RoundedCornerShape(30.dp)
+    val shape = RoundedCornerShape(25.dp)
     //TODO: manca implementare la logica delle impostazioni della partita nel backend
     var totalRounds_temp by remember { mutableStateOf(totalRounds.toString()) }
     var turnTime_temp by remember { mutableStateOf(turnTime.toString()) }
@@ -162,15 +172,14 @@ fun SetUpPopUp(totalRounds: Int,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 //TODO: sono campi fantasma per ora, perchè manca la logica in backend
-                MyFormLine(title ="Total rounds" , label = "players", targetValue = totalRounds_temp){totalRounds_temp = it}
-                MyFormLine(title ="Quiz time" , label = "players", targetValue = quizTime_temp){quizTime_temp = it}
-                MyFormLine(title ="Turn time" , label = "players", targetValue = turnTime_temp){turnTime_temp = it}
+                MyFormLine(title ="Total rounds" , label = "players", targetValue = totalRounds_temp){value -> totalRounds_temp = value}
+                MyFormLine(title ="Quiz time" , label = "players", targetValue = quizTime_temp){value -> quizTime_temp = value}
+                MyFormLine(title ="Turn time" , label = "players", targetValue = turnTime_temp){value -> turnTime_temp = value}
                 updateGameInfos.invoke(totalRounds_temp.toInt(), turnTime_temp.toInt(), quizTime_temp.toInt())
             }
         }
     }
 }
-
 
 @Composable
 fun CityNameField(title: String, description: String) {

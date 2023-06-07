@@ -17,6 +17,7 @@ import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 //onStartNewGame è un nome locale per indicare che riceve da mainscreen "onCreateNewGame" che è def in view model che corrisponde a "createNewGame" in game manager
 //funzioni composable accettano un Modifier
 
+/*TODO: da eliminare*/
 @Composable
 fun InitialScreen(onStartNewGame: () -> Unit,  onJoinGame: (String) -> Unit,  modifier: Modifier = Modifier)
 {

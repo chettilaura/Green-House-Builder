@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 import it.polito.did.gruppo8.model.baseClasses.*
 
+/*TODO: da eliminare*/
 
 @Composable
 fun SetupMatchScreen(

@@ -50,6 +50,8 @@ import it.polito.did.gruppo8.util.myComposable.RoundCard
 //      pulsante di back/possibilità di swipare a destra per tornare alla vista precedente
 //NOTA: lo sfondo è dello stesso colore del quartiere assegnato al giocatore
 
+/*TODO: da ripulire e spostare in NewScreen*/
+
 val caveatRegular = FontFamily(
     Font(R.font.caveat_regular, FontWeight.Normal, FontStyle.Normal)
 )
@@ -62,16 +64,6 @@ val caveatSemiBold = FontFamily(
 val caveatBold = FontFamily(
     Font(R.font.caveat_bold, FontWeight.Bold, FontStyle.Normal)
 )
-/*
-fun generateItemList(size: Int): MutableList<Item> {
-    val itemList = mutableListOf<Item>()
-    for (i in 1..size) {
-        val item = Item()
-        itemList.add(item)
-    }
-    return itemList
-}
- */
 
 @Composable
 fun HouseOverviewScreen(vm: GameViewModel, modifier: Modifier = Modifier)
