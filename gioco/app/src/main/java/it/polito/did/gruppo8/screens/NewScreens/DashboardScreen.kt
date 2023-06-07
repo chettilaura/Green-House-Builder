@@ -28,6 +28,7 @@ import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.util.myComposable.MyPlayerData
+import it.polito.did.gruppo8.util.myComposable.RoundCard
 
 //SCHERMATA CHE VEDE SOLO L'HOST
 
@@ -35,6 +36,7 @@ import it.polito.did.gruppo8.util.myComposable.MyPlayerData
 fun DashboardScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
     val players by vm.players.observeAsState()
+    val gameInfos by vm.gameInfos.observeAsState()
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
@@ -48,6 +50,8 @@ fun DashboardScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally) {
             DashBoardTopBar(title = "City of ${vm.gameInfos.value!!.cityName}", colorId = colorResource(id = R.color.cal_poly_green))
 
+            RoundCard("${gameInfos!!.roundCounter+1}/${gameInfos!!.totalRounds}",
+                "${gameInfos!!.turnCounter+1}/${gameInfos!!.totalTurns}")
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally){
