@@ -47,31 +47,22 @@ fun MyButton(title: String,
         .height(buttonHeight.dp)
         .fillMaxWidth()
     ){
-        if(enabled){
-            Image(
-                painter = painterResource(R.drawable.empty_button),
-                contentDescription = description,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    //.clickable { onJoinGame(gameID, playerName) }
-                    .clickable(
-                        enabled = enabled,
-                        onClick = onClickEvent)
-            )
-        } else{
-            Image(
-                painter = painterResource(R.drawable.empty_button_disabled),
-                contentDescription = description,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    //.clickable { onJoinGame(gameID, playerName) }
-                    .clickable(
-                        enabled = enabled,
-                        onClick = onClickEvent)
-            )
-        }
+        Image(
+            painter = painterResource(
+                if (enabled)
+                    R.drawable.empty_button
+                else
+                    R.drawable.empty_button_disabled
+            ),
+            contentDescription = description,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+                .fillMaxWidth()
+                //.clickable { onJoinGame(gameID, playerName) }
+                .clickable(
+                    enabled = enabled,
+                    onClick = onClickEvent)
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize(),
