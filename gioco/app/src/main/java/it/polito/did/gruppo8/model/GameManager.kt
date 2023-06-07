@@ -230,6 +230,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
         //Risposta non data
         if(answer==-1){
+            notifyAnswerToArduino(2)
             Log.d("VerifyQuiz", "Answer not given")
             switchScreen(ScreenName.NoAnswer)
         }
@@ -237,11 +238,13 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             // Turno del giocatore corrente
             if (isPlayerTurn) {
                 if (result) {
+                    notifyAnswerToArduino(0)
                     // Aggiungi denaro e vai al turno
                     Log.d("VerifyQuiz", "Answer correct!")
                     _mutablePlayers.value!![myPlayerId]!!.wallet.addCoins(50)
                     switchScreen(ScreenName.CorrectAnswer)
                 } else {
+                    notifyAnswerToArduino(1)
                     // Skippa il turno
                     Log.d("VerifyQuiz", "Answer wrong!")
                     switchScreen(ScreenName.WrongAnswer)
@@ -251,11 +254,13 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             else {
                 if (result) {
                     // Aggiungi denaro
+                    notifyAnswerToArduino(0)
                     Log.d("VerifyQuiz", "Answer correct!")
                     _mutablePlayers.value!![myPlayerId]!!.wallet.addCoins(50)
                     switchScreen(ScreenName.CorrectAnswer)
                 } else {
                     // Sottrai denaro
+                    notifyAnswerToArduino(1)
                     Log.d("VerifyQuiz","Answer wrong!")
                     _mutablePlayers.value!![myPlayerId]!!.wallet.removeCoins(25)
                     switchScreen(ScreenName.WrongAnswer)
@@ -435,6 +440,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         // Update db
         _dbManager.writeData("$id/gameInfos", gameInfos.value)
         Log.d("GameManager", "Turn of ${players.value!![gameInfos.value!!.currentPlayerId]!!.nickname}")
+        notifyNextTurnToArduino(players.value!![gameInfos.value!!.currentPlayerId]!!.nickname)
 
         // Coroutine to pass to the next quiz
         scope.launch {
@@ -442,6 +448,17 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             delay(5000)
             _dbManager.writeData("$id/screen", ScreenName.Quiz.route)
         }
+    }
+    //endregion
+
+    //region Arduino Methods
+    private fun notifyAnswerToArduino(result: Int){
+        _dbManager.writeData("arduino/rispostaQuiz", result)
+    }
+
+    private fun notifyNextTurnToArduino(nickname: String){
+        _dbManager.writeData("arduino/nomeTurno", nickname)
+        _dbManager.writeData("arduino/cambioTurno", 1)
     }
     //endregion
 }
