@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -28,6 +29,7 @@ import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.screens.caveatSemiBold
 import it.polito.did.gruppo8.util.myComposable.LoadingAnimation
+import java.util.Locale
 
 @Composable
 fun WaitingScreen(
@@ -46,12 +48,12 @@ fun WaitingScreen(
         /*MyTopBar(title = "WAITING", colorId = colorResource(id = R.color.cal_poly_green))*/
         Column(
             modifier = Modifier
-                .fillMaxHeight()
+                .fillMaxWidth()
                 .padding(8.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.weight(0.4f))
+            Spacer(modifier = Modifier.weight(1f))
             Row(
                 modifier = Modifier,
                 horizontalArrangement = Arrangement.Center,
@@ -72,7 +74,7 @@ fun WaitingScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = bottomText,
+                text = bottomText.uppercase(Locale.getDefault()),
                 color = Color.Black,
                 fontFamily = caveatSemiBold,
                 style = MaterialTheme.typography.h3,

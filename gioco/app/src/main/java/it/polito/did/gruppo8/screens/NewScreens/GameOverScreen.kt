@@ -12,10 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -29,18 +29,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
-import it.polito.did.gruppo8.ui.theme.DarkGreen
+import it.polito.did.gruppo8.screens.caveatSemiBold
 import it.polito.did.gruppo8.util.myComposable.MyButton
-import it.polito.did.gruppo8.util.myComposable.MyPlayerData
 import it.polito.did.gruppo8.util.myComposable.ParameterBars
 
 @Composable
@@ -57,35 +54,28 @@ fun GameOverScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
             contentScale = ContentScale.FillHeight
         )
         Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             GameOverTopBar(title = "GAME OVER ", colorId = colorResource(id = R.color.cal_poly_green))
 
-            RankedPlayers(players = players!!.values.toList().take(3))
-
-            Text(
-                text = "OVERALL",
-                fontFamily = caveatBold,
-                color = DarkGreen,
-                style = MaterialTheme.typography.h4,
-                textAlign = TextAlign.Center
-            )
-
-            //mostrata classifica generale (come in dashboard)
-
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally){
-                MyPlayerData(players!!.values.toList()) //da passare i giocatori e relativi parametri a funzione originale
-
+            LazyColumn(
+                modifier = Modifier
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                itemsIndexed(players!!.values.toList()) { index, player ->
+                    PlayerRankingCard(player, index)
+                }
             }
+            /*RankedPlayers(players = players!!.values.toList())*/
 
             MyButton(
                 title = "EXIT",
                 description = "FINE DEL GIOCO",
                 buttonHeight = 100,
-            ){/*vm.onExitGameButtonPressed()*/ }
-
+            ){/*vm.onExitGameButtonPressed() */}
         }
     }
 }
@@ -110,83 +100,97 @@ fun GameOverTopBar(title: String, colorId: Color) {
 
 @Composable
 fun RankedPlayers(players: List<Player>) {
-    Column(
+    LazyColumn(
         modifier = Modifier
-            .padding(5.dp),
-        verticalArrangement = Arrangement.Center,
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
+        itemsIndexed(players) { index, player ->
+            PlayerRankingCard(player, index)
+        }
+    }
+}
+
+@Composable
+fun PlayerRankingCard(player: Player, index:Int) {
+    Card(
+        modifier = Modifier
+            .padding(4.dp)
+            .wrapContentHeight(),
+        elevation = 4.dp,
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(
+            2.dp,
+            when (index) {
+                0 -> Color(0xFFDAA520)
+                1 -> Color(0xFFC0C0C0)
+                2 -> Color(0xFFCD7F32)
+                else -> Color.Black
+            })
+    ) {
+        Box(
             modifier = Modifier
-                .padding(15.dp)
-                .verticalScroll(rememberScrollState())
-                .weight(1f, false),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
         ) {
-            players.forEach { player ->
-
-                val placement = players.indexOf(player)
-
-                Card(modifier = Modifier
-//                  .width(120.dp)
-//                  .height(80.dp)
-                    .padding(10.dp),
-                    elevation = 4.dp,
-                    shape = RoundedCornerShape(15.dp),
-                    border = BorderStroke(3.dp,
-                        when(placement){
-                            0 -> Color(0xFFDAA520)
-                            1 -> Color(0xFFC0C0C0)
-                            2 -> Color(0xFFCD7F32)
-                            else -> {
-                                Color.DarkGray
-                            }
-                        }
-                    )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.15f),
-                        /*.padding(1.dp),*/
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        if(placement<=2) {
-                            Image(
-                                painter = painterResource(
-                                    when(placement){
-                                        0 -> R.drawable.coccarda1
-                                        1 -> R.drawable.coccarda2
-                                        2 -> R.drawable.coccarda3
-                                        else -> {
-                                            0
-                                        }
-                                    }
-                                ),
-                                contentDescription = "Award",
-                                //modifier = Modifier.size(50.dp),
-                                contentScale = ContentScale.Fit
-                            )
-                        }
-
-                        Text(
-                            text = player.nickname,
-                            fontFamily = caveatBold,
-                            color = DarkGreen,
-                            style = MaterialTheme.typography.h3,
-                            textAlign = TextAlign.Center
-                        )
-                        Text(
-                            text = player.house.stats.weightedAverage().toString(),
-                            fontFamily = caveatBold,
-                            color = DarkGreen,
-                            style = MaterialTheme.typography.h3,
-                            textAlign = TextAlign.Center
-                        )
-                        //ParameterBars(player.house.stats, 0.1f)
-                    }
+                    Image(
+                        painter = painterResource(
+                            when (index) {
+                                0 -> R.drawable.coccarda1
+                                1 -> R.drawable.coccarda2
+                                2 -> R.drawable.coccarda3
+                                else -> 0
+                            }),
+                        contentDescription = "Award",
+                        modifier = Modifier.size(50.dp)
+                    )
+                    Text(
+                        text = player.nickname + " ",
+                        fontFamily = caveatBold,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Start
+                    )
                 }
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = "SCORE: ",
+                        fontFamily = caveatSemiBold,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.h6,
+                        textAlign = TextAlign.Start
+                    )
+                    Text(
+                        text = player.house.stats.weightedAverage().toString(), /*TODO: controllare che sia punteggio corretto*/
+                        fontFamily = caveatBold,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Start
+                    )
+                }
+                ParameterBars(player.house.stats, 0.2f)
             }
         }
     }

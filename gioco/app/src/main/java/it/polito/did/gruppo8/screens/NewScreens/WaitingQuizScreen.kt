@@ -78,9 +78,9 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
             val nickname = if(gameInfos!!.currentPlayerId != players!![vm.myPlayerId]?.id)
                 players!![gameInfos!!.currentPlayerId]?.nickname?:""
             else
-                "Your"
+                "YOUR"
             QuizTopBar(
-                title = "It's $nickname turn",
+                title = "IT'S $nickname TURN",
                 colorId = colorResource(id = R.color.cal_poly_green)
             )
 
@@ -118,7 +118,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Text(
-                                        text = "If it's you...",
+                                        text = "IF IT'S YOU...",
                                         fontFamily = caveatBold,
                                         color = Color.White,
                                         style = MaterialTheme.typography.h4
@@ -139,7 +139,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "Right answer",
+                                                text = "RIGHT ANSWER",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -158,7 +158,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "Wrong answer",
+                                                text = "WRONG ANSWER",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -177,7 +177,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "No answer",
+                                                text = "NO ANSWER",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -203,7 +203,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Text(
-                                        text = "If it's not you...",
+                                        text = "IF IT'S NOT YOU...",
                                         fontFamily = caveatBold,
                                         color = Color.White,
                                         style = MaterialTheme.typography.h4
@@ -224,7 +224,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "Right answer",
+                                                text = "RIGHT ANSWER",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -244,7 +244,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "Wrong answer",
+                                                text = "WRONG ANSWER",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -265,7 +265,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                             horizontalArrangement = Arrangement.SpaceEvenly,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
-                                                text = "No answer",
+                                                text = "NO ANSWER",
                                                 fontFamily = caveatBold,
                                                 color = Color.Black,
                                                 style = MaterialTheme.typography.h5
@@ -281,17 +281,15 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                                 contentDescription = "houseIcon")
 
                                         }
-
                                     }
                                 }
-
                             }
                         }
                 }
             }
         }
-      }
     }
+}
 
 
 

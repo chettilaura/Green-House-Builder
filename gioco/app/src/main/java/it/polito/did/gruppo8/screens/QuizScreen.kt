@@ -95,7 +95,7 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                         border = BorderStroke(2.dp, Color.Black)
                     ) {
                         Text(text = answer,
-                            fontFamily = caveatBold,
+                            fontFamily = caveatSemiBold,
                             color = Color.White,
                             style = MaterialTheme.typography.h5)
                     }
@@ -145,7 +145,7 @@ fun QuizCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .fillMaxSize(0.4f)
+                    .fillMaxSize(0.5f)
                     .padding(8.dp),
                 backgroundColor = colorResource(id = R.color.asparagus),
                 elevation = 5.dp,
@@ -154,7 +154,7 @@ fun QuizCard(
             ) {
                 Text(text = quiz.question,
                     Modifier.padding(8.dp),
-                    fontFamily = caveatBold,
+                    fontFamily = caveatSemiBold,
                     color = Color.White,
                     style = MaterialTheme.typography.h4)
             }
