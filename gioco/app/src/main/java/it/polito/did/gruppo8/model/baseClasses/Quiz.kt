@@ -1,5 +1,6 @@
 package it.polito.did.gruppo8.model.baseClasses
 
+
 class Quiz() {
     var question : String = ""
     var answers : List<String> = listOf()
@@ -11,7 +12,14 @@ class Quiz() {
         this.correct = correctAnswer
     }
 
-    fun verifyAnswer(answerId : Int) : Boolean {
-        return answerId == correct;
+    enum class Result(){
+        NotGiven,
+        Wrong,
+        Correct
+    }
+    fun verifyAnswer(answerId : Int) : Result {
+        if(answerId==-1)
+            return Result.NotGiven
+        return if(answerId==correct) Result.Correct else Result.Wrong
     }
 }

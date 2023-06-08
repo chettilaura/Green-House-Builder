@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.ktx.getValue
 import it.polito.did.gruppo8.Navigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -13,7 +12,6 @@ import java.time.LocalDateTime
 
 import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.model.baseClasses.*
-import it.polito.did.gruppo8.screens.ErrorScreen
 import it.polito.did.gruppo8.util.myLibs.MyRandom
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -172,9 +170,13 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
     fun rankPlayers(){
         // Sort players based on weighted average of its stats
+        //TODO: Inverse sort
         _mutablePlayers.value = _mutablePlayers.value!!.toList().sortedBy { (_, player) ->
             player.house.stats.weightedAverage()
         }.toMap().toMutableMap()
+
+        val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
+        _dbManager.writeData("$id/players", players.value)
     }
 
     fun endGame(){
@@ -237,54 +239,39 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 "Answer: $answer, Correct: ${quiz.correct}" +
                 "Result: $result")
 
-        //Risposta non data
-        if(answer==-1){
-            notifyAnswerToArduino(2)
-            Log.d("VerifyQuiz", "Answer not given")
-            switchScreen(ScreenName.NoAnswer)
-        }
-        else {
-            // Turno del giocatore corrente
-            if (isPlayerTurn) {
-                if (result) {
-                    notifyAnswerToArduino(0)
-                    // Aggiungi denaro e vai al turno
-                    Log.d("VerifyQuiz", "Answer correct!")
-                    _mutablePlayers.value!![myPlayerId]!!.wallet.addCoins(50)
-                    switchScreen(ScreenName.CorrectAnswer)
-                } else {
-                    notifyAnswerToArduino(1)
-                    // Skippa il turno
-                    Log.d("VerifyQuiz", "Answer wrong!")
-                    switchScreen(ScreenName.WrongAnswer)
-                }
+        // Notify to Arduino
+        if(isPlayerTurn)
+            notifyAnswerToArduino(result)
+
+        // Switch to feedback screen and update wallet
+        when(result){
+            Quiz.Result.NotGiven -> {
+                Log.d("VerifyQuiz", "Answer not given")
+                switchScreen(ScreenName.NoAnswer)
             }
-            // Non è il turno del giocatore corrente
-            else {
-                if (result) {
-                    // Aggiungi denaro
-                    notifyAnswerToArduino(0)
-                    Log.d("VerifyQuiz", "Answer correct!")
-                    _mutablePlayers.value!![myPlayerId]!!.wallet.addCoins(50)
-                    switchScreen(ScreenName.CorrectAnswer)
-                } else {
-                    // Sottrai denaro
-                    notifyAnswerToArduino(1)
-                    Log.d("VerifyQuiz","Answer wrong!")
+
+            Quiz.Result.Wrong -> {
+                Log.d("VerifyQuiz", "Answer wrong!")
+                if(!isPlayerTurn)
                     _mutablePlayers.value!![myPlayerId]!!.wallet.removeCoins(25)
-                    switchScreen(ScreenName.WrongAnswer)
-                }
+                switchScreen(ScreenName.WrongAnswer)
+            }
+
+            Quiz.Result.Correct -> {
+                Log.d("VerifyQuiz", "Answer correct!")
+                _mutablePlayers.value!![myPlayerId]!!.wallet.addCoins(50)
+                switchScreen(ScreenName.CorrectAnswer)
             }
         }
 
         scope.launch {
             delay(3500)
-            if(result && isPlayerTurn) {
+            if(result==Quiz.Result.Correct && isPlayerTurn) {
                 // Switch to overview screen and play the turn
                 Log.d("VerifyQuiz", "Player is gonna play its turn")
                 switchScreen(ScreenName.HouseOverview)
             }
-            else if(!result && isPlayerTurn) {
+            else if(result==Quiz.Result.Wrong && isPlayerTurn) {
                 // Skip directly to next turn
                 Log.d("VerifyQuiz", "Player is gonna skip its turn")
                 nextTurn()
@@ -424,6 +411,8 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     private fun nextTurn(){
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
 
+        //TODO: Fix Notify Arduino only for player turn.
+
         // Update turn and round counter
         val cachedInfos = _mutableGameInfos.value!!
         cachedInfos.turnCounter++
@@ -461,8 +450,12 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     //endregion
 
     //region Arduino Methods
-    private fun notifyAnswerToArduino(result: Int){
-        _dbManager.writeData("arduino/rispostaQuiz", result)
+    private fun notifyAnswerToArduino(result: Quiz.Result){
+        when(result){
+            Quiz.Result.Correct -> _dbManager.writeData("arduino/rispostaQuiz", 0)
+            Quiz.Result.Wrong -> _dbManager.writeData("arduino/rispostaQuiz", 1)
+            Quiz.Result.NotGiven -> _dbManager.writeData("arduino/rispostaQuiz", 2)
+        }
     }
 
     private fun notifyNextTurnToArduino(nickname: String){
