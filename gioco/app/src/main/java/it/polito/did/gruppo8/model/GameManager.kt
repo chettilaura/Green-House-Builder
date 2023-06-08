@@ -144,10 +144,10 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         _mutableGameInfos.value!!.quizTime = quizTime
         _mutableGameInfos.value!!.totalTurns = _mutablePlayers.value!!.entries.size
 
-
-
         //Update Game settings
         _dbManager.writeData("$id/gameInfos", gameInfos.value)
+
+        observeGameInfos()
 
         //Subscribe to roundCounter to check if the game has reach the end
         _dbManager.addListener("$id/gameInfos/roundCounter", "observeRounds",
@@ -179,7 +179,16 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
     fun endGame(){
         rankPlayers()
+        Log.d("End Game", "Player ranked, going to End Screen")
         switchScreen(ScreenName.GameOver, updateDatabase = true)
+    }
+
+    fun exitGame(){
+        val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
+
+        // TODO: Reset all LiveDatas
+        switchScreen(ScreenName.MainMenu, updateDatabase = true)
+        _dbManager.removeData(id)
     }
     //endregion
 
@@ -423,7 +432,8 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             cachedInfos.roundCounter++
             if(cachedInfos.roundCounter == cachedInfos.totalRounds){
                 Log.d("GameManager", "END GAME")
-                //TODO: End Game
+                _mutableGameInfos.value = cachedInfos
+                _dbManager.writeData("$id/gameInfos", gameInfos.value)
                 return
             }
         }
@@ -431,7 +441,6 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         Log.d("GameManager", "Preparing ${cachedInfos.turnCounter} turn...")
 
         // Update next player id
-        //_currentPlayerIndex = (_currentPlayerIndex+1)%players.value!!.entries.size
         val newCurrentPlayer = players.value!!.entries.elementAtOrNull(cachedInfos.turnCounter)
             ?: throw RuntimeException("Errore nell'aggiornamento del prossimo player")
         cachedInfos.currentPlayerId = newCurrentPlayer.key

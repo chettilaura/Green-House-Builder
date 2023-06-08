@@ -27,6 +27,7 @@ import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
+import it.polito.did.gruppo8.util.myComposable.MyButton
 import it.polito.did.gruppo8.util.myComposable.MyPlayerData
 import it.polito.did.gruppo8.util.myComposable.RoundCard
 
@@ -56,6 +57,12 @@ fun DashboardScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally){
                 MyPlayerData(players!!.values.toList()) //passare i giocatori e relativi parametri a funzione originale
+
+                MyButton(
+                    title = "END GAME",
+                    description = "FINE DEL GIOCO",
+                    buttonHeight = 100,
+                ){/*vm.onExitGameButtonPressed()*/ }
             }
         }
     }

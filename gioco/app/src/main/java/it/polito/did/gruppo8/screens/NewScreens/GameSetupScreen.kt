@@ -139,9 +139,10 @@ fun PlayersList(players: List<Player>) {
 fun SetUpPopUp(totalRounds: Int,
                turnTime: Int,
                quizTime: Int,
-               updateGameInfos: (newTotalRounds:Int,newTurnTime:Int,newQuizTime:Int)->Unit) {
+               updateGameInfos: (newTotalRounds:Int, newTurnTime:Int, newQuizTime:Int)->Unit
+) {
     val shape = RoundedCornerShape(25.dp)
-    //TODO: manca implementare la logica delle impostazioni della partita nel backend
+
     var totalRounds_temp by remember { mutableStateOf(totalRounds.toString()) }
     var turnTime_temp by remember { mutableStateOf(turnTime.toString()) }
     var quizTime_temp by remember { mutableStateOf(quizTime.toString()) }

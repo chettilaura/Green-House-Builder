@@ -92,7 +92,7 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(route = ScreenName.GameOver.route) {
-            GameOverScreen()
+            GameOverScreen(vm)
         }
 
         composable(route = ScreenName.Error.route) {

@@ -46,4 +46,10 @@ class GameViewModel: ViewModel() {
     // HouseOverviewScreen
     fun onBuyButtonPressed(itemId: Int, free: Boolean = false) = gameManager.buyItemFromShop(itemId, free)
     fun onEndTurnButtonPressed() = gameManager.endTurn()
+
+    // DashboardScreen
+    fun onEndGameButtonPressed() = gameManager.endGame()
+
+    // GameOverScreen
+    fun onExitButtonPressed() = gameManager.exitGame()
 }

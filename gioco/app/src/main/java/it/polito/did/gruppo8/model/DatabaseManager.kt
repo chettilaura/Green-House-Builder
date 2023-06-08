@@ -80,6 +80,19 @@ class DatabaseManager() {
         }
     }
 
+    fun removeData(path: String){
+        _dbScope.launch{
+            _firebase.getReference(path).removeValue()
+                .addOnSuccessListener {
+                    Log.d("DatabaseManager", "Data removed at path $path")
+                }
+                .addOnFailureListener{
+                    Log.d("DatabaseManager", "ERROR: Could not remove data at path $path")
+                }
+                .await()
+        }
+    }
+
     /**
      * Retrieves the DataSnapshot from the database at specific path.
      *
