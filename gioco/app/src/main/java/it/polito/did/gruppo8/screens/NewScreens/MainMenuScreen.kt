@@ -120,7 +120,10 @@ fun popUpTutorial() {
     Box(
         modifier = Modifier
             .size(400.dp, 400.dp)
-            .clip(shape)
+            .clip(shape).border(
+                shape = shape,
+                border = BorderStroke(width = 2.dp, color = Color.Black)
+            )
             .background(Color(0xFF55825F))
     ) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -217,20 +220,32 @@ fun Instructions(){
     Column(modifier = Modifier
         .padding(15.dp)
         .verticalScroll(rememberScrollState())) {
-        //prendere da file scritto quando avremo il tutorial scritto
-        Text(text = "HOST \n" +
-                "Create new city clicking on the new game button, set up your match with your customs total rounds, quiz time and turn time clicking on Game setup button and start the game. You’ll see a dashboard with all players statistics during the game. \n" +
-                "\n" +
-                "PLAYER\n" +
-                "To start playing, click on “Join Game” button, write your player name and the Game ID of the reference match and create house. \n" +
-                "Once your player is settled, you can answer the quizzes all the time. \n" +
-                "When is your turn you can earn money if the answer is right or skip the turn when is wrong or don't submit answer.\n For the first case you can see your house stats and upgrade it by buying items from the shop trying to make it as green as possible. \n" +
-                "When it is not your turn, you have the same possibilities of answering but you can’t go to the shop in case of right answer and you lose money if the answer is wrong, so just wait for you’re turn. \n" +
-                "At the game ending all players standings will be visible and you’ll see your position among others. \n" +
-                "So, enjoy the match and MAKE IT GREEN! \n",
+
+        Text(text = "HOST",
+            fontFamily = caveatBold,
+            color = Color.Black,
+            style = MaterialTheme.typography.h5)
+
+        Text(text = "Create new city clicking on the new game button, set up your match with your customs total rounds, quiz time and turn time clicking on Game setup button and start the game. You’ll see a dashboard with all players statistics during the game. \n",
             fontFamily = caveatBold,
             color = Color.White,
-            style = MaterialTheme.typography.h5)}
+            style = MaterialTheme.typography.h5)
+
+        Text(text = "PLAYER",
+            fontFamily = caveatBold,
+            color = Color.Black,
+            style = MaterialTheme.typography.h5)
+
+        Text(text = "To start playing, click on “Join Game” button, write your player name and the Game ID of the reference match and create house. \n" +
+        "Once your player is settled, you can answer the quizzes all the time. \n" +
+                "When is your turn you can earn money if the answer is right or skip the turn when is wrong or don't submit answer.\n For the first case you can see your house stats and upgrade it by buying items from the shop trying to make it as green as possible. \n" +
+                "When it is not your turn, you have the same possibilities of answering but you can’t go to the shop in case of right answer and you lose money if the answer is wrong, so just wait for you’re turn and don't submit answer if you're not sure. \n" +
+                "At the game ending all players standings will be visible and you’ll see your position among others. \n" +
+                "So, enjoy the match and MAKE IT GREEN! \n",
+        fontFamily = caveatBold,
+        color = Color.White,
+        style = MaterialTheme.typography.h5)
+            }
 }
 
 /*--------------------------------------------------------------------*/
