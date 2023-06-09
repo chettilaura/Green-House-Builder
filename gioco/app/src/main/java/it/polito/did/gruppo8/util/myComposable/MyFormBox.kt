@@ -4,12 +4,17 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
@@ -26,20 +31,27 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
  * @param fraction used to set the height of the box
  */
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MyFormBox (title: String, label: String, targetValue: String, updateTargetCallback : (String)->Unit, fraction:Float) {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(fraction)
-        .padding(2.dp),
+fun MyFormBox(
+    title: String,
+    label: String,
+    targetValue: String,
+    updateTargetCallback: (String) -> Unit,
+    fraction: Float
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(fraction)
+            .padding(2.dp),
         backgroundColor = colorResource(id = R.color.emerald),
         elevation = 4.dp,
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(2.dp, Color.Black)
     ) {
         Column(
-            modifier = Modifier
-                .padding(8.dp),
+            modifier = Modifier.padding(8.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -47,36 +59,45 @@ fun MyFormBox (title: String, label: String, targetValue: String, updateTargetCa
                 text = title,
                 fontFamily = caveatSemiBold,
                 color = Color.White,
-                style = MaterialTheme.typography.h4)
+                style = MaterialTheme.typography.h4
+            )
             Spacer(modifier = Modifier.size(4.dp))
 
-            //var fieldValue by remember { mutableStateOf(TextFieldValue(""))}
+            val keyboardController = LocalSoftwareKeyboardController.current
+            val keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+
             TextField(
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    /*.background(colorResource(id = emerald))*/
+                modifier = Modifier.fillMaxWidth(0.9f)
                     .border(
                         width = 2.dp,
                         color = colorResource(id = R.color.cal_poly_green),
                         shape = RoundedCornerShape(10.dp)
                     ),
                 value = targetValue,
-                //onValueChange = { fieldValue = it },
-                onValueChange = updateTargetCallback,
+                onValueChange = { newValue ->
+                    if (newValue.length <= 13) {    //lunghezza massima dei caratteri inseriti
+                        updateTargetCallback(newValue)
+                    }
+                },
                 label = {
-                    Text(text = label,
+                    Text(
+                        text = label,
                         color = Color.White,
                         fontFamily = caveatRegular,
                         style = MaterialTheme.typography.body1
                     )
                 },
-                /*colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = colorResource(id = asparagus)
-                )*/
+                keyboardOptions = keyboardOptions,
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hideSoftwareKeyboard()
+                    }
+                )
             )
         }
     }
 }
+
 
 @Preview (showSystemUi = true, showBackground = true)
 @Composable
