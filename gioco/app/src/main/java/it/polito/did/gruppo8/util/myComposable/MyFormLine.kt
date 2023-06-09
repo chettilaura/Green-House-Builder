@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -19,8 +21,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +40,10 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
  * @param targetValue the string in which you want to save the user input.
  * @param updateTargetCallback action to trigger when field value change. ex. function: {targetValue = it}.
  */
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.ImeAction
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MyFormLine(
     title: String,
@@ -43,7 +51,6 @@ fun MyFormLine(
     targetValue: String,
     updateTargetCallback : (String)->Unit
 ) {
-
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(2.dp),
@@ -62,34 +69,47 @@ fun MyFormLine(
                 text = title,
                 fontFamily = caveatSemiBold,
                 color = Color.White,
-                style = MaterialTheme.typography.h4)
+                style = MaterialTheme.typography.h4
+            )
             Spacer(modifier = Modifier.size(4.dp))
+
+            val keyboardController = LocalSoftwareKeyboardController.current
+            val keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            )
 
             TextField(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
-                    /*.background(colorResource(id = emerald))*/
                     .border(
                         width = 2.dp,
                         color = colorResource(id = R.color.cal_poly_green),
                         shape = RoundedCornerShape(10.dp)
                     ),
                 value = targetValue,
-                onValueChange = updateTargetCallback,
+                onValueChange = { newValue ->
+                    if (newValue.length <= 13) {
+                        updateTargetCallback(newValue)
+                    }
+                },
                 label = {
-                    Text(text = label,
+                    Text(
+                        text = label,
                         color = Color.White,
                         fontFamily = caveatRegular,
                         style = MaterialTheme.typography.body1
                     )
                 },
-                /*colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = colorResource(id = asparagus)
-                )*/
+                keyboardOptions = keyboardOptions,
+                keyboardActions = KeyboardActions(
+                    onDone = { keyboardController?.hideSoftwareKeyboard() }
+                )
             )
         }
     }
 }
+
 
 @Preview
 @Composable

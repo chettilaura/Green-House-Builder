@@ -104,7 +104,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                         Box(
                             modifier = Modifier
-                                .size(400.dp, 400.dp)
+                                .size(450.dp, 450.dp)
                                 .clip(RoundedCornerShape(30.dp))
                                 .background(Color(0xFF599B68))
                         ) {
@@ -128,11 +128,12 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                 Box(modifier = Modifier) {
 
                                     Column(
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally,
                                         modifier = Modifier
                                             .padding(10.dp)
-                                            .fillMaxWidth(),
-                                        verticalArrangement = Arrangement.Center,
-                                        horizontalAlignment = Alignment.CenterHorizontally
+                                            .fillMaxWidth()
+
                                     ) {
                                         Row(modifier = Modifier
                                             .fillMaxWidth(),
@@ -148,8 +149,29 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
+                                            Text(
+                                                text = "+ 50",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h5
+                                            )
+
+                                            Spacer(modifier = Modifier.size(10.dp))
                                             Image(
                                                 painter = painterResource(id = R.drawable.coin),
+                                                contentDescription = "houseIcon" )
+
+                                            Spacer(modifier = Modifier.size(10.dp))
+
+                                            Text(
+                                                text = "AND",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h6
+                                            )
+
+                                            Image(
+                                                painter = painterResource(id = R.drawable.house),
                                                 contentDescription = "houseIcon" )
                                         }
 
@@ -167,9 +189,16 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
+                                            Text(
+                                                text = "SKIP TURN",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h6
+                                            )
                                             Image(
-                                                painter = painterResource(id = R.drawable.coin),
-                                                contentDescription = "coinIcon" )
+                                                modifier = Modifier.size(50.dp,50.dp),
+                                                painter = painterResource(id = R.drawable.noshop),
+                                                contentDescription = "houseIcon")
                                         }
 
                                         Row(modifier = Modifier
@@ -186,10 +215,22 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
-                                            Image(
-                                                painter = painterResource(id = R.drawable.coin),
-                                                contentDescription = "coinIcon"
+                                            Text(
+                                                text = "SKIP TURN",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h6
                                             )
+                                            Image(
+
+                                                painter = painterResource(id = R.drawable.coin),
+                                                contentDescription = "coinIcon",
+                                                modifier = Modifier.size(50.dp,50.dp),
+
+                                            )
+
+
+
                                         }
 
                                     }
@@ -234,10 +275,16 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
+                                            Text(
+                                                text = "+ 50",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h5
+                                            )
+
                                             Image(
-                                                modifier = Modifier.size(50.dp,50.dp),
-                                                painter = painterResource(id = R.drawable.house),
-                                                contentDescription = "houseIcon")
+                                                painter = painterResource(id = R.drawable.coin),
+                                                contentDescription = "houseIcon" )
                                         }
 
                                         Row(modifier = Modifier
@@ -254,16 +301,22 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
+                                            Text(
+                                                text = "- 25",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h5
+                                            )
+
                                             Image(
-                                                modifier = Modifier.size(50.dp,50.dp),
-                                                painter = painterResource(id = R.drawable.noshop),
-                                                contentDescription = "houseIcon")
+                                                painter = painterResource(id = R.drawable.coin),
+                                                contentDescription = "houseIcon" )
 
                                         }
 
                                         Row(modifier = Modifier
                                             .fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.SpaceEvenly,
+                                            horizontalArrangement = Arrangement.SpaceAround,
                                             verticalAlignment = Alignment.CenterVertically) {
                                             Text(
                                                 text = "NO ANSWER",
@@ -275,11 +328,12 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             // TODO:inserire valore delle monete
 
-                                            Image(
-                                                modifier = Modifier.size(50.dp,50.dp),
-                                                //TODO: Manca resource noshop nella cartella -Mattia
-                                                painter = painterResource(id = R.drawable.noshop),
-                                                contentDescription = "houseIcon")
+                                            Text(
+                                                text = "NOTHING HAPPEN",
+                                                fontFamily = caveatBold,
+                                                color = Color.Black,
+                                                style = MaterialTheme.typography.h6
+                                            )
 
                                         }
                                     }

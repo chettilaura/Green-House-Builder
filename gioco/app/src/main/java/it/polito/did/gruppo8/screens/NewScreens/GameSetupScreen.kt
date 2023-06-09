@@ -1,6 +1,8 @@
 package it.polito.did.gruppo8.screens.NewScreens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -110,8 +112,12 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
 
                     Box(
                         modifier = Modifier
-                            .size(400.dp, 400.dp)
-                            .clip(RoundedCornerShape(25.dp))
+                            .size(400.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .border(
+                                shape = RoundedCornerShape(16.dp),
+                                border = BorderStroke(width = 2.dp, color = Color.Black)
+                            )
                     ) {
                         Image(
                             painter = painterResource(R.drawable.bg),
