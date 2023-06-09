@@ -37,6 +37,7 @@ import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Player
 import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.screens.caveatSemiBold
+import it.polito.did.gruppo8.ui.theme.*
 import it.polito.did.gruppo8.util.myComposable.MyButton
 import it.polito.did.gruppo8.util.myComposable.ParameterBars
 
@@ -75,7 +76,9 @@ fun GameOverScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                 title = "EXIT",
                 description = "FINE DEL GIOCO",
                 buttonHeight = 100,
-            ){/*vm.onExitGameButtonPressed() */}
+            ){
+                vm.onExitGameButtonPressed()
+            }
         }
     }
 }
@@ -123,9 +126,9 @@ fun PlayerRankingCard(player: Player, index:Int) {
         border = BorderStroke(
             2.dp,
             when (index) {
-                0 -> Color(0xFFDAA520)
-                1 -> Color(0xFFC0C0C0)
-                2 -> Color(0xFFCD7F32)
+                0 -> Gold
+                1 -> Silver
+                2 -> Bronze
                 else -> Color.Black
             })
     ) {
@@ -149,17 +152,19 @@ fun PlayerRankingCard(player: Player, index:Int) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Image(
-                        painter = painterResource(
-                            when (index) {
-                                0 -> R.drawable.coccarda1
-                                1 -> R.drawable.coccarda2
-                                2 -> R.drawable.coccarda3
-                                else -> 0
-                            }),
-                        contentDescription = "Award",
-                        modifier = Modifier.size(50.dp)
-                    )
+                    if(index<=2){
+                        Image(
+                            painter = painterResource(
+                                when (index) {
+                                    0 -> R.drawable.coccarda1
+                                    1 -> R.drawable.coccarda2
+                                    2 -> R.drawable.coccarda3
+                                    else -> 0
+                                }),
+                            contentDescription = "Award",
+                            modifier = Modifier.size(50.dp)
+                        )
+                    }
                     Text(
                         text = player.nickname + " ",
                         fontFamily = caveatBold,
@@ -183,7 +188,7 @@ fun PlayerRankingCard(player: Player, index:Int) {
                         textAlign = TextAlign.Start
                     )
                     Text(
-                        text = player.house.stats.weightedAverage().toString(), /*TODO: controllare che sia punteggio corretto*/
+                        text = player.house.stats.weightedAverage().toInt().toString(), /*TODO: controllare che sia punteggio corretto*/
                         fontFamily = caveatBold,
                         color = Color.Black,
                         style = MaterialTheme.typography.h5,

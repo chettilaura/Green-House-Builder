@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,7 @@ import it.polito.did.gruppo8.ui.theme.DarkGreen
 //legata a dashboard dell'host e a game over
 
 @Composable
-fun MyPlayerData(players: List<Player>) {
+fun MyPlayerData(players: List<Player>, currentPlayerId: String) {
     Column(
         modifier = Modifier
             .padding(5.dp),
@@ -43,7 +44,7 @@ fun MyPlayerData(players: List<Player>) {
                 Text(
                     text = player.nickname,
                     fontFamily = caveatBold,
-                    color = DarkGreen,
+                    color = if(player.id==currentPlayerId) Color.Red else DarkGreen,
                     style = MaterialTheme.typography.h3,
                     textAlign = TextAlign.Center
                 )
@@ -56,5 +57,5 @@ fun MyPlayerData(players: List<Player>) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun previewPlayerList(){
-    MyPlayerData(listOf())
+    MyPlayerData(listOf(), "")
 }

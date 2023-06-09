@@ -56,13 +56,15 @@ fun DashboardScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally){
-                MyPlayerData(players!!.values.toList()) //passare i giocatori e relativi parametri a funzione originale
+                MyPlayerData(players!!.values.toList(), gameInfos!!.currentPlayerId)
 
                 MyButton(
                     title = "END GAME",
                     description = "FINE DEL GIOCO",
                     buttonHeight = 100,
-                ){/*vm.onExitGameButtonPressed()*/ }
+                ){
+                    vm.onEndGameButtonPressed()
+                }
             }
         }
     }

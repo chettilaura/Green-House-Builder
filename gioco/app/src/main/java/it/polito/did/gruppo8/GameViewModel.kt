@@ -51,5 +51,5 @@ class GameViewModel: ViewModel() {
     fun onEndGameButtonPressed() = gameManager.endGame()
 
     // GameOverScreen
-    fun onExitButtonPressed() = gameManager.exitGame()
+    fun onExitGameButtonPressed() = gameManager.exitGame()
 }

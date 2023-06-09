@@ -37,7 +37,12 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
  * @param updateTargetCallback action to trigger when field value change. ex. function: {targetValue = it}.
  */
 @Composable
-fun MyFormLine(title: String, label: String, targetValue: String, updateTargetCallback : (String)->Unit) {
+fun MyFormLine(
+    title: String,
+    label: String,
+    targetValue: String,
+    updateTargetCallback : (String)->Unit
+) {
 
     Card(modifier = Modifier
         .fillMaxWidth()

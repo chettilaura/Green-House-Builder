@@ -157,36 +157,40 @@ class DatabaseManager() {
             override fun onDataChange(snapshot: DataSnapshot) = onDataChange(snapshot)
             override fun onCancelled(error: DatabaseError) = onCancelled(error)
         }
-        _firebase.getReference(path).addValueEventListener(listener)
-        Log.d("DatabaseManager", "Listener $listenerId subscribed to $path")
+
+        val ref = _firebase.getReference(path)
+        ref.addValueEventListener(listener)
+        Log.d("DatabaseManager", "Listener $listenerId subscribed to $ref")
 
         //Update listener register
-        _listenerRegister.putIfAbsent(path, mutableMapOf())
-        _listenerRegister[path]!!.putIfAbsent(listenerId, listener)
+        _listenerRegister.putIfAbsent(ref.toString(), mutableMapOf())
+        _listenerRegister[ref.toString()]!!.putIfAbsent(listenerId, listener)
     }
 
     fun removeListener(path: String, listenerId: String){
-        val map = _listenerRegister[path] ?: return
+        val ref = _firebase.getReference(path)
+
+        val map = _listenerRegister[ref.toString()] ?: return
         if(map.contains(listenerId)){
-            _firebase.getReference(path).removeEventListener(map[listenerId]!!)
+            ref.removeEventListener(map[listenerId]!!)
 
             //Update listener register
             map.remove(listenerId)
             if(map.isEmpty())
-                _listenerRegister.remove(path)
+                _listenerRegister.remove(ref.toString())
         }
     }
 
     fun removeAllListeners(path: String){
         val ref = _firebase.getReference(path)
 
-        val map = _listenerRegister[path] ?: return
+        val map = _listenerRegister[ref.toString()] ?: return
         for (entry in map){
             ref.removeEventListener(entry.value)
 
             //Update listener register
             map.remove(entry.key)
         }
-        _listenerRegister.remove(path)
+        _listenerRegister.remove(ref.toString())
     }
 }

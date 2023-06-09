@@ -39,14 +39,9 @@ import it.polito.did.gruppo8.screens.caveatSemiBold
 /***
  * Generalized card with parameter bars used to show user progress in the game.
  *
- * @param co2Impact shows progress indicator for the CO2 bar
- * @param comfort shows progress indicator for the comfort bar
- * @param economy shows progress indicator for the economy bar
+ * @param stats Statistics of the house
  * @param fraction indicates the relative height of the card in the screen
- *
- *
  */
-
 @Composable
 fun ParameterBars(stats: Statistics, fraction: Float) {
    /* val co2Impact = rememberSaveable {
@@ -91,7 +86,7 @@ fun ParameterBars(stats: Statistics, fraction: Float) {
                         Image(painter = painterResource(R.drawable.leaf),
                             contentDescription = "leaf")
                         Spacer(modifier = Modifier.weight(1f))
-                        Text(text = "CO2 IMPACT",
+                        Text(text = "GREEN",
                             fontFamily = caveatSemiBold,
                             style = MaterialTheme.typography.h6
                         )
@@ -130,7 +125,7 @@ fun ParameterBars(stats: Statistics, fraction: Float) {
                         Image(painter = painterResource(R.drawable.sofa),
                             contentDescription = "sofa")
                         Spacer(modifier = Modifier.weight(1f))
-                        Text(text = "COMFORT",
+                        Text(text = "COMFY",
                             fontFamily = caveatSemiBold,
                             style = MaterialTheme.typography.h6,
                             textAlign = TextAlign.Left
@@ -171,7 +166,7 @@ fun ParameterBars(stats: Statistics, fraction: Float) {
                         Image(painter = painterResource(R.drawable.coin),
                             contentDescription = "coin")
                         Spacer(modifier = Modifier.weight(1f))
-                        Text(text = "ECONOMY",
+                        Text(text = "LOWCOST",
                             fontFamily = caveatSemiBold,
                             style = MaterialTheme.typography.h6,
                             textAlign = TextAlign.Left

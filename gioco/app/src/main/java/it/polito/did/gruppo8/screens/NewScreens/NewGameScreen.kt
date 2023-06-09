@@ -66,9 +66,6 @@ fun NewGameScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
         )
         MyTopBar(title = "NEW GAME", colorId = colorResource(id = R.color.cal_poly_green))
 
-
-
-
         Column (
             modifier = Modifier
                 .fillMaxHeight()

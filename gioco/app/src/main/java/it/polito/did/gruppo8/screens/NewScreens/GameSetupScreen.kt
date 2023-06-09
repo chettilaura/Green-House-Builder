@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Player
@@ -48,14 +49,16 @@ import it.polito.did.gruppo8.util.myComposable.MyTopBar
 
 
 @Composable
-fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
-{
-    var nPlayers by remember { mutableStateOf(TextFieldValue("")) }
+fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
     val players by vm.players.observeAsState()
 
-    var totalRounds by remember { mutableStateOf(vm.gameInfos.value!!.totalRounds) }
-    var turnTime by remember { mutableStateOf(vm.gameInfos.value!!.turnTime) }
-    var quizTime by remember { mutableStateOf(vm.gameInfos.value!!.quizTime) }
+    var totalRounds by remember { mutableStateOf("") }
+    var turnTime by remember { mutableStateOf("") }
+    var quizTime by remember { mutableStateOf("") }
+
+    totalRounds = vm.gameInfos.value!!.totalRounds.toString()
+    turnTime = vm.gameInfos.value!!.turnTime.toString()
+    quizTime = vm.gameInfos.value!!.quizTime.toString()
 
     Box(modifier = Modifier.fillMaxSize(1f)) {
         Image(
@@ -77,51 +80,99 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier)
             Spacer(modifier = Modifier.size(30.dp))
 
             //TODO: anche questo box può essere generalizzato e spostato nel package util.myComposable
-            //CityNameField(vm.cityName.value!!, "Create house button")
             CityNameField(vm.gameInfos.value!!.cityName!!, "Create house button")
-
-
             Spacer(modifier = Modifier.size(10.dp))
 
-            /*PlayersList(players?.values!!.toList())*/
-            /*TODO: controllare se in questo modo funziona*/
-            MyPlayerNameListCard(header = "PLAYERS\n${players?.values!!.size}", playersList = players?.values!!.toList())
-
+            MyPlayerNameListCard(
+                header = "PLAYERS\n${players?.values!!.size}",
+                playersList = players?.values!!.toList()
+            )
             Spacer(modifier = Modifier.size(10.dp))
 
-            //InformationCard(title = "GAME ID", info = vm.lobbyId.value!!, 0.3f)
             InformationCard(title = "GAME ID", info = vm.gameInfos.value!!.lobbyId!!, 0.3f)
-
-            //MyFormBox(title = "Game ID", label = "Id string (test ${gameId})", fieldValue = nPlayers,  fraction = 0.3f)
             Spacer(modifier = Modifier.size(30.dp))
 
-//TUTORIAL POP UP
+            //TUTORIAL POP UP
             var setGamePopUpControl by remember { mutableStateOf(false) }
-            MyButton(title = "GAME SETUP", description = "Setup", 100){setGamePopUpControl = true}
+            MyButton(title = "GAME SETUP", description = "Setup", 100) {
+                setGamePopUpControl = true
+            }
 
             Spacer(modifier = Modifier.size(5.dp))
 
+            //Game Setup Pop Up
             if (setGamePopUpControl) {
                 Popup(
                     alignment = Center,
-                    onDismissRequest = { setGamePopUpControl = false }) {
+                    onDismissRequest = { setGamePopUpControl = false },
+                    properties = PopupProperties(focusable = true)
+                ) {
+
+                    Box(
+                        modifier = Modifier
+                            .size(400.dp, 400.dp)
+                            .clip(RoundedCornerShape(25.dp))
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.bg),
+                            contentDescription = "Immagine di sfondo",
+                            modifier = Modifier.fillMaxHeight(),
+                            contentScale = ContentScale.FillHeight
+                        )
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Image(
+                                painter = painterResource(R.drawable.tut_background),
+                                contentDescription = "tutorial background",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.FillBounds
+                            )
+                            Column(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.SpaceAround,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                MyFormLine(
+                                    title = "Total rounds",
+                                    label = "players",
+                                    targetValue = totalRounds
+                                ) { value -> totalRounds = value }
+                                MyFormLine(
+                                    title = "Quiz time",
+                                    label = "players",
+                                    targetValue = quizTime
+                                ) { value -> quizTime = value }
+                                MyFormLine(
+                                    title = "Turn time",
+                                    label = "players",
+                                    targetValue = turnTime
+                                ) { value -> turnTime = value }
+                            }
+                        }
+
+
+                        /*
                     SetUpPopUp(totalRounds, turnTime, quizTime){ newTotalRounds, newTurnTime, newQuizTime ->
                         totalRounds = newTotalRounds
                         turnTime = newTurnTime
                         quizTime = newQuizTime
                     }
+                     */
+                    }
                 }
             }
 
-            //StartGameButton(title = "START", description = "start game button", onStartButtonPressed)
-            MyButton(title = "START",
+            MyButton(
+                title = "START",
                 description = "start game button",
                 100,
                 enabled = players!!.values.isNotEmpty()
             )
-            {vm.onStartButtonPressed(totalRounds, turnTime, quizTime)}
+            {
+                vm.onStartButtonPressed(totalRounds.toInt(), turnTime.toInt(), quizTime.toInt())
+            }
         }
-
     }
 }
 
@@ -257,7 +308,7 @@ fun StartGameButton(title: String, description: String, onButtonPressed: () -> U
 fun PreviewGameSetupScreen() {
     GameSkeletonTheme {
         val vm = GameViewModel()
-        GameSetupScreen(vm,modifier = Modifier)
+        GameSetupScreen(vm, modifier = Modifier)
     }
 }
 

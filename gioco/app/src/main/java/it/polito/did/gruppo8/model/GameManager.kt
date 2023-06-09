@@ -93,7 +93,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             Navigator.navigateTo(screenName)
         }
         catch (e:Exception){
-            Navigator.navigateTo(ScreenName.Error)
+            switchScreen(ScreenName.Error)
         }
     }
 
@@ -148,21 +148,10 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         observeGameInfos()
 
         //Subscribe to roundCounter to check if the game has reach the end
-        _dbManager.addListener("$id/gameInfos/roundCounter", "observeRounds",
-            onDataChange = {snapshot ->
-                val currentRoundCounter = snapshot.getValue(Int::class.java)
-                if(currentRoundCounter == gameInfos.value!!.totalRounds){
-                    endGame()
-                }
-            },
-            onCancelled = {switchScreen(ScreenName.Error, updateDatabase = true)}
-        )
+        observeRoundCounter()
 
         //Host switches to the Dashboard
         switchScreen(ScreenName.Dashboard)
-
-        //TODO: Valutare se passare prima per FreeItemScreen (problema di sincronizzazione)
-        //_dbManager.writeData("$id/screen", ScreenName.FreeItem.route)
 
         //Next turn
         nextTurn()
@@ -170,8 +159,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
     fun rankPlayers(){
         // Sort players based on weighted average of its stats
-        //TODO: Inverse sort
-        _mutablePlayers.value = _mutablePlayers.value!!.toList().sortedBy { (_, player) ->
+        _mutablePlayers.value = _mutablePlayers.value!!.toList().sortedByDescending { (_, player) ->
             player.house.stats.weightedAverage()
         }.toMap().toMutableMap()
 
@@ -188,16 +176,24 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     fun exitGame(){
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
 
-        // TODO: Reset all LiveDatas
-        switchScreen(ScreenName.MainMenu, updateDatabase = true)
-        _dbManager.removeData(id)
+        scope.launch {
+            val check = async { _dbManager.isDataPresent(id) }.await()
+
+            //Return to Main Menu
+            switchScreen(ScreenName.MainMenu, updateDatabase = check)
+
+            //Delete lobby from the database
+            if(check) _dbManager.removeData(id)
+
+            //Clear local livedata
+            clearLiveData()
+        }
     }
     //endregion
 
     //region Methods for Client/Player
 
     fun joinGame(lobbyId:String, nickname:String) {
-
         try {
             if (lobbyId.isEmpty()) return
 
@@ -208,7 +204,9 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 val check = async { _dbManager.isDataPresent(lobbyId) }.await()
                 if(!check) {
                     //TODO: riportare ad una schermata di errore per dire che la partita non esiste.
-                    throw RuntimeException("Invalid gameId")
+                    //throw RuntimeException("Invalid gameId")
+                    switchScreen(ScreenName.MainMenu)
+                    return@launch
                 }
                 Log.d("GameManager","joinGame: matchId is $lobbyId")
 
@@ -223,8 +221,14 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                         _dbManager.readData("$lobbyId/gameInfos", GameInfos::class.java)
                 }.await()
 
+                //Retrieve shop
+                val shopSnapshot = async { _dbManager.getDataSnapshot("shop") }.await()
+                retrieveShop(shopSnapshot)
+
+                observeLobbyId()
                 observeGameInfos()
                 observePlayers()
+
                 observeScreen()
             }
         } catch (e: Exception) {
@@ -327,11 +331,10 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     //endregion
 
     //region Private shared Methods
-
     private fun observePlayers() {
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
 
-        _dbManager.addListener("$id/players", "watchPlayers",
+        _dbManager.addListener("$id/players", "observePlayers",
             onDataChange = { snapshot ->
                 val currentPlayers = snapshot.value as Map<*, *>?
                 if(currentPlayers!=null){
@@ -351,26 +354,24 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 }
             },
             onCancelled = {
-                switchScreen(ScreenName.Error)
+                //switchScreen(ScreenName.Error)
+                Log.d("ObservePlayers","Data cancelled at $id/players")
             }
         )
     }
 
-
-
-    //funzione che osserva il child "screen" della struttura firebase della partita
-    //in base al valore di "screen" fa apparire la relativa schermata
     private fun observeScreen() {
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
 
-        _dbManager.addListener("$id/screen", "watchScreen",
+        _dbManager.addListener("$id/screen", "observeScreen",
             onDataChange = {
                 _mutableCurrentScreenName.value = ScreenName.routeToScreenName(it.value?.toString()?: "")
                 Log.d("ObserveScreen","Data updated: ${currentScreenName.value}")
                 switchScreen(_mutableCurrentScreenName.value ?: ScreenName.Error)
             },
             onCancelled = {
-                switchScreen(ScreenName.Error)
+                //switchScreen(ScreenName.Error)
+                Log.d("ObserveScreen","Data cancelled at $id/screen")
             }
         )
     }
@@ -378,7 +379,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     private fun observeGameInfos() {
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
 
-        _dbManager.addListener("$id/gameInfos", "watchGameInfos",
+        _dbManager.addListener("$id/gameInfos", "observeGameInfos",
             onDataChange = {
                 val currentGameInfos = it.getValue(GameInfos::class.java)
                 if(currentGameInfos!=null){
@@ -387,7 +388,45 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 }
             },
             onCancelled = {
-                switchScreen(ScreenName.Error)
+                //switchScreen(ScreenName.Error)
+                Log.d("ObserveGameInfos","Data cancelled at $id/gameInfos")
+            }
+        )
+    }
+
+    private fun observeRoundCounter() {
+        val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
+
+        _dbManager.addListener("$id/gameInfos/roundCounter", "observeRoundCounter",
+            onDataChange = {snapshot ->
+                val currentRoundCounter = snapshot.getValue(Int::class.java)
+                if(currentRoundCounter == gameInfos.value!!.totalRounds){
+                    endGame()
+                }
+            },
+            onCancelled = {
+                //switchScreen(ScreenName.Error, updateDatabase = true)
+                Log.d("ObserveRoundCounter","Data cancelled at $id/gameInfos/roundCounter")
+            }
+        )
+    }
+
+    private fun observeLobbyId() {
+        val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
+
+        _dbManager.addListener(id, "observeLobbyId",
+            onDataChange = {
+                scope.launch {
+                    val check = async{_dbManager.isDataPresent(id)}.await()
+                    if(check) return@launch
+                    Log.d("ObserveLobbyId","Data cancelled at $id")
+                    clearLiveData()
+                    _dbManager.removeAllListeners("$id/screen")
+                    switchScreen(ScreenName.MainMenu)
+                }
+            },
+            onCancelled = {
+
             }
         )
     }
@@ -446,6 +485,12 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             delay(5000)
             _dbManager.writeData("$id/screen", ScreenName.Quiz.route)
         }
+    }
+
+    private fun clearLiveData() {
+        _mutableGameInfos.value = GameInfos()
+        _mutablePlayers.value = mutableMapOf()
+        _mutableShop.value = mutableMapOf()
     }
     //endregion
 

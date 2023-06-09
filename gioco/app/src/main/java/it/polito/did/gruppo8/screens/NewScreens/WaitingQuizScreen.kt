@@ -188,7 +188,8 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
                                             Image(
                                                 painter = painterResource(id = R.drawable.coin),
-                                                contentDescription = "coinIcon" )
+                                                contentDescription = "coinIcon"
+                                            )
                                         }
 
                                     }
