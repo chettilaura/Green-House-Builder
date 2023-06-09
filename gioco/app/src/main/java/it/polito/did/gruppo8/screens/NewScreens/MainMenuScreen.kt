@@ -1,7 +1,9 @@
 package it.polito.did.gruppo8.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -85,7 +87,7 @@ fun MainMenuScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
 //SETTINGS POP UP
 
             var settingsPopUpControl by remember { mutableStateOf(false) }
-            MyButton(title = "SETTINGS", description = "Settings", 100) {settingsPopUpControl = true}
+            MyButton(title = "CREDITS", description = "Credits", 100) {settingsPopUpControl = true}
 
 
             Spacer(modifier = Modifier.size(5.dp))
@@ -95,7 +97,9 @@ fun MainMenuScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
                 Popup(
                     alignment = Center,
                     onDismissRequest = { settingsPopUpControl = false }) {
-                    settingsPopUp()
+
+                    CreditsPopUp()
+
                 }
             }
 
@@ -139,12 +143,16 @@ fun popUpTutorial() {
 }
 
 @Composable
-fun settingsPopUp() {
+fun CreditsPopUp() {
     val shape = RoundedCornerShape(30.dp)
     Box(
         modifier = Modifier
             .size(400.dp, 400.dp)
             .clip(shape)
+            .border(
+                shape = shape,
+                border = BorderStroke(width = 2.dp, color = Color.Black)
+            )
             .background(Color(0xFF55825F))
     ) {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -154,7 +162,7 @@ fun settingsPopUp() {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            "SETTINGS",
+                            "CREDITS",
                             fontFamily = caveatBold,
                             color = Color.White,
                             style = MaterialTheme.typography.h3
@@ -165,29 +173,28 @@ fun settingsPopUp() {
                         verticalArrangement = Arrangement.SpaceEvenly,
                         horizontalAlignment = Alignment.CenterHorizontally) {
 
-                        Row(){
-                            Text("MUSIC",
-                                fontFamily = caveatBold,
-                                color = Color.Black,
-                                style = MaterialTheme.typography.h4)
-                            SwitchDemo()
 
-                        }
-                        Row(){
-                            Text("SFX",
-                                fontFamily = caveatBold,
-                                color = Color.Black,
-                                style = MaterialTheme.typography.h4)
-                            SwitchDemo()
+                        Text("EDOARDO ARALLA",
+                            fontFamily = caveatBold,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.h4)
 
-                        }
-                        Row(){
-                            Text("VIBRATION",
-                                fontFamily = caveatBold,
-                                color = Color.Black,
-                                style = MaterialTheme.typography.h4)
-                            SwitchDemo()
-                        }
+                        Text("MATTIA CACCIATORE",
+                            fontFamily = caveatBold,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.h4)
+
+
+                        Text("LAURA CHETTI",
+                            fontFamily = caveatBold,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.h4)
+
+                        Text("GIOVANNI MERCORILLO",
+                            fontFamily = caveatBold,
+                            color = Color.Black,
+                            style = MaterialTheme.typography.h4)
+
                     }
                 }
             }
@@ -224,15 +231,7 @@ fun Instructions(){
             fontFamily = caveatBold,
             color = Color.White,
             style = MaterialTheme.typography.h5)}
-} //aggiungere tutorial con eventuali immagini
-@Composable
-fun SwitchDemo() {
-    val checkedState = remember { mutableStateOf(true) }
-    Switch(
-        checked = checkedState.value,
-        onCheckedChange = { checkedState.value = it }
-    )
-}  //da assegnare (music, sfx, vibration)
+}
 
 /*--------------------------------------------------------------------*/
 //PREVIEW
