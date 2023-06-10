@@ -44,7 +44,7 @@ fun MyPlayerData(players: List<Player>, currentPlayerId: String) {
                 Text(
                     text = player.nickname,
                     fontFamily = caveatBold,
-                    color = if(player.id==currentPlayerId) Color.Red else DarkGreen,
+                    color = if(player.id==currentPlayerId) Color(0xFF599B68) else DarkGreen,
                     style = MaterialTheme.typography.h3,
                     textAlign = TextAlign.Center
                 )

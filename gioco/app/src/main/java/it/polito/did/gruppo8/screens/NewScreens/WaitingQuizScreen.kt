@@ -205,8 +205,8 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                                                 style = MaterialTheme.typography.h6
                                             )
                                             Image(
-                                                modifier = Modifier.size(20.dp,20.dp),
-                                                painter = painterResource(id = R.drawable.coin),
+                                                modifier = Modifier.size(40.dp,40.dp),
+                                                painter = painterResource(id = R.drawable.noshop),
                                                 contentDescription = "coinIcon"
                                             )
 

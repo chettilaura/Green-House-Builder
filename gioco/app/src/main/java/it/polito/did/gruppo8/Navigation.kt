@@ -56,7 +56,7 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(route = ScreenName.Waiting.route) {
-            WaitingScreen(vm, vm.gameInfos.value!!.cityName!!, "WAIT, THE GAME IS STARTING!")
+            WaitingScreen(vm, vm.gameInfos.value!!.cityName!!, "LOADING")
         }
 
         composable(route = ScreenName.Dashboard.route) {
