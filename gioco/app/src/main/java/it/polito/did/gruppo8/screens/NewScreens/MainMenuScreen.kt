@@ -233,11 +233,13 @@ fun CreditsPopUp() {
 @Composable
 fun AppName(){
     Row(horizontalArrangement = Arrangement.Center) {
+
         Image(
             painter = painterResource(id = R.drawable.app_name),
             contentDescription = null,
-            modifier = Modifier.size(200.dp)
+            modifier = Modifier.size(250.dp)
         )
+
     }
 }
 
