@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -41,6 +42,7 @@ import androidx.compose.ui.window.PopupProperties
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Player
+import it.polito.did.gruppo8.screens.CreditsPopUp
 import it.polito.did.gruppo8.screens.caveatBold
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
 import it.polito.did.gruppo8.util.myComposable.InformationCard
@@ -57,126 +59,140 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
     var totalRounds by remember { mutableStateOf("") }
     var turnTime by remember { mutableStateOf("") }
     var quizTime by remember { mutableStateOf("") }
+    var setGamePopUpControl by remember { mutableStateOf(false) }
 
     totalRounds = vm.gameInfos.value!!.totalRounds.toString()
     turnTime = vm.gameInfos.value!!.turnTime.toString()
     quizTime = vm.gameInfos.value!!.quizTime.toString()
 
-    Box(modifier = Modifier.fillMaxSize(1f)) {
-        Image(
-            painter = painterResource(R.drawable.bg),
-            contentDescription = "Immagine di sfondo",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.FillHeight
-        )
 
-        MyTopBar(title = "NEW GAME", colorId = colorResource(id = R.color.cal_poly_green))
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+    if (setGamePopUpControl) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .blur(4.dp)
         ) {
-
-            Spacer(modifier = Modifier.size(60.dp))
-
-            //TODO: anche questo box può essere generalizzato e spostato nel package util.myComposable
-            CityNameField(vm.gameInfos.value!!.cityName!!, "Create house button")
-            Spacer(modifier = Modifier.size(10.dp))
-
-            MyPlayerNameListCard(
-                header = "PLAYERS\n${players?.values!!.size}",
-                playersList = players?.values!!.toList()
+            Image(
+                painter = painterResource(R.drawable.bg),
+                contentDescription = "Immagine di sfondo",
+                modifier = Modifier.fillMaxHeight(),
+                contentScale = ContentScale.FillHeight
             )
-            Spacer(modifier = Modifier.size(10.dp))
+            Popup(
+                alignment = Center,
+                onDismissRequest = { setGamePopUpControl = false },
+                properties = PopupProperties(focusable = true)
+            ) {
 
-            InformationCard(title = "GAME ID", info = vm.gameInfos.value!!.lobbyId!!, 0.3f)
-            Spacer(modifier = Modifier.size(30.dp))
-
-            //TUTORIAL POP UP
-            var setGamePopUpControl by remember { mutableStateOf(false) }
-            MyButton(title = "GAME SETUP", description = "Setup", 100) {
-                setGamePopUpControl = true
-            }
-
-            Spacer(modifier = Modifier.size(5.dp))
-
-            //Game Setup Pop Up
-            if (setGamePopUpControl) {
-                Popup(
-                    alignment = Center,
-                    onDismissRequest = { setGamePopUpControl = false },
-                    properties = PopupProperties(focusable = true)
-                ) {
-
-                    Box(
-                        modifier = Modifier
-                            .size(400.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .border(
-                                shape = RoundedCornerShape(16.dp),
-                                border = BorderStroke(width = 2.dp, color = Color.Black)
-                            )
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.bg),
-                            contentDescription = "Immagine di sfondo",
-                            modifier = Modifier.fillMaxHeight(),
-                            contentScale = ContentScale.FillHeight
+                Box(
+                    modifier = Modifier
+                        .size(400.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .border(
+                            shape = RoundedCornerShape(16.dp),
+                            border = BorderStroke(width = 2.dp, color = Color.Black)
                         )
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Image(
-                                painter = painterResource(R.drawable.tut_background),
-                                contentDescription = "tutorial background",
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.FillBounds
-                            )
-                            Column(
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.SpaceAround,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                MyFormLine(
-                                    title = "Total rounds",
-                                    label = "rounds",
-                                    targetValue = totalRounds
-                                ) { value -> totalRounds = value }
-                                MyFormLine(
-                                    title = "Quiz time",
-                                    label = "seconds",
-                                    targetValue = quizTime
-                                ) { value -> quizTime = value }
-                                MyFormLine(
-                                    title = "Turn time",
-                                    label = "seconds",
-                                    targetValue = turnTime
-                                ) { value -> turnTime = value }
-                            }
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.bg),
+                        contentDescription = "Immagine di sfondo",
+                        modifier = Modifier.fillMaxHeight(),
+                        contentScale = ContentScale.FillHeight
+                    )
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Image(
+                            painter = painterResource(R.drawable.tut_background),
+                            contentDescription = "tutorial background",
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        Column(
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.SpaceAround,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            MyFormLine(
+                                title = "Total rounds",
+                                label = "rounds",
+                                targetValue = totalRounds
+                            ) { value -> totalRounds = value }
+                            MyFormLine(
+                                title = "Quiz time",
+                                label = "seconds",
+                                targetValue = quizTime
+                            ) { value -> quizTime = value }
+                            MyFormLine(
+                                title = "Turn time",
+                                label = "seconds",
+                                targetValue = turnTime
+                            ) { value -> turnTime = value }
                         }
+                    }
 
 
-                        /*
-                    SetUpPopUp(totalRounds, turnTime, quizTime){ newTotalRounds, newTurnTime, newQuizTime ->
-                        totalRounds = newTotalRounds
-                        turnTime = newTurnTime
-                        quizTime = newQuizTime
-                    }
-                     */
-                    }
+                    /*
+            SetUpPopUp(totalRounds, turnTime, quizTime){ newTotalRounds, newTurnTime, newQuizTime ->
+                totalRounds = newTotalRounds
+                turnTime = newTurnTime
+                quizTime = newQuizTime
+            }
+             */
                 }
             }
+        }
+    } else {
 
-            MyButton(
-                title = "START",
-                description = "start game button",
-                100,
-                enabled = players!!.values.isNotEmpty()
+
+        Box(modifier = Modifier.fillMaxSize(1f)) {
+            Image(
+                painter = painterResource(R.drawable.bg),
+                contentDescription = "Immagine di sfondo",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillHeight
             )
-            {
-                vm.onStartButtonPressed(totalRounds.toInt(), turnTime.toInt(), quizTime.toInt())
+
+            MyTopBar(title = "NEW GAME", colorId = colorResource(id = R.color.cal_poly_green))
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Spacer(modifier = Modifier.size(60.dp))
+
+                //TODO: anche questo box può essere generalizzato e spostato nel package util.myComposable
+                CityNameField(vm.gameInfos.value!!.cityName!!, "Create house button")
+                Spacer(modifier = Modifier.size(10.dp))
+
+                MyPlayerNameListCard(
+                    header = "PLAYERS\n${players?.values!!.size}",
+                    playersList = players?.values!!.toList()
+                )
+                Spacer(modifier = Modifier.size(10.dp))
+
+                InformationCard(title = "GAME ID", info = vm.gameInfos.value!!.lobbyId!!, 0.3f)
+                Spacer(modifier = Modifier.size(30.dp))
+
+
+                MyButton(title = "GAME SETUP", description = "Setup", 100) {
+                    setGamePopUpControl = true
+                }
+
+                Spacer(modifier = Modifier.size(5.dp))
+
+                //Game Setup Pop Up
+                MyButton(
+                    title = "START",
+                    description = "start game button",
+                    100,
+                    enabled = players!!.values.isNotEmpty()
+                )
+                {
+                    vm.onStartButtonPressed(totalRounds.toInt(), turnTime.toInt(), quizTime.toInt())
+                }
             }
         }
     }

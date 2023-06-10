@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
@@ -42,69 +43,83 @@ import it.polito.did.gruppo8.util.myComposable.MyButton
 @Composable
 fun MainMenuScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
 
-    Box(modifier = Modifier.fillMaxSize(1f)) {
-        Image(
-            painter = painterResource(R.drawable.bg),
-            contentDescription = "Immagine di sfondo",
-            modifier = Modifier.fillMaxHeight(),
-            contentScale = ContentScale.FillHeight
-        )
+    var settingsPopUpControl by remember { mutableStateOf(false) }
+    var tutorialPopUpControl by remember { mutableStateOf(false) }
 
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(8.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.size(30.dp))
-            AppName()
+    if (settingsPopUpControl) {
+        Box(modifier = Modifier.fillMaxSize()
+            .blur(4.dp)) {
+            Image(
+                painter = painterResource(R.drawable.bg),
+                contentDescription = "Immagine di sfondo",
+                modifier = Modifier.fillMaxHeight(),
+                contentScale = ContentScale.FillHeight
+            )
+            Popup(
+                alignment = Center,
+                onDismissRequest = { settingsPopUpControl = false }) {
 
-            MyButton("NEW GAME", "Create house button", 100){vm.onNewGameButtonPressed()}
-            MyButton("JOIN GAME", "Create house button", 100) { vm.onJoinGameButtonPressed() }
+                CreditsPopUp()
 
+            }
+        }
+    }
 
-            Spacer(modifier = Modifier.size(30.dp))
+    else if (tutorialPopUpControl) {
+
+        Box(modifier = Modifier.fillMaxSize()
+            .blur(4.dp)) {
+            Image(
+                painter = painterResource(R.drawable.bg),
+                contentDescription = "Immagine di sfondo",
+                modifier = Modifier.fillMaxHeight(),
+                contentScale = ContentScale.FillHeight
+            )
+            Popup(
+                alignment = Center,
+                onDismissRequest = { tutorialPopUpControl = false }) {
+                popUpTutorial()
+            }
+        }
+    } else {
+
+        Box(modifier = Modifier.fillMaxSize(1f)) {
+            Image(
+                painter = painterResource(R.drawable.bg),
+                contentDescription = "Immagine di sfondo",
+                modifier = Modifier.fillMaxHeight(),
+                contentScale = ContentScale.FillHeight
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(8.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.size(30.dp))
+
+                AppName()
+
+                MyButton("NEW GAME", "Create house button", 100) { vm.onNewGameButtonPressed() }
+                MyButton("JOIN GAME", "Create house button", 100) { vm.onJoinGameButtonPressed() }
+                Spacer(modifier = Modifier.size(30.dp))
 
 //TUTORIAL POP UP
-
-            var tutorialPopUpControl by remember { mutableStateOf(false) }
-            MyButton(title = "TUTORIAL", description = "Tutorial", 100) {tutorialPopUpControl = true}
-
-
-            Spacer(modifier = Modifier.size(5.dp))
-
-            if (tutorialPopUpControl) {
-
-                Popup(
-                    alignment = Center,
-                    onDismissRequest = { tutorialPopUpControl = false }) {
-                    popUpTutorial()
+                MyButton(title = "TUTORIAL", description = "Tutorial", 100) {
+                    tutorialPopUpControl = true
                 }
-            }
-
+                Spacer(modifier = Modifier.size(5.dp))
 
 //SETTINGS POP UP
 
-            var settingsPopUpControl by remember { mutableStateOf(false) }
-            MyButton(title = "CREDITS", description = "Credits", 100) {settingsPopUpControl = true}
-
-
-            Spacer(modifier = Modifier.size(5.dp))
-
-            if (settingsPopUpControl) {
-
-                Popup(
-                    alignment = Center,
-                    onDismissRequest = { settingsPopUpControl = false }) {
-
-                    CreditsPopUp()
-
+                MyButton(title = "CREDITS", description = "Credits", 100) {
+                    settingsPopUpControl = true
                 }
+                Spacer(modifier = Modifier.size(5.dp))
             }
-
         }
-
     }
 }
 
