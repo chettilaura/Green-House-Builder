@@ -6,12 +6,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.ImeAction
@@ -50,8 +54,11 @@ fun MyFormBox(
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(2.dp, Color.Black)
     ) {
+
         Column(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -66,34 +73,67 @@ fun MyFormBox(
             val keyboardController = LocalSoftwareKeyboardController.current
             val keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
 
-            TextField(
-                modifier = Modifier.fillMaxWidth(0.9f)
-                    .border(
-                        width = 2.dp,
-                        color = colorResource(id = R.color.cal_poly_green),
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                value = targetValue,
-                onValueChange = { newValue ->
-                    if (newValue.length <= 13) {    //lunghezza massima dei caratteri inseriti
-                        updateTargetCallback(newValue)
-                    }
-                },
-                label = {
-                    Text(
-                        text = label,
-                        color = Color.White,
-                        fontFamily = caveatRegular,
-                        style = MaterialTheme.typography.body1
-                    )
-                },
-                keyboardOptions = keyboardOptions,
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        keyboardController?.hideSoftwareKeyboard()
-                    }
-                )
+            val customTextSelectionColors = TextSelectionColors(
+                handleColor = Color.Transparent,
+                backgroundColor = Color(0xD724472C)
             )
+
+            CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+
+                TextField(
+
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.White,
+                        disabledTextColor = Color(0xFF43C366),
+                        cursorColor = Color.Black,
+                        errorCursorColor = Color(0xFF43C366),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Red,
+                        disabledIndicatorColor = Color(0xFF43C366),
+                        leadingIconColor = Color(0xFF43C366),
+                        disabledLeadingIconColor = Color(0xFF43C366),
+                        errorLeadingIconColor = Color(0xFF43C366),
+                        trailingIconColor = Color(0xFF43C366),
+                        disabledTrailingIconColor = Color(0xFF43C366),
+                        errorTrailingIconColor = Color(0xFF43C366),
+                        focusedLabelColor = Color(0xFF43C366),
+                        unfocusedLabelColor = Color(0xFF43C366),
+                        disabledLabelColor = Color(0xFF43C366),
+                        errorLabelColor = Color(0xFF43C366),
+                        placeholderColor = Color.Red,
+                        disabledPlaceholderColor = Color.Red
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .border(
+                            shape = RoundedCornerShape(10.dp),
+                            width = 2.dp,
+                            color = Color(0xFF294D31)
+                        ),
+
+                    value = targetValue,
+                    onValueChange = { newValue ->
+                        if (newValue.length <= 13) {    //lunghezza massima dei caratteri inseriti
+                            updateTargetCallback(newValue)
+                        }
+                    },
+                    label = {
+                        Text(
+                            text = label,
+                            color = Color.White,
+                            fontFamily = caveatRegular,
+                            style = MaterialTheme.typography.body1
+                        )
+                    },
+                    keyboardOptions = keyboardOptions,
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hideSoftwareKeyboard()
+                        }
+                    )
+                )
+            }
         }
     }
 }

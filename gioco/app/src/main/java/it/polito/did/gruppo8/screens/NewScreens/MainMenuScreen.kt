@@ -107,7 +107,7 @@ fun MainMenuScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.size(30.dp))
 
 //TUTORIAL POP UP
-                MyButton(title = "TUTORIAL", description = "Tutorial", 100) {
+                MyButton(title = "GUIDE", description = "Tutorial", 100) {
                     tutorialPopUpControl = true
                 }
                 Spacer(modifier = Modifier.size(5.dp))
@@ -134,7 +134,7 @@ fun popUpTutorial() {
     val shape = RoundedCornerShape(20.dp)
     Card(
         modifier = Modifier
-            .size(400.dp, 400.dp),
+            .size(400.dp, 400.dp).padding(8.dp),
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(2.dp, Color.Black),
         backgroundColor = colorResource(id = R.color.cal_poly_green)
@@ -145,7 +145,7 @@ fun popUpTutorial() {
             .background(Color(R.color.cal_poly_green))*/
     ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                Column(modifier = Modifier.padding(20.dp)) {
+                Column(modifier = Modifier.padding(10.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
@@ -168,7 +168,7 @@ fun CreditsPopUp() {
     val shape = RoundedCornerShape(20.dp)
     Card(
         modifier = Modifier
-            .size(400.dp, 400.dp),
+            .size(400.dp, 400.dp).padding(8.dp),
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(2.dp, Color.Black),
         backgroundColor = colorResource(id = R.color.cal_poly_green)
@@ -201,23 +201,28 @@ fun CreditsPopUp() {
                         Text("EDOARDO ARALLA",
                             fontFamily = caveatRegular,
                             color = Color.White,
-                            style = MaterialTheme.typography.h4)
+                            style = MaterialTheme.typography.h5)
+
+                        Text("SACHA BARIL",
+                            fontFamily = caveatRegular,
+                            color = Color.White,
+                            style = MaterialTheme.typography.h5)
 
                         Text("MATTIA CACCIATORE",
                             fontFamily = caveatRegular,
                             color = Color.White,
-                            style = MaterialTheme.typography.h4)
+                            style = MaterialTheme.typography.h5)
 
 
                         Text("LAURA MARCHETTI",
                             fontFamily = caveatRegular,
                             color = Color.White,
-                            style = MaterialTheme.typography.h4)
+                            style = MaterialTheme.typography.h5)
 
                         Text("GIOVANNI MERCORILLO",
                             fontFamily = caveatRegular,
                             color = Color.White,
-                            style = MaterialTheme.typography.h4)
+                            style = MaterialTheme.typography.h5)
 
                     }
                 }
@@ -239,13 +244,13 @@ fun AppName(){
 @Composable
 fun Instructions(){
     Column(modifier = Modifier
-        .padding(15.dp)
+        .padding(8.dp)
         .verticalScroll(rememberScrollState())) {
 
         Text(text = "HOST",
             fontFamily = caveatBold,
-            color = Color.White,
-            style = MaterialTheme.typography.h4)
+            color = Color(0xFF43C366),
+            style = MaterialTheme.typography.h5)
 
         Text(text = "Create new city clicking on the new game button, set up your match with your customs total rounds, quiz time and turn time clicking on Game setup button and start the game. You’ll see a dashboard with all players statistics during the game. \n",
             fontFamily = caveatRegular,
@@ -254,8 +259,8 @@ fun Instructions(){
 
         Text(text = "PLAYER",
             fontFamily = caveatBold,
-            color = Color.White,
-            style = MaterialTheme.typography.h4)
+            color = Color(0xFF43C366),
+            style = MaterialTheme.typography.h5)
 
         Text(text = "To start playing, click on “Join Game” button, write your player name and the Game ID of the reference match and create house. \n" +
         "Once your player is settled, you can answer the quizzes all the time. \n" +

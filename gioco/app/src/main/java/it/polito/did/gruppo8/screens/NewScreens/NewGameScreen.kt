@@ -54,8 +54,8 @@ fun NewGameScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
         ) {
             MyFormBox ("CITY NAME", "NAME YOUR CITY", cityName, {cityName = it},0.3f) // call a JoinGameScreen
 
-            Spacer(modifier = Modifier.size(32.dp))
-            Spacer(modifier = Modifier.size(15.dp))
+
+            Spacer(modifier = Modifier.size(40.dp))
 
             MyButton(title = "CREATE CITY", description = "Create City", 100) {vm.onCreateCityButtonPressed(cityName)}
 

@@ -44,7 +44,7 @@ fun InformationCard(title: String, info: String, fraction: Float) {
                 fontFamily = caveatSemiBold,
                 color = Color.White,
                 style = MaterialTheme.typography.h5,
-                textAlign = TextAlign.Start
+                textAlign = TextAlign.Center
             )
 
             Card(modifier = Modifier
@@ -59,7 +59,7 @@ fun InformationCard(title: String, info: String, fraction: Float) {
                     modifier = Modifier
                         .padding(8.dp),
                     verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.Start,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(text = info,
                         fontFamily = caveatRegular,

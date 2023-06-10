@@ -68,7 +68,8 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
 
     if (setGamePopUpControl) {
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .blur(4.dp)
         ) {
             Image(
@@ -77,6 +78,9 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxHeight(),
                 contentScale = ContentScale.FillHeight
             )
+
+            MyTopBar(title = "NEW GAME", colorId = colorResource(id = R.color.cal_poly_green))
+
             Popup(
                 alignment = Center,
                 onDismissRequest = { setGamePopUpControl = false },
@@ -84,7 +88,7 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
             ) {
 
                 Box(
-                    modifier = Modifier
+                    modifier = Modifier.padding(8.dp)
                         .size(400.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .border(
@@ -152,46 +156,57 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
                 contentScale = ContentScale.FillHeight
             )
 
-            MyTopBar(title = "NEW GAME", colorId = colorResource(id = R.color.cal_poly_green))
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(8.dp),
+            Column(modifier = Modifier
+                .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Spacer(modifier = Modifier.size(60.dp))
-
-                //TODO: anche questo box può essere generalizzato e spostato nel package util.myComposable
-                CityNameField(vm.gameInfos.value!!.cityName!!, "Create house button")
-                Spacer(modifier = Modifier.size(10.dp))
-
-                MyPlayerNameListCard(
-                    header = "PLAYERS\n${players?.values!!.size}",
-                    playersList = players?.values!!.toList()
-                )
-                Spacer(modifier = Modifier.size(10.dp))
-
-                InformationCard(title = "GAME ID", info = vm.gameInfos.value!!.lobbyId!!, 0.3f)
-                Spacer(modifier = Modifier.size(30.dp))
+                horizontalAlignment = Alignment.CenterHorizontally) {
 
 
-                MyButton(title = "GAME SETUP", description = "Setup", 100) {
-                    setGamePopUpControl = true
-                }
+                MyTopBar(title = "NEW GAME", colorId = colorResource(id = R.color.cal_poly_green))
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                Spacer(modifier = Modifier.size(5.dp))
+                    Spacer(modifier = Modifier.size(10.dp))
 
-                //Game Setup Pop Up
-                MyButton(
-                    title = "START",
-                    description = "start game button",
-                    100,
-                    enabled = players!!.values.isNotEmpty()
-                )
-                {
-                    vm.onStartButtonPressed(totalRounds.toInt(), turnTime.toInt(), quizTime.toInt())
+                    //TODO: anche questo box può essere generalizzato e spostato nel package util.myComposable
+                    CityNameField(vm.gameInfos.value!!.cityName!!, "Create house button")
+                    Spacer(modifier = Modifier.size(6.dp))
+
+                    MyPlayerNameListCard(
+                        header = "PLAYERS\n${players?.values!!.size}",
+                        playersList = players?.values!!.toList()
+                    )
+                    Spacer(modifier = Modifier.size(10.dp))
+
+                    InformationCard(title = "GAME ID", info = vm.gameInfos.value!!.lobbyId!!, 0.4f)
+                    Spacer(modifier = Modifier.size(30.dp))
+
+
+                    MyButton(title = "GAME SETUP", description = "Setup", 100) {
+                        setGamePopUpControl = true
+                    }
+
+                    Spacer(modifier = Modifier.size(5.dp))
+
+                    //Game Setup Pop Up
+                    MyButton(
+                        title = "START",
+                        description = "start game button",
+                        100,
+                        enabled = players!!.values.isNotEmpty()
+                    )
+                    {
+                        vm.onStartButtonPressed(
+                            totalRounds.toInt(),
+                            turnTime.toInt(),
+                            quizTime.toInt()
+                        )
+                    }
                 }
             }
         }

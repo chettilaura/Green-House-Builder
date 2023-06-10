@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,8 +56,8 @@ fun MyFormLine(
     updateTargetCallback : (String)->Unit
 ) {
     Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(2.dp),
+        .padding(2.dp)
+        .fillMaxWidth(),
         backgroundColor = colorResource(id = R.color.emerald),
         elevation = 4.dp,
         shape = RoundedCornerShape(20.dp),
@@ -79,33 +83,63 @@ fun MyFormLine(
                 imeAction = ImeAction.Done
             )
 
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .border(
-                        width = 2.dp,
-                        color = colorResource(id = R.color.cal_poly_green),
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                value = targetValue,
-                onValueChange = { newValue ->
-                    if (newValue.length <= 13) {
-                        updateTargetCallback(newValue)
-                    }
-                },
-                label = {
-                    Text(
-                        text = label,
-                        color = Color.White,
-                        fontFamily = caveatRegular,
-                        style = MaterialTheme.typography.body1
-                    )
-                },
-                keyboardOptions = keyboardOptions,
-                keyboardActions = KeyboardActions(
-                    onDone = { keyboardController?.hideSoftwareKeyboard() }
-                )
+            val customTextSelectionColors = TextSelectionColors(
+                handleColor = Color.Transparent,
+                backgroundColor = Color(0xD724472C)
             )
+
+            CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+
+                TextField(
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.White,
+                        disabledTextColor = Color(0xFF43C366),
+                        cursorColor = Color.Black,
+                        errorCursorColor = Color(0xFF43C366),
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Red,
+                        disabledIndicatorColor = Color(0xFF43C366),
+                        leadingIconColor = Color(0xFF43C366),
+                        disabledLeadingIconColor = Color(0xFF43C366),
+                        errorLeadingIconColor = Color(0xFF43C366),
+                        trailingIconColor = Color(0xFF43C366),
+                        disabledTrailingIconColor = Color(0xFF43C366),
+                        errorTrailingIconColor = Color(0xFF43C366),
+                        focusedLabelColor = Color(0xFF43C366),
+                        unfocusedLabelColor = Color(0xFF43C366),
+                        disabledLabelColor = Color(0xFF43C366),
+                        errorLabelColor = Color(0xFF43C366),
+                        placeholderColor = Color.Red,
+                        disabledPlaceholderColor = Color.Red
+                    ),
+                    modifier = Modifier
+                        .border(
+                            width = 2.dp,
+                            color = colorResource(id = R.color.cal_poly_green),
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .fillMaxWidth(0.9f),
+                    value = targetValue,
+                    onValueChange = { newValue ->
+                        if (newValue.length <= 13) {
+                            updateTargetCallback(newValue)
+                        }
+                    },
+                    label = {
+                        Text(
+                            text = label,
+                            color = Color.White,
+                            fontFamily = caveatRegular,
+                            style = MaterialTheme.typography.body1
+                        )
+                    },
+                    keyboardOptions = keyboardOptions,
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hideSoftwareKeyboard() }
+                    )
+                )
+            }
         }
     }
 }
