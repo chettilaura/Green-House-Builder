@@ -14,7 +14,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.Navigator
 import it.polito.did.gruppo8.R
-import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.screens.caveatBold
 
 /***

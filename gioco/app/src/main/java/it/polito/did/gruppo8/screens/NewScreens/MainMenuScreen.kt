@@ -2,18 +2,22 @@ package it.polito.did.gruppo8.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Switch
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,21 +26,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import it.polito.did.gruppo8.GameViewModel
-import it.polito.did.gruppo8.Navigator
 import it.polito.did.gruppo8.R
-import it.polito.did.gruppo8.ScreenName
 import it.polito.did.gruppo8.ui.theme.GameSkeletonTheme
-import it.polito.did.gruppo8.util.myComposable.*
+import it.polito.did.gruppo8.util.myComposable.MyButton
 
 
 @Composable
@@ -116,15 +116,18 @@ fun MainMenuScreen(vm:GameViewModel, modifier: Modifier = Modifier) {
  */
 @Composable
 fun popUpTutorial() {
-    val shape = RoundedCornerShape(30.dp)
-    Box(
+    val shape = RoundedCornerShape(20.dp)
+    Card(
         modifier = Modifier
-            .size(400.dp, 400.dp)
-            .clip(shape).border(
+            .size(400.dp, 400.dp),
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(2.dp, Color.Black),
+        backgroundColor = colorResource(id = R.color.cal_poly_green)
+            /*.clip(shape).border(
                 shape = shape,
                 border = BorderStroke(width = 2.dp, color = Color.Black)
             )
-            .background(Color(0xFF55825F))
+            .background(Color(R.color.cal_poly_green))*/
     ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(modifier = Modifier.padding(20.dp)) {
@@ -147,16 +150,19 @@ fun popUpTutorial() {
 
 @Composable
 fun CreditsPopUp() {
-    val shape = RoundedCornerShape(30.dp)
-    Box(
+    val shape = RoundedCornerShape(20.dp)
+    Card(
         modifier = Modifier
-            .size(400.dp, 400.dp)
-            .clip(shape)
+            .size(400.dp, 400.dp),
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(2.dp, Color.Black),
+        backgroundColor = colorResource(id = R.color.cal_poly_green)
+            /*.clip(shape)
             .border(
                 shape = shape,
                 border = BorderStroke(width = 2.dp, color = Color.Black)
             )
-            .background(Color(0xFF55825F))
+            .background(Color(R.color.cal_poly_green))*/
     ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(modifier = Modifier.padding(20.dp)) {
@@ -178,24 +184,24 @@ fun CreditsPopUp() {
 
 
                         Text("EDOARDO ARALLA",
-                            fontFamily = caveatBold,
-                            color = Color.Black,
+                            fontFamily = caveatRegular,
+                            color = Color.White,
                             style = MaterialTheme.typography.h4)
 
                         Text("MATTIA CACCIATORE",
-                            fontFamily = caveatBold,
-                            color = Color.Black,
+                            fontFamily = caveatRegular,
+                            color = Color.White,
                             style = MaterialTheme.typography.h4)
 
 
-                        Text("LAURA CHETTI",
-                            fontFamily = caveatBold,
-                            color = Color.Black,
+                        Text("LAURA MARCHETTI",
+                            fontFamily = caveatRegular,
+                            color = Color.White,
                             style = MaterialTheme.typography.h4)
 
                         Text("GIOVANNI MERCORILLO",
-                            fontFamily = caveatBold,
-                            color = Color.Black,
+                            fontFamily = caveatRegular,
+                            color = Color.White,
                             style = MaterialTheme.typography.h4)
 
                     }
@@ -223,18 +229,18 @@ fun Instructions(){
 
         Text(text = "HOST",
             fontFamily = caveatBold,
-            color = Color.Black,
-            style = MaterialTheme.typography.h5)
+            color = Color.White,
+            style = MaterialTheme.typography.h4)
 
         Text(text = "Create new city clicking on the new game button, set up your match with your customs total rounds, quiz time and turn time clicking on Game setup button and start the game. You’ll see a dashboard with all players statistics during the game. \n",
-            fontFamily = caveatBold,
+            fontFamily = caveatRegular,
             color = Color.White,
             style = MaterialTheme.typography.h5)
 
         Text(text = "PLAYER",
             fontFamily = caveatBold,
-            color = Color.Black,
-            style = MaterialTheme.typography.h5)
+            color = Color.White,
+            style = MaterialTheme.typography.h4)
 
         Text(text = "To start playing, click on “Join Game” button, write your player name and the Game ID of the reference match and create house. \n" +
         "Once your player is settled, you can answer the quizzes all the time. \n" +
@@ -242,7 +248,7 @@ fun Instructions(){
                 "When it is not your turn, you have the same possibilities of answering but you can’t go to the shop in case of right answer and you lose money if the answer is wrong, so just wait for you’re turn and don't submit answer if you're not sure. \n" +
                 "At the game ending all players standings will be visible and you’ll see your position among others. \n" +
                 "So, enjoy the match and MAKE IT GREEN! \n",
-        fontFamily = caveatBold,
+        fontFamily = caveatRegular,
         color = Color.White,
         style = MaterialTheme.typography.h5)
             }

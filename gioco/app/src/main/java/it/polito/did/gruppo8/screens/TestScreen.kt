@@ -13,31 +13,25 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
+import it.polito.did.gruppo8.model.baseClasses.Quiz
 import it.polito.did.gruppo8.model.baseClasses.Statistics
-import it.polito.did.gruppo8.util.myComposable.MyFormLine
-import it.polito.did.gruppo8.util.myComposable.MyParameterBarCardPreview
 import it.polito.did.gruppo8.util.myComposable.ParameterBars
-import org.w3c.dom.Text
 
 /*TODO: Schermata di test per provare elementi grafici*/
 /*TODO: serve per testare composable, si può eliminare se funziona tutto*/
@@ -69,9 +63,23 @@ fun TestScreen() {
             }*/
             /*var target by remember{mutableStateOf("")}
             MyFormLine(title = "Titolo", label = "label", targetValue = target, updateTargetCallback = {value -> target = value})*/
+
+            /*QuizCard(quiz = Quiz()) {
+                Card(modifier = Modifier.height(50.dp), backgroundColor = colorResource(id = R.color.cal_poly_green)) {
+                    Text(text = "Testo",
+                    color = Color.White)
+                }
+                Card(modifier = Modifier.height(50.dp), backgroundColor = colorResource(id = R.color.asparagus)) {
+                    Text(text = "Testo",color = Color.White)
+                }
+                Card(modifier = Modifier.height(50.dp), backgroundColor = colorResource(id = R.color.emerald)) {
+                    Text(text = "Testo",color = Color.White)
+                }
+            }*/
             var index = 6
             Card(modifier = Modifier
-                .padding(4.dp).wrapContentHeight(),
+                .padding(4.dp)
+                .wrapContentHeight(),
                 elevation = 4.dp,
                 shape = RoundedCornerShape(15.dp),
                 border = BorderStroke(2.dp,
@@ -85,13 +93,16 @@ fun TestScreen() {
                     }
                 )
             ){
-                Box(modifier = Modifier.fillMaxWidth()
+                Box(modifier = Modifier
+                    .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(16.dp),
                 contentAlignment = Alignment.Center
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxWidth().padding(4.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -128,7 +139,8 @@ fun TestScreen() {
                         }
                         Row(
                             Modifier
-                                .fillMaxWidth().padding(4.dp),
+                                .fillMaxWidth()
+                                .padding(4.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {

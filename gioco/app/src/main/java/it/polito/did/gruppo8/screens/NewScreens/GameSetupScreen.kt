@@ -79,7 +79,7 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Spacer(modifier = Modifier.size(30.dp))
+            Spacer(modifier = Modifier.size(60.dp))
 
             //TODO: anche questo box può essere generalizzato e spostato nel package util.myComposable
             CityNameField(vm.gameInfos.value!!.cityName!!, "Create house button")
@@ -141,17 +141,17 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
                             ) {
                                 MyFormLine(
                                     title = "Total rounds",
-                                    label = "players",
+                                    label = "rounds",
                                     targetValue = totalRounds
                                 ) { value -> totalRounds = value }
                                 MyFormLine(
                                     title = "Quiz time",
-                                    label = "players",
+                                    label = "seconds",
                                     targetValue = quizTime
                                 ) { value -> quizTime = value }
                                 MyFormLine(
                                     title = "Turn time",
-                                    label = "players",
+                                    label = "seconds",
                                     targetValue = turnTime
                                 ) { value -> turnTime = value }
                             }
@@ -230,9 +230,9 @@ fun SetUpPopUp(totalRounds: Int,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 //TODO: sono campi fantasma per ora, perchè manca la logica in backend
-                MyFormLine(title ="Total rounds" , label = "players", targetValue = totalRounds_temp){value -> totalRounds_temp = value}
-                MyFormLine(title ="Quiz time" , label = "players", targetValue = quizTime_temp){value -> quizTime_temp = value}
-                MyFormLine(title ="Turn time" , label = "players", targetValue = turnTime_temp){value -> turnTime_temp = value}
+                MyFormLine(title ="Total rounds" , label = "rounds", targetValue = totalRounds_temp){value -> totalRounds_temp = value}
+                MyFormLine(title ="Quiz time" , label = "seconds", targetValue = quizTime_temp){value -> quizTime_temp = value}
+                MyFormLine(title ="Turn time" , label = "seconds", targetValue = turnTime_temp){value -> turnTime_temp = value}
                 updateGameInfos.invoke(totalRounds_temp.toInt(), turnTime_temp.toInt(), quizTime_temp.toInt())
             }
         }

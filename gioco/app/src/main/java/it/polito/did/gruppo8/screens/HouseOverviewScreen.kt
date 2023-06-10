@@ -2,7 +2,6 @@ package it.polito.did.gruppo8.screens
 
 import MyAlertDialog
 import android.util.Log
-import androidx.compose.runtime.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,7 +28,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Item
@@ -224,7 +223,7 @@ fun HouseViewBox(ownedItems: ArrayList<Item>) {
         )
 
         ownedItems.forEachIndexed { _, item ->
-            Image(painter = rememberImagePainter(data = item.houseSpriteURL),
+            Image(painter = rememberAsyncImagePainter(model = item.houseSpriteURL),
                 contentDescription = "sprite_description",
                 modifier = Modifier.fillMaxWidth(),
                 contentScale = ContentScale.FillBounds

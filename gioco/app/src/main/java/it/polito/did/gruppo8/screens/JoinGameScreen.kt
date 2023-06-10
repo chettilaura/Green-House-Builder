@@ -45,9 +45,9 @@ fun JoinGameScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MyFormBox("PLAYER NAME", "NAME", playerName, {playerName = it}, 0.3f)
+            MyFormBox("PLAYER NAME", "ENTER YOUR NAME", playerName, {playerName = it}, 0.3f)
             Spacer(modifier = Modifier.size(32.dp))
-            MyFormBox("GAME ID", "ID NUMBER", gameID, {gameID = it}, 0.4f)
+            MyFormBox("GAME ID", "ENTER GAME ID NUMBER", gameID, {gameID = it}, 0.4f)
 
         }
     }

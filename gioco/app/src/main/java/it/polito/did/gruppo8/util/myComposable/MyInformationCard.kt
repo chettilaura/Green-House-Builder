@@ -43,7 +43,7 @@ fun InformationCard(title: String, info: String, fraction: Float) {
                 text = title,
                 fontFamily = caveatSemiBold,
                 color = Color.White,
-                style = MaterialTheme.typography.h3,
+                style = MaterialTheme.typography.h5,
                 textAlign = TextAlign.Start
             )
 
@@ -64,7 +64,7 @@ fun InformationCard(title: String, info: String, fraction: Float) {
                     Text(text = info,
                         fontFamily = caveatRegular,
                         color= Color.White,
-                        style = MaterialTheme.typography.body1,
+                        style = MaterialTheme.typography.h4,
                         textAlign = TextAlign.Center
                     )
                 }

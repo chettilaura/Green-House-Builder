@@ -41,7 +41,7 @@ fun MyPlayerNameListCard(header: String, playersList: List<Player>) {
 
     Card(modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight(0.15f)
+        .fillMaxHeight(0.3f)
         .padding(2.dp),
         backgroundColor = colorResource(id = R.color.emerald),
         elevation = 4.dp,
@@ -59,7 +59,7 @@ fun MyPlayerNameListCard(header: String, playersList: List<Player>) {
                 fontFamily = caveatBold,
                 color = Color.White,
                 style = MaterialTheme.typography.h5,
-                textAlign = TextAlign.Start)
+                textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.width(16.dp))
 
             Box(modifier = Modifier.fillMaxSize()

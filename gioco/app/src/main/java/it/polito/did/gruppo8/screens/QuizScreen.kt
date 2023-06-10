@@ -154,7 +154,7 @@ fun QuizCard(
             ) {
                 Text(text = quiz.question,
                     Modifier.padding(8.dp),
-                    fontFamily = caveatSemiBold,
+                    fontFamily = caveatRegular,
                     color = Color.White,
                     style = MaterialTheme.typography.h4)
             }
