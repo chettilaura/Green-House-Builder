@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.R
 import it.polito.did.gruppo8.model.baseClasses.Quiz
 import it.polito.did.gruppo8.model.baseClasses.Statistics
+import it.polito.did.gruppo8.screens.NewScreens.DashBoardTopBar
 import it.polito.did.gruppo8.util.myComposable.ParameterBars
 
 /*TODO: Schermata di test per provare elementi grafici*/
@@ -50,33 +53,60 @@ fun TestScreen() {
             modifier = Modifier.fillMaxHeight(),
             contentScale = ContentScale.FillHeight
         )
+        DashBoardTopBar(title = "city of testlandiaa", colorId = colorResource(id = R.color.cal_poly_green))
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            /*MyLazyColumnListCard("PLAYERS", houses)*/
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxSize(0.8f),
+                backgroundColor = colorResource(id = R.color.emerald),
+                shape = RoundedCornerShape(20.dp),
+                elevation = 5.dp,
+                border = BorderStroke(2.dp, Color.Black)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-            /*Button(onClick = { houses.add(0,"newname") }, ) {
-                Text(text = "ADD")
-            }*/
-            /*var target by remember{mutableStateOf("")}
-            MyFormLine(title = "Titolo", label = "label", targetValue = target, updateTargetCallback = {value -> target = value})*/
+                    Card(   //TESTO DELLA DOMANDA
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .fillMaxSize(0.5f)
+                            .padding(8.dp),
+                        backgroundColor = colorResource(id = R.color.asparagus),
+                        elevation = 5.dp,
+                        border = BorderStroke(2.dp, Color.DarkGray),
+                        shape = RoundedCornerShape(15.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .verticalScroll(rememberScrollState()),
+                            verticalArrangement = Arrangement.Top,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "quiz.questionaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                                Modifier.padding(8.dp),
+                                fontFamily = caveatRegular,
+                                color = Color.White,
+                                style = MaterialTheme.typography.h4
+                            )
+                        }
+                    }
 
-            /*QuizCard(quiz = Quiz()) {
-                Card(modifier = Modifier.height(50.dp), backgroundColor = colorResource(id = R.color.cal_poly_green)) {
-                    Text(text = "Testo",
-                    color = Color.White)
-                }
-                Card(modifier = Modifier.height(50.dp), backgroundColor = colorResource(id = R.color.asparagus)) {
-                    Text(text = "Testo",color = Color.White)
-                }
-                Card(modifier = Modifier.height(50.dp), backgroundColor = colorResource(id = R.color.emerald)) {
-                    Text(text = "Testo",color = Color.White)
-                }
-            }*/
-            var index = 6
+                    /*var index = 6
             Card(modifier = Modifier
                 .padding(4.dp)
                 .wrapContentHeight(),
@@ -159,13 +189,14 @@ fun TestScreen() {
                                 textAlign = TextAlign.Start
                             )
                         }
-                        ParameterBars(/*TODO: passare statistiche relative a player*/Statistics(),
+                        ParameterBars(*//*TODO: passare statistiche relative a player*//*Statistics(),
                             0.2f
                         )
                     }
                 }
+            }*/
+                }
             }
-
         }
     }
 }

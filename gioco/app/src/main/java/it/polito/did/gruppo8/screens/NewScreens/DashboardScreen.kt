@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -22,6 +23,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import it.polito.did.gruppo8.GameViewModel
 import it.polito.did.gruppo8.R
@@ -73,7 +75,7 @@ fun DashboardScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 @Composable
 fun DashBoardTopBar(title: String, colorId: Color) {
     TopAppBar (
-        modifier = Modifier.height(100.dp),
+        modifier = Modifier.height(150.dp),
         title = {
             Text(title,
                 modifier = Modifier.fillMaxWidth(),

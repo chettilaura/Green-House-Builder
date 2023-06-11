@@ -62,7 +62,8 @@ fun GameOverScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 
             LazyColumn(
                 modifier = Modifier
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .fillMaxHeight(0.85f),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

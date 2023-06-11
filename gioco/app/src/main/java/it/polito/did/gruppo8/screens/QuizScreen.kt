@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -144,19 +146,29 @@ fun QuizCard(
             Card(   //TESTO DELLA DOMANDA
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
-                    .fillMaxSize(0.5f)
+                    .fillMaxHeight(0.5f)
                     .padding(8.dp),
                 backgroundColor = colorResource(id = R.color.asparagus),
                 elevation = 5.dp,
                 border = BorderStroke(2.dp, Color.DarkGray),
                 shape = RoundedCornerShape(15.dp)
             ) {
-                Text(text = quiz.question,
-                    Modifier.padding(8.dp),
-                    fontFamily = caveatRegular,
-                    color = Color.White,
-                    style = MaterialTheme.typography.h4)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = quiz.question,
+                        Modifier.padding(8.dp),
+                        fontFamily = caveatRegular,
+                        color = Color.White,
+                        style = MaterialTheme.typography.h4
+                    )
+                }
             }
             /*Spacer(modifier = Modifier.size(8.dp))*/
 

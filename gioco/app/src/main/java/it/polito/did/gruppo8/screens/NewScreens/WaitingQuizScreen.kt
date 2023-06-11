@@ -336,7 +336,7 @@ fun WaitingQuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
 @Composable
 fun QuizTopBar(title: String, colorId: Color) {
     TopAppBar (
-        modifier = Modifier.height(100.dp),
+        modifier = Modifier.height(150.dp),
         title = {
             Text(title,
                 fontFamily = caveatBold,
