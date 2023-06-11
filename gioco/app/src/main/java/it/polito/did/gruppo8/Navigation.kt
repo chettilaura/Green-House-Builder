@@ -33,7 +33,7 @@ fun Navigation(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        startDestination = ScreenName.Splash.route
+        startDestination = ScreenName.MainMenu.route
     ) {
         composable(route = ScreenName.Splash.route) {
             SplashScreen()

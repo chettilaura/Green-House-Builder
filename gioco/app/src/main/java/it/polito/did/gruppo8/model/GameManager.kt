@@ -270,6 +270,24 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
         scope.launch {
             delay(3500)
+
+            if(!isPlayerTurn){
+                Log.d("VerifyQuiz", "Going to wait for end of turn")
+                switchScreen(ScreenName.Waiting)
+            }
+            else{
+                when(result){
+                    Quiz.Result.Correct -> {
+                        Log.d("VerifyQuiz", "Player is gonna play its turn")
+                        switchScreen(ScreenName.HouseOverview)
+                    }
+                    else -> {
+                        Log.d("VerifyQuiz", "Player is gonna skip its turn")
+                        nextTurn()
+                    }
+                }
+            }
+            /*
             if(result==Quiz.Result.Correct && isPlayerTurn) {
                 // Switch to overview screen and play the turn
                 Log.d("VerifyQuiz", "Player is gonna play its turn")
@@ -281,10 +299,9 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 nextTurn()
             }
             else {
-                // Wait until player ends its turn
-                Log.d("VerifyQuiz", "Going to wait for end of turn")
-                switchScreen(ScreenName.Waiting)
+
             }
+            */
         }
     }
 
