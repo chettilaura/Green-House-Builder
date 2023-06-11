@@ -10,9 +10,9 @@ enum class StatModifier(val value: Int){
 
 class Statistics {
     companion object{
-        const val MAX_GREEN = 1000
-        const val MAX_COMFY = 1000
-        const val MAX_LOWCOST = 1000
+        const val MAX_GREEN = 500
+        const val MAX_COMFY = 500
+        const val MAX_LOWCOST = 500
     }
 
     var green : Int = 0
@@ -24,13 +24,13 @@ class Statistics {
                lowcostModifier: StatModifier
     ){
         green += greenModifier.value
-        if(green<0) green = 0
+        green.coerceIn(0..MAX_GREEN)
 
         comfy += comfyModifier.value
-        if(comfy<0) comfy = 0
+        comfy.coerceIn(0..MAX_COMFY)
 
         lowcost += lowcostModifier.value
-        if(lowcost<0) lowcost = 0
+        lowcost.coerceIn(0..MAX_LOWCOST)
     }
 
     fun weightedAverage(): Float{

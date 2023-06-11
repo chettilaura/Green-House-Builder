@@ -56,14 +56,14 @@ import it.polito.did.gruppo8.util.myComposable.MyTopBar
 fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
     val players by vm.players.observeAsState()
 
-    var totalRounds by remember { mutableStateOf("") }
-    var turnTime by remember { mutableStateOf("") }
-    var quizTime by remember { mutableStateOf("") }
+    var totalRounds by remember { mutableStateOf(vm.gameInfos.value!!.totalRounds.toString()) }
+    var turnTime by remember { mutableStateOf(vm.gameInfos.value!!.turnTime.toString()) }
+    var quizTime by remember { mutableStateOf(vm.gameInfos.value!!.quizTime.toString()) }
     var setGamePopUpControl by remember { mutableStateOf(false) }
 
-    totalRounds = vm.gameInfos.value!!.totalRounds.toString()
-    turnTime = vm.gameInfos.value!!.turnTime.toString()
-    quizTime = vm.gameInfos.value!!.quizTime.toString()
+    //totalRounds = vm.gameInfos.value!!.totalRounds.toString()
+    //turnTime = vm.gameInfos.value!!.turnTime.toString()
+    //quizTime = vm.gameInfos.value!!.quizTime.toString()
 
 
     if (setGamePopUpControl) {
@@ -86,7 +86,6 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
                 onDismissRequest = { setGamePopUpControl = false },
                 properties = PopupProperties(focusable = true)
             ) {
-
                 Box(
                     modifier = Modifier.padding(8.dp)
                         .size(400.dp)
@@ -146,8 +145,6 @@ fun GameSetupScreen(vm : GameViewModel, modifier: Modifier = Modifier) {
             }
         }
     } else {
-
-
         Box(modifier = Modifier.fillMaxSize(1f)) {
             Image(
                 painter = painterResource(R.drawable.bg),

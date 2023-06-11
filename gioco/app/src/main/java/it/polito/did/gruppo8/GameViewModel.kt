@@ -11,7 +11,7 @@ import it.polito.did.gruppo8.model.baseClasses.Quiz
 class GameViewModel: ViewModel() {
     private val gameManager = GameManager(viewModelScope)
 
-    val currentScreenName = gameManager.currentScreenName
+    //val currentScreenName = gameManager.currentScreenName
     val gameInfos = gameManager.gameInfos
 
     val players = gameManager.players

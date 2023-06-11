@@ -157,20 +157,24 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         nextTurn()
     }
 
+    // TODO: Move Ranking to local side, because Databse doesn't preserve the order.
     fun rankPlayers(){
         // Sort players based on weighted average of its stats
         _mutablePlayers.value = _mutablePlayers.value!!.toList().sortedByDescending { (_, player) ->
             player.house.stats.weightedAverage()
         }.toMap().toMutableMap()
 
+        Log.d("RankPlayers", "Players ranked")
+        /*
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
         _dbManager.writeData("$id/players", players.value)
+         */
     }
 
     fun endGame(){
         rankPlayers()
-        Log.d("End Game", "Player ranked, going to End Screen")
-        switchScreen(ScreenName.GameOver, updateDatabase = true)
+        notifyEndGameToArduino()
+        switchScreen(ScreenName.GameOver)
     }
 
     fun exitGame(){
@@ -228,6 +232,9 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                 observeLobbyId()
                 observeGameInfos()
                 observePlayers()
+
+                //Subscribe to roundCounter to check if the game has reach the end
+                observeRoundCounter()
 
                 observeScreen()
             }
@@ -417,7 +424,9 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
         _dbManager.addListener("$id/gameInfos/roundCounter", "observeRoundCounter",
             onDataChange = {snapshot ->
                 val currentRoundCounter = snapshot.getValue(Int::class.java)
+                Log.d("ObserveRoundCounter", "Next round")
                 if(currentRoundCounter == gameInfos.value!!.totalRounds){
+                    Log.d("ObserveRoundCounter", "End game reached")
                     endGame()
                 }
             },
@@ -466,8 +475,6 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
 
     private fun nextTurn(){
         val id = gameInfos.value!!.lobbyId ?: throw RuntimeException("Missing game Id")
-
-        //TODO: Fix Notify Arduino only for player turn.
 
         // Update turn and round counter
         val cachedInfos = _mutableGameInfos.value!!
@@ -523,6 +530,10 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
     private fun notifyNextTurnToArduino(nickname: String){
         _dbManager.writeData("arduino/nomeTurno", nickname)
         _dbManager.writeData("arduino/cambioTurno", 1)
+    }
+
+    private fun notifyEndGameToArduino(){
+        _dbManager.writeData("arduino/finePartita", 1)
     }
     //endregion
 }
