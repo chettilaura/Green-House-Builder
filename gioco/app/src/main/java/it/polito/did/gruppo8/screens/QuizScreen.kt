@@ -80,7 +80,7 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.weight(1f))
                 MoneyCard(players!![vm.myPlayerId]!!.wallet.coins)
             }
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(0.3f))
 
             QuizCard(quiz) {
                 for(answer in quiz.answers) {
@@ -104,9 +104,8 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                     Spacer(modifier = Modifier.size(8.dp))
                 }
             }
-
+            Spacer(modifier = Modifier.weight(0.3f))
             /*
-            Spacer(modifier = Modifier.weight(1f))
             MyButton(
                 title = "SUBMIT ANSWER",
                 description = "SUBMIT ANSWER BUTTON",

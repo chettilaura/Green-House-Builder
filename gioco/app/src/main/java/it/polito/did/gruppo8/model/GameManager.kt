@@ -184,7 +184,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
             val check = async { _dbManager.isDataPresent(id) }.await()
 
             //Return to Main Menu
-            switchScreen(ScreenName.MainMenu, updateDatabase = check)
+            switchScreen(ScreenName.MainMenu)
 
             //Delete lobby from the database
             if(check) _dbManager.removeData(id)
