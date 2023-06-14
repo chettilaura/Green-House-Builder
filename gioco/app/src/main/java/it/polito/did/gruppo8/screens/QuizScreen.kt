@@ -105,6 +105,7 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                 }
             }
 
+            /*
             Spacer(modifier = Modifier.weight(1f))
             MyButton(
                 title = "SUBMIT ANSWER",
@@ -115,6 +116,7 @@ fun QuizScreen(vm: GameViewModel, modifier: Modifier = Modifier) {
                     selectedAnswer
                 )
             }
+             */
         }
     }
 }
