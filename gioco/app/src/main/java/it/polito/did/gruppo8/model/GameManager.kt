@@ -448,7 +448,7 @@ class GameManager(private val scope: CoroutineScope/*, navController: NavControl
                     Log.d("ObserveLobbyId","Data cancelled at $id")
                     clearLiveData()
                     _dbManager.removeAllListeners("$id/screen")
-                    switchScreen(ScreenName.MainMenu)
+                    //switchScreen(ScreenName.MainMenu)
                 }
             },
             onCancelled = {
